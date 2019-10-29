@@ -1,0 +1,25 @@
+{
+  "name": "cdp_g2_equipe2_dev",
+  "version": "1.0.0",
+  "description": "Application pour la gestion des projets",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/FatimaEzzahraBakir/CDP_G2_Equipe2_Dev.git"
+  },
+  "author": "Fatima Ezzahra Bakir, Cyril Caulonque, Claire Marciniak",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/FatimaEzzahraBakir/CDP_G2_Equipe2_Dev/issues"
+  },
+  "homepage": "https://github.com/FatimaEzzahraBakir/CDP_G2_Equipe2_Dev#readme",
+  "dependencies": {
+    "ejs": "^2.7.1",
+    "express": "^4.17.1",
+    "path": "^0.12.7",
+    "pm2": "^4.1.2"
+  }
+}
