@@ -3,7 +3,7 @@ const app = express()
 const ejs = require('ejs')
 var path = require('path')
 require('./src/app/signin')(app)
-
+require('./src/app/signup')(app)
 // set the view engine to ejs
 app.engine('ejs', ejs.renderFile);
 app.set('view engine', 'ejs');

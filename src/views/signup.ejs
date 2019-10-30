@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="fr" dir="ltr">
+<head>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="css/materialize.css">
+  <link rel="stylesheet" href="css/style.css">
+  <title>Inscription</title>
+</head>
+<body>
+  <nav>
+    <div class="nav-wrapper">
+      <a href="" class="brand-logo">Gestion projets</a>
+    </div>
+  </nav>
+  <div class="container">
+    <div class="row">
+      <form action="/signup" method="POST">
+        <div class="row">
+          <div class="col s12 m6 offset-m3">
+            <div class="card center-align mg">
+              <div class="card-content">
+                <span class="card-title">Inscription</span>
+                <div class="input-field">
+                  <input name="FirstName" type="text" class="validate" placeholder="FirstName" required>
+                </div>
+                <div class="input-field" >
+                  <input name="LastName" type="password" class="validate" placeholder="LastName" required>
+                </div>
+                <div class="input-field" >
+                    <input name="Login" type="password" class="validate" placeholder="Login" required>
+                  </div>
+                  <div class="input-field" >
+                    <input name="Mail" type="password" class="validate" placeholder="Mail" required>
+                  </div>
+                  <div class="input-field" >
+                    <input name="Passeword" type="password" class="validate" placeholder="Passeword" required>
+                  </div>
+                <button class="btn waves-effect waves-light" type="submit">Sign Up</button>
+                <a class="btn waves-effect waves-light red" href="/">Cancel</a>
+              </div>   
+            </div>
+          </div>
+        </div>
+      </form>  
+    </div>
+  </div>
+</body>
+</html>
