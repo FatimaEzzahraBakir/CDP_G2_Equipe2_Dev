@@ -14,3 +14,16 @@ body, html{
   margin-bottom: 10px;
   width: 100%;
 }
+
+.right {
+  position: absolute;
+  right: 0px;
+}
+
+.cardmargin {
+  margin: 0.5rem 0 1rem 0;
+}
+
+nav {
+  margin-bottom: 15px;
+}

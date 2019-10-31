@@ -8,7 +8,7 @@
 </head>
 <body>
   <nav>
-    <div class="nav-wrapper">
+    <div>
       <a href="" class="brand-logo">Gestion projets</a>
     </div>
   </nav>
@@ -20,6 +20,9 @@
             <div class="card center-align mg">
               <div class="card-content">
                 <span class="card-title">Connexion</span>
+                <% if (typeof  error != 'undefined') { %>
+                  <div class="card-pannel small red darken-2 white-text"><%= error %></div>
+                <% } %>
                 <div class="input-field">
                   <!--<label for="login" class="active">Login</label> -->
                   <input name="login" type="text" class="validate" placeholder="Login" required>
