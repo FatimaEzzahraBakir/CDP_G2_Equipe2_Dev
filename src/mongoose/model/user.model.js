@@ -5,7 +5,7 @@ var userSchema = new mongoose.Schema({
     mail:String,
     login:String,
     password:String,
-    projects: { type: Schema.Types.ObjectId, ref: 'projects' },
-    tasks: { type: Schema.Types.ObjectId, ref: 'tasks' }
+    projects: { type: mongoose.Schema.Types.ObjectId, ref: 'projects' },
+    tasks: { type: mongoose.Schema.Types.ObjectId, ref: 'tasks' }
 });
 module.exports = mongoose.model('users', userSchema);
