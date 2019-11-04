@@ -24,6 +24,15 @@ body, html{
   margin: 0.5rem 0 1rem 0;
 }
 
+.card-pannel.small.red.darken-2.white-text {
+  margin-top: 4px;
+}
+
+.card-pannel.small.green.darken-1.white-text {
+  margin-top: 4px;
+}
+
 nav {
   margin-bottom: 15px;
+  padding-left: 10px;
 }

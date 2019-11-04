@@ -20,20 +20,28 @@
             <div class="card center-align mg">
               <div class="card-content">
                 <span class="card-title">Inscription</span>
+                <% if (typeof  errors != 'undefined') { %>
+                  <% errors.forEach(function(error) { %>
+                    <div class="card-pannel small red darken-2 white-text"><%= error.msg %></div>
+                  <% }); %>
+                <% } %>
+                <% if (typeof success != 'undefined') { %>
+                  <div class="card-pannel small green darken-1 white-text"><%= success %></div>
+                <% } %>
                 <div class="input-field">
-                  <input name="FirstName" type="text" class="validate" placeholder="FirstName" required>
+                  <input name="firstName" type="text" class="validate" placeholder="FirstName" required>
                 </div>
                 <div class="input-field" >
-                  <input name="LastName" type="text" class="validate" placeholder="LastName" required>
+                  <input name="lastName" type="text" class="validate" placeholder="LastName" required>
                 </div>
                 <div class="input-field" >
-                    <input name="Login" type="text" class="validate" placeholder="Login" required>
+                    <input name="login" type="text" class="validate" placeholder="Login" required>
                   </div>
                   <div class="input-field" >
-                    <input name="Mail" type="text" class="validate" placeholder="Mail" required>
+                    <input name="mail" type="text" class="validate" placeholder="Mail" required>
                   </div>
                   <div class="input-field" >
-                    <input name="Passeword" type="password" class="validate" placeholder="Passeword" required>
+                    <input name="password" type="password" class="validate" placeholder="Password" required>
                   </div>
                 <button class="btn waves-effect waves-light" type="submit">Sign Up</button>
                 <a class="btn waves-effect waves-light red" href="/">Cancel</a>
