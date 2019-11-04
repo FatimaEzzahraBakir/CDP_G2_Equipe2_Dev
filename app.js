@@ -30,6 +30,7 @@ require('./src/routes/index')(app)
 require('./src/routes/signin')(app)
 require('./src/routes/signup')(app)
 require('./src/routes/newProject')(app)
+require('./src/routes/logout')(app)
 // set the view engine to ejs
 app.engine('ejs', ejs.renderFile);
 app.set('view engine', 'ejs');

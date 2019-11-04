@@ -13,10 +13,19 @@
       <a href="" class="brand-logo">Gestion projets</a>
     </div>
   </nav>
-  <div class="identification">
-    <a type="button" href="/signup" class="waves-effect waves-light btn-large">Inscription</a>
-    <a type="button" href="/signin" class="waves-effect waves-light btn-large">Connexion</a>
-  </div>
+  
+  <% if (user) { %>
+    <div class="identification">
+      <a type="button" href="/signup" class="waves-effect waves-light btn-large disabled">Inscription</a>
+      <a type="button" href="/signin" class="waves-effect waves-light btn-large disabled">Connexion</a>
+      <a type="button" href="/logout" class="waves-effect waves-light btn-large">Déconnexion</a>
+    </div>
+  <% } else { %>
+    <div class="identification">
+      <a type="button" href="/signup" class="waves-effect waves-light btn-large">Inscription</a>
+      <a type="button" href="/signin" class="waves-effect waves-light btn-large">Connexion</a>
+    </div>
+  <% } %>
 
   <!-- <form class="signup" action="index.html" method="post">
   <input type="text" name="login" placeholder="Login">
