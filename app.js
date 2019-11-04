@@ -18,7 +18,6 @@ app.use(session({ secret: 'secret',
                   resave: false,
                   saveUninitialized: false}));
 
-
 app.use(flash());
 app.use(bodyParser.urlencoded({ extended: false }));
 
@@ -30,6 +29,7 @@ app.use(passport.session());
 require('./src/routes/index')(app)
 require('./src/routes/signin')(app)
 require('./src/routes/signup')(app)
+require('./src/routes/newProject')(app)
 // set the view engine to ejs
 app.engine('ejs', ejs.renderFile);
 app.set('view engine', 'ejs');
