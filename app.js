@@ -10,7 +10,6 @@ app.use(session({ secret: 'secret',
                   resave: false,
                   saveUninitialized: false}));
 
-
 app.use(flash());
 
 // passport
@@ -18,9 +17,11 @@ require('./config/passport')(passport)
 app.use(passport.initialize());
 app.use(passport.session());
 
-require('./src/app/index')(app)
-require('./src/app/signin')(app)
-require('./src/app/signup')(app)
+require('./src/routes/index')(app)
+require('./src/routes/signin')(app)
+require('./src/routes/signup')(app)
+require('./src/routes/newProject')(app)
+
 // set the view engine to ejs
 app.engine('ejs', ejs.renderFile);
 app.set('view engine', 'ejs');
