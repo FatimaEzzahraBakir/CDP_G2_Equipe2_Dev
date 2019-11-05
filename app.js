@@ -8,6 +8,7 @@ const passport = require('passport');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const mongoDB = 'mongodb://localhost:27017/cdpdb'
+//const mongoDB = 'mongodb+srv://dbAdmin:admindbCDP@cluster0-ryf5h.azure.mongodb.net/test?retryWrites=true&w=majority'
 
 
 mongoose.connect(mongoDB, {useNewUrlParser: true});
@@ -26,16 +27,19 @@ require('./config/passport')(passport)
 app.use(passport.initialize());
 app.use(passport.session());
 
-require('./src/routes/index')(app)
-require('./src/routes/signin')(app)
-require('./src/routes/signup')(app)
-require('./src/routes/newProject')(app)
-require('./src/routes/logout')(app)
+
 // set the view engine to ejs
 app.engine('ejs', ejs.renderFile);
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, '/src/views'))
 app.use(express.static(path.join(__dirname , 'public')));
+
+require('./src/routes/index')(app)
+require('./src/routes/signin')(app)
+require('./src/routes/signup')(app)
+require('./src/routes/newProject')(app)
+require('./src/routes/logout')(app)
+require('./src/routes/users')(app)
 
 
 app.listen(8080);
