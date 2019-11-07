@@ -97,6 +97,7 @@ module.exports = function (app) {
       if (err) throw err;
       res.render('updateProject',
         {
+          userLogin: req.params.login,
           projectName: project.name,
           projectDescription: project.description
         });
@@ -114,7 +115,29 @@ module.exports = function (app) {
       },
       function (err, project) {
         if (err) throw err;
-        res.redirect('/user/' + req.params.login + '/projects/' + req.params.name + '/addMember');
+        res.redirect('/user/' + req.params.login + '/projects/' + req.body.name);
       });
+  });
+
+  app.get('/user/:login/projects/:name/delete', function (req, res) {
+    if (typeof req.user == 'undefined' || req.params.login !== req.user.login)
+      return res.send('Accès non autorisé');
+    Project.findOneAndRemove({
+      name: req.params.name,
+      members: req.user.id
+    }, function (err, project) {
+      if (err) throw err;
+      User.updateMany(
+        {
+          _id: { $in: project.members }
+        },
+        {
+          $pull: { projects:  project.id }
+        },
+        function (err, result) {
+          if (err) throw err;
+          res.redirect('/user/' + req.params.login + '/projects/');
+        })
+    });
   });
 }
