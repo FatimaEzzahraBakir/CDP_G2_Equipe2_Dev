@@ -41,3 +41,18 @@ nav {
   font-size: 2.5em;
   margin-bottom: 20px;
 }
+
+.center-border {
+  line-height: 50px;
+  height: 100%;
+  border: 2px solid #26a69a;
+  text-align: center;
+}
+
+#submitmember{
+  padding-right: 10px;
+}
+
+.row.membersubmitrow{
+  margin-bottom: 0px;
+}

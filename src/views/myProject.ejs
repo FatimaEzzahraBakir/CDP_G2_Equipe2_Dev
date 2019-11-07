@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="fr" dir="ltr">
+
+<head>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="/css/materialize.css">
+  <link rel="stylesheet" href="/css/style.css">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <% if(typeof project == 'undefined'){ %>
+    <title>Untitled</title>
+    <% } else { %>
+      <title><%= project.name %></title>
+      <% } %>
+    </head>
+
+    <body>
+      <nav class="navmargin">
+        <div class="nav-wrapper">
+          <ul id="nav-mobile" class="left hide-on-med-and-down">
+            <li>
+              <% if(typeof project != 'undefined') { %>
+                <a href="/user/<%= user %>/projects">
+                  <i class="material-icons left">keyboard_backspace</i>Retour à la liste</a></li>
+
+                </ul>
+                <a href="/" class="brand-logo center">Gestion projets</a>
+                <ul id="nav-mobile" class="right hide-on-med-and-down">
+                  <li><a>Bienvenue <%= user %></a></li>
+                  <li><a href="/logout">Déconnexion</a></li>
+                </ul>
+              </div>
+            </nav>
+
+            <div class="row">
+
+              <div class="col s2">
+
+                <div class="collection">
+                  <a href="/user/<%= user %>/projects/<%= project.name %>/backlog" class="collection-item btn">Issues</a>
+                  <a href="/user/<%= user %>/projects/<%= project.name %>/tasks" class="collection-item btn disabled">Tâches</a>
+                  <a href="/user/<%= user %>/projects/<%= project.name %>/sprints" class="collection-item btn disabled">Releases</a>
+                  <a href="/user/<%= user %>/projects/<%= project.name %>/tests" class="collection-item btn disabled">Tests</a>
+                  <a href="/user/<%= user %>/projects/<%= project.name %>/doc" class="collection-item btn disabled">Documentations</a>
+                </div>
+
+                <div class="row">
+                  <div class="col s6">
+                    <a class="waves-effect waves-light btn orange lighten-2" href="/user/<%= user %>/projects/<%= project.name %>/update">modifier</a>
+                  </div>
+                  <div class="col s6">
+                    <a class="waves-effect waves-light btn red lighten-2" href="/user/<%= user %>/projects/<%= project.name %>/delete">supprimer</a>
+                    <% } %>
+                  </div>
+                </div>
+
+
+
+              </div>
+
+              <div class="col s5">
+                <div class="card z-depth-1">
+                  <div class="card-panel">
+
+                    <% if(typeof project != 'undefined') { %>
+                      <h6 class="card-title"><%= project.name %></h6>
+                      <p><%= project.description %></p>
+                    </div>
+                    <% } %>
+                  </div>
+                </div>
+
+                <div class="col offset-s2">
+                  <% if(typeof project != 'undefined') { %>
+
+                    <div class="card z-depth-1">
+                      <div class="card-content">
+                        <h6 class="card-title">Membres</h6>
+
+                        <% if(typeof members != 'undefined') { %>
+                          <ul>
+                            <% members.forEach(function(member) { %>
+                              <li><%= member.login %></li>
+                              <% }); %>
+                            </ul>
+
+                            <% } %>
+                          </div>
+                          <div class="card-action">
+                            <a href="/user/<%= user %>/projects/<%= project.name %>/addMember" class="center-align green-text accent-4">
+                              <i class="material-icons left">group_add</i>Ajouter un membre</a>
+                            </div>
+                            <% } %>
+                          </div>
+                        </div>
+
+                      </div>
+
+
+                    </body>
+
+                    </html>

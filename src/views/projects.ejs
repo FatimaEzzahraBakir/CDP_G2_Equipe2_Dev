@@ -28,7 +28,7 @@
             </div>
             <div class="card-action">
               <a href="/user/<%= user %>/projects/<%= project.name %>" class="left-align">Accéder</a>
-              <a href="/user/<%= user %>/projects/<%= project.name %>/modify" class="center-align">Modifier</a>
+              <a href="/user/<%= user %>/projects/<%= project.name %>/update" class="center-align">Modifier</a>
               <a href="/user/<%= user %>/projects/<%= project.name %>/delete"
                 class="right materialize-red-text">Supprimer</a>
             </div>
@@ -40,7 +40,7 @@
       </div>
       <div class="col s4">
         <div class="cardmargin">
-          <a href="/newProject" class="waves-effect waves-light btn btn-large"><i
+          <a href="/user/<%= user %>/newProject" class="waves-effect waves-light btn btn-large"><i
               class="material-icons left">add</i>Nouveau Projet</a>
         </div>
       </div>
