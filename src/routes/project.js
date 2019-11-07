@@ -43,12 +43,11 @@ module.exports = function (app) {
     });
   });
 
-
   app.get('/user/:login/projects/:name/addMember', function (req, res) {
     res.render('addMember', { userLogin: req.params.login, projectName: req.params.name, error: req.flash("error") });
   });
 
-  app.post('/user/:login/projects/:projectname/addMember', function (req, res) {
+  app.post('/user/:login/projects/:name/addMember', function (req, res) {
     console.log('POST addMember')
     let typeOfUser = req.body.inputType;
     let query;
@@ -63,27 +62,59 @@ module.exports = function (app) {
         if (err) throw err;
         if (!userInvited) {
           req.flash('error', "L'utilisateur n'a pas été trouvé");
-          return res.redirect('/user/:login/projects/:name/addMember');
+          return res.redirect('/user/' + req.params.login + '/projects/' + req.params.name + '/addMember');
         }
         //ajoute user au project        
         Project.findOneAndUpdate(
           {
-            name: req.params.projectname,
+            name: req.params.name,
             members: req.user.id
           },
-          { $push: { members: userInvited.id } },
+          { $addToSet: { members: userInvited.id } },
           //ajoute project au user
-          function (err, project) {
+          function (err, project, doc) {
             User.findOneAndUpdate(
               query,
-              { $push: { projects: project.id } },
+              { $addToSet: { projects: project.id } },
               function (err, user) {
                 res.redirect('/user/' + req.params.login + '/projects/' + project.name);
               }
             )
+
           }
         )
       }
     )
+  });
+
+  app.get('/user/:login/projects/:name/update', function (req, res) {
+    if (typeof req.user == 'undefined' || req.params.login !== req.user.login)
+      return res.send('Accès non autorisé');
+    Project.findOne({
+      name: req.params.name,
+      members: req.user.id
+    }, function (err, project) {
+      if (err) throw err;
+      res.render('updateProject',
+        {
+          projectName: project.name,
+          projectDescription: project.description
+        });
+    });
+  });
+
+  app.post('/user/:login/projects/:name/update', function (req, res) {
+    Project.findOneAndUpdate({
+      name: req.params.name,
+      members: req.user.id
+    },
+      {
+        name: req.body.name,
+        description: req.body.description
+      },
+      function (err, project) {
+        if (err) throw err;
+        res.redirect('/user/' + req.params.login + '/projects/' + req.params.name + '/addMember');
+      });
   });
 }
