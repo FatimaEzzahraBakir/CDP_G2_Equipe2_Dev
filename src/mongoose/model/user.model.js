@@ -27,7 +27,7 @@ module.exports.createUser = function(newUser, callback){
 module.exports.getProjects = function getProjects(user){
   return new Promise(function(resolve) {
     let res = [];
-    if(typeof user.projects == 'undefined'){
+    if(typeof user.projects == 'undefined' || user.projects.length === 0){
       resolve(res);
     }
     user.projects.forEach(function(project_id, i){

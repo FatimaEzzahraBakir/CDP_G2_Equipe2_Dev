@@ -19,6 +19,8 @@ module.exports = function (app) {
   });
 
   app.get('/user/:login/newProject', function (req, res) {
+    if (typeof req.user == 'undefined' || req.params.login !== req.user.login)
+      return res.send('Accès non autorisé');
     res.render('newProject', { user: req.user.login });
   });
 
@@ -46,9 +48,44 @@ module.exports = function (app) {
         { $push: { projects: project.id } },
         function (err, user) {
           if (err) throw err;
-          res.send(JSON.stringify(user));
+          res.redirect('/user/' + user.login + '/projects');
         });
     });
+  });
+
+
+  /* pas encore testé */
+  app.post('/user/:login/projects/:projectname/addMember', [
+    check('login').not().isEmpty()
+  ], (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.render('newProject', {
+        errors: errors.array()
+      });
+    }
+
+    User.findOne(
+      { login: req.params.login },
+      function (err, user) {
+        if (err) throw err;
+        //ajoute user au project
+        Project.findOneAndUpdate(
+          { name: req.params.projectname },
+          { $push: { members: user.id } },
+          //ajoute project au user
+          function (err, project) {
+            User.findOneAndUpdate(
+              { login: req.params.login },
+              { $push: { projects: project.id } },
+              function (err, user) {
+                res.redirect('/user/' + user.login + '/projects/' + project.name);
+              }
+            )
+          }
+        )
+      })
+
   });
 
 }
