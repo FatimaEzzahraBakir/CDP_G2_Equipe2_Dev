@@ -79,7 +79,7 @@
                         <% if(typeof members != 'undefined') { %>
                           <ul>
                             <% members.forEach(function(member) { %>
-                              <li><%= member.login %> </li>
+                              <li><%= member.login %></li>
                               <% }); %>
                             </ul>
 
@@ -87,7 +87,7 @@
                           </div>
                           <div class="card-action">
                             <a href="/user/<%= user %>/projects/<%= project.name %>/addMember" class="center-align green-text accent-4">
-                              <i class="material-icons left">add</i>Ajouter un membre</a>
+                              <i class="material-icons left">group_add</i>Ajouter un membre</a>
                             </div>
                             <% } %>
                           </div>

@@ -40,6 +40,7 @@ require('./src/routes/signup')(app)
 require('./src/routes/logout')(app)
 require('./src/routes/users')(app)
 require('./src/routes/project')(app)
+require('./src/routes/backlog')(app)
 
 
 app.listen(8080);

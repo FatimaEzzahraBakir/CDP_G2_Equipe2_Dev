@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="fr" dir="ltr">
+
+<head>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="/css/materialize.css">
+  <link rel="stylesheet" href="/css/style.css">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <title>Issues</title>
+</head>
+
+<body>
+  <nav class="navmargin">
+    <div class="nav-wrapper">
+      <ul id="nav-mobile" class="left hide-on-med-and-down">
+        <li>
+          <% if(typeof project != 'undefined') { %>
+            <a href="/user/<%= user %>/projects/<%= project.name %>">
+              <i class="material-icons left">keyboard_backspace</i>Retour au projet</a></li>
+
+            </ul>
+            <a href="/" class="brand-logo center">Gestion projets</a>
+            <ul id="nav-mobile" class="right hide-on-med-and-down">
+              <li><a>Bienvenue <%= user %></a></li>
+              <li><a href="/logout">Déconnexion</a></li>
+            </ul>
+          </div>
+          <%}%>
+        </nav>
+        <div class="container">
+            <div class="col s8">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Description</th>
+                    <th>Priorité</th>
+                    <th>Etat</th>
+                    <th>Difficulté</th>
+                  </tr>
+                </thead>
+                <tbody>
+              <% if(typeof issues != 'undefined') { %>
+                <% issues.forEach(function(issue) { if(issue != null){%>
+                  <div class="row">
+                            <tr>
+                              <td><p><%= issue.description %></p></td>
+                              <td><%= issue.priority %></td>
+                              <td><%= issue.state %></td>
+                              <td><%= issue.difficulty %></td>
+
+                      <td> <p><a href="/user/<%= user %>/projects/<%= project.name %>/backlog/<%= issue._id %>/modify" class="center-align"><i class="material-icons left">edit</i></a></p>
+                      <p><a href="/user/<%= user %>/projects/<%= project.name %>/backlog/<%= issue._id %>/delete" class="materialize-red-text"><i class="material-icons left">delete_forever</i></a></p></td>
+                          </tr>
+                    <% }}); %>
+
+                  </tbody>
+                </table>
+                    <% } %>
+
+                  </div>
+                  <div class="col s4">
+                    <div class="cardmargin">
+                      <a href="/user/<%= user %>/projects/<%= project.name %>/addIssue" class="waves-effect waves-light btn btn-large"><i
+                        class="material-icons left">add</i>Nouvelle issue</a>
+                      </div>
+                    </div>
+                  </div>
+
+              </body>
+
+              </html>
