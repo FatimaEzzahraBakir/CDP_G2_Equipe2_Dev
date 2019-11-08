@@ -73,7 +73,8 @@ module.exports = function(app){
             Project.update(
               { _id: project._id },
               { $pull: { 'issues': req.params.id } }, function(err, result){
-                return res.render('backlog', {user: req.user.login, project: project, issues: issues});
+                //return res.render('backlog', {user: req.user.login, project: project, issues: issues});
+                res.redirect('/user/' + req.params.login +'/projects/' + req.params.name + '/backlog');
               }
             );
           })

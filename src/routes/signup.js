@@ -19,10 +19,10 @@ module.exports = function (app) {
       return new Promise((resolve, reject) => {
         User.findOne({ login: req.body.login }, function (err, user) {
           if (err) {
-            reject(new Error('Server Error'))
+            reject(new Error('Erreur serveur'))
           }
           if (Boolean(user)) {
-            reject(new Error('Login already in use'))
+            reject(new Error('Login déjà utilisé'))
           }
           resolve(true)
         });
@@ -32,10 +32,10 @@ module.exports = function (app) {
       return new Promise((resolve, reject) => {
         User.findOne({ mail: req.body.mail }, function (err, user) {
           if (err) {
-            reject(new Error('Server Error'))
+            reject(new Error('Erreur Serveur'))
           }
           if (Boolean(user)) {
-            reject(new Error('E-mail already in use'))
+            reject(new Error('Email déjà utilisé'))
           }
           resolve(true)
         });
@@ -63,7 +63,7 @@ module.exports = function (app) {
     User.createUser(userInstance, function (err, user) {
       if (err) return handleError(err);
       res.render('signup', {
-        success: 'Successfully registered !'
+        success: 'Inscription réussie !'
       })
     });
   });

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="fr" dir="ltr">
+
 <head>
   <meta charset="utf-8">
   <link rel="stylesheet" href="/css/materialize.css">
@@ -22,34 +23,34 @@
               <div class="card-content">
                 <span class="card-title">Ajouter une issue</span>
                 <% if (typeof  error != 'undefined') { %>
-                  <div class="card-pannel small red darken-2 white-text"><%= error %></div>
-                  <% } %>
-                  <div class="input-field">
-                    <input name="description" type="text" class="validate" placeholder="description" required>
-                  </div>
-                  <div class="input-field">
-                    <p>Difficulté</p>
-                    <input name="difficulty" type="number" class="validate" placeholder="difficulty" required>
-                  </div>
-                  <div class="input-field col s12 ">
-                    <select class="browser-default" name="state">
-                      <option value="" disabled selected>Etat</option>
-                      <option value="DONE"  >Done</option>
-                      <option value="DOING" >Doing</option>
-                      <option value="TODO"  >ToDo</option>
-                    </select>
-                  </div>
-                  <div class="input-field col s12 ">
-                    <select class="browser-default" name="priority">
-                      <option value="" disabled selected>Priorité</option>
-                      <option value="HIGH" >High</option>
-                      <option value="LOW" >Low</option>
-                    </select>
-                  </div>
-                  <button class="btn waves-effect waves-light" type="submit">Ajouter</button>
-                  <a class="btn waves-effect waves-light red" href="/">Cancel</a>
+                <div class="card-pannel small red darken-2 white-text"><%= error %></div>
+                <% } %>
+                <div class="input-field">
+                  <input name="description" type="text" class="validate" placeholder="description" required>
                 </div>
+                <div class="input-field">
+                  <p>Difficulté</p>
+                  <input name="difficulty" type="number" class="validate" placeholder="difficulty" required>
+                </div>
+                <div class="input-field col s12 ">
+                  <select class="browser-default" name="state">
+                    <option value="" disabled selected>Etat</option>
+                    <option value="DONE">Done</option>
+                    <option value="DOING">Doing</option>
+                    <option value="TODO">ToDo</option>
+                  </select>
+                </div>
+                <div class="input-field col s12 ">
+                  <select class="browser-default" name="priority">
+                    <option value="" disabled selected>Priorité</option>
+                    <option value="HIGH">High</option>
+                    <option value="LOW">Low</option>
+                  </select>
+                </div>
+                <button class="btn waves-effect waves-light" type="submit">Ajouter</button>
+                <a class="btn waves-effect waves-light red" href="/">Retour</a>
               </div>
             </div>
           </div>
-        </body>
+        </div>
+</body>

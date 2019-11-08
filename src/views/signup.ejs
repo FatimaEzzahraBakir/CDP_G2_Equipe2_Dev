@@ -1,15 +1,17 @@
 <!DOCTYPE html>
 <html lang="fr" dir="ltr">
+
 <head>
   <meta charset="utf-8">
   <link rel="stylesheet" href="css/materialize.css">
   <link rel="stylesheet" href="css/style.css">
   <title>Inscription</title>
 </head>
+
 <body>
-  <nav>
+  <nav class="navmargin">
     <div class="nav-wrapper">
-      <a href="" class="brand-logo">Gestion projets</a>
+      <a href="/" class="brand-logo">Gestion projets</a>
     </div>
   </nav>
   <div class="container">
@@ -21,36 +23,37 @@
               <div class="card-content">
                 <span class="card-title">Inscription</span>
                 <% if (typeof  errors != 'undefined') { %>
-                  <% errors.forEach(function(error) { %>
-                    <div class="card-pannel small red darken-2 white-text"><%= error.msg %></div>
-                  <% }); %>
+                <% errors.forEach(function(error) { %>
+                <div class="card-pannel small red darken-2 white-text"><%= error.msg %></div>
+                <% }); %>
                 <% } %>
                 <% if (typeof success != 'undefined') { %>
-                  <div class="card-pannel small green darken-1 white-text"><%= success %></div>
+                <div class="card-pannel small green darken-1 white-text"><%= success %></div>
                 <% } %>
                 <div class="input-field">
-                  <input name="firstName" type="text" class="validate" placeholder="FirstName" required>
+                  <input name="firstName" type="text" class="validate" placeholder="Prénom" required>
                 </div>
-                <div class="input-field" >
-                  <input name="lastName" type="text" class="validate" placeholder="LastName" required>
+                <div class="input-field">
+                  <input name="lastName" type="text" class="validate" placeholder="Nom de famille" required>
                 </div>
-                <div class="input-field" >
-                    <input name="login" type="text" class="validate" placeholder="Login" required>
-                  </div>
-                  <div class="input-field" >
-                    <input name="mail" type="text" class="validate" placeholder="Mail" required>
-                  </div>
-                  <div class="input-field" >
-                    <input name="password" type="password" class="validate" placeholder="Password" required>
-                  </div>
-                <button class="btn waves-effect waves-light" type="submit">Sign Up</button>
-                <a class="btn waves-effect waves-light red" href="/">Cancel</a>
-              </div>   
+                <div class="input-field">
+                  <input name="login" type="text" class="validate" placeholder="Login" required>
+                </div>
+                <div class="input-field">
+                  <input name="mail" type="text" class="validate" placeholder="Email" required>
+                </div>
+                <div class="input-field">
+                  <input name="password" type="password" class="validate" placeholder="Mot de passe" required>
+                </div>
+                <button class="btn waves-effect waves-light" type="submit">S'inscrire</button>
+                <a class="btn waves-effect waves-light red" href="/">Retour</a>
+              </div>
             </div>
           </div>
         </div>
-      </form>  
+      </form>
     </div>
   </div>
 </body>
+
 </html>
