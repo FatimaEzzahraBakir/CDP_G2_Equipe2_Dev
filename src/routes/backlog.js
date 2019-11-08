@@ -69,15 +69,16 @@ module.exports = function(app){
               });
             });
           }).then(function(issues){
-            console.log(project.issues + " et " + req.params.id);
             //ne marche pas encore : ne fait rien
-            Project.updateMany(
-              {_id: {$in: project.issues}}, {$pull: {issues: req.params.id}}, function(err, result){
+            Project.update(
+              { _id: project._id },
+              { $pull: { 'issues': req.params.id } }, function(err, result){
                 return res.render('backlog', {user: req.user.login, project: project, issues: issues});
-              });
-            })
-          });
+              }
+            );
+          })
         });
+      });
     });
 
     app.get('/user/:login/projects/:name/backlog/:id/update', async function(req, res) {
@@ -94,17 +95,17 @@ module.exports = function(app){
       Issue.findOneAndUpdate({
         _id: req.params.id,
       },
-        {
-          description: req.body.description,
-          difficulty: req.body.difficulty,
-          state: req.body.state,
-          priority: req.body.priority
-        },
-        function (err, project) {
-          if (err) throw err;
-          res.redirect('/user/' + req.params.login + '/projects/' + req.params.name + '/backlog');
-        });
-      
+      {
+        description: req.body.description,
+        difficulty: req.body.difficulty,
+        state: req.body.state,
+        priority: req.body.priority
+      },
+      function (err, project) {
+        if (err) throw err;
+        res.redirect('/user/' + req.params.login + '/projects/' + req.params.name + '/backlog');
+      });
+
     });
 
 
