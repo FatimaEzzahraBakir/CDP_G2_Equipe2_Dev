@@ -15,7 +15,7 @@
       <ul id="nav-mobile" class="left hide-on-med-and-down">
         <li>
           <% if(typeof project != 'undefined') { %>
-            <a href="/user/<%= user %>/projects/<%= project.name %>">
+            <a href="/user/<%= user %>/projects/<%= project.id %>">
               <i class="material-icons left">keyboard_backspace</i>Retour au projet</a></li>
 
             </ul>
@@ -48,8 +48,8 @@
                         <td><%= issue.state %></td>
                         <td><%= issue.difficulty %></td>
 
-                        <td> <p><a href="/user/<%= user %>/projects/<%= project.name %>/backlog/<%= issue._id %>/update" class="center-align"><i class="material-icons left">edit</i></a></p>
-                          <p><a href="/user/<%= user %>/projects/<%= project.name %>/backlog/<%= issue._id %>/delete" class="materialize-red-text"><i class="material-icons left">delete_forever</i></a></p></td>
+                        <td> <p><a href="/user/<%= user %>/projects/<%= project.id %>/backlog/<%= issue._id %>/update" class="center-align"><i class="material-icons left">edit</i></a></p>
+                          <p><a href="/user/<%= user %>/projects/<%= project.id %>/backlog/<%= issue._id %>/delete" class="materialize-red-text"><i class="material-icons left">delete_forever</i></a></p></td>
                         </tr>
                         <% }}); %>
 
@@ -60,7 +60,7 @@
                   </div>
                   <div class="col s4">
                     <div class="cardmargin">
-                      <a href="/user/<%= user %>/projects/<%= project.name %>/addIssue" class="waves-effect waves-light btn btn-large"><i
+                      <a href="/user/<%= user %>/projects/<%= project.id %>/addIssue" class="waves-effect waves-light btn btn-large"><i
                         class="material-icons left">add</i>Nouvelle issue</a>
                       </div>
                     </div>

@@ -8,6 +8,6 @@ var taskSchema = new mongoose.Schema({
     startDate: Date,
     length:Number,
     dev:{ type: Schema.Types.ObjectId, ref: 'users' },
-    issues: { type: Schema.Types.ObjectId, ref: 'issues' }
+    issue: { type: Schema.Types.ObjectId, ref: 'issues' }
 });
 module.exports = mongoose.model('tasks', taskSchema);

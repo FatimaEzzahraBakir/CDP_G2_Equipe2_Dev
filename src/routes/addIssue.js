@@ -3,13 +3,15 @@ const Project = require('../mongoose/model/project.model');
 const { check, validationResult } = require('express-validator');
 
 module.exports = function (app) {
-  app.get('/user/:login/projects/:name/addIssue', function (req, res) {
+  app.get('/user/:login/projects/:project_id/addIssue', function (req, res) {
     if (typeof req.user == 'undefined' || req.params.login !== req.user.login)
       return res.send('Accès non autorisé');
-    res.render('addIssue', { userLogin: req.params.login, projectName: req.params.name, error: req.flash("error") });
+    Project.findById(req.params.project_id).then((project) => {
+      res.render('addIssue', { userLogin: req.params.login, project: project, error: req.flash("error") });
+    });
   });
 
-  app.post('/user/:login/projects/:name/addIssue', [
+  app.post('/user/:login/projects/:project_id/addIssue', [
     check('description').not().isEmpty(),
     check('difficulty').not().isEmpty(),
     check('state').not().isEmpty(),
@@ -23,7 +25,7 @@ module.exports = function (app) {
     }
 
     Project.findOne({
-      name: req.params.name,
+      _id: req.params.project_id,
       members: req.user.id
     }, function (err, project) {
       if (err) throw err;
@@ -34,12 +36,12 @@ module.exports = function (app) {
         state: req.body.state,
         tasks: []
       });
-      issueInstance.projects = project.id;
+      issueInstance.project = project.id;
       issueInstance.save(function (err, issue) {
         if (err) throw err;
         Project.findOneAndUpdate(
           {
-            name: req.params.name,
+            _id: req.params.project_id,
             members: req.user.id
           },
           {
@@ -47,7 +49,7 @@ module.exports = function (app) {
           },
           function (err) {
             if (err) throw err;
-            return res.redirect('/user/' + req.user.login + '/projects/' + req.params.name + '/backlog');
+            return res.redirect('/user/' + req.user.login + '/projects/' + req.params.project_id + '/backlog');
           }
         )
       })

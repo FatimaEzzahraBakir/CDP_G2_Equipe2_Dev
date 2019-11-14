@@ -27,7 +27,7 @@
                 <div class="card-pannel small red darken-2 white-text"><%= error %></div>
                 <% } %>
               </div>
-              <form action="/user/<%= userLogin %>/projects/<%= projectName %>/addMember" method="POST">
+              <form action="/user/<%= userLogin %>/projects/<%= project.id %>/addMember" method="POST">
                 <div class="input-field">
                   <label for="memberString" class="active">Login / Email</label>
                   <input name="memberString" type="text" class="validate" placeholder="Login/Email" required>
