@@ -15,7 +15,6 @@ module.exports = function (app) {
         projects: user_projects
       });
     });
-
   });
 
   app.get('/user/:login/newProject', function (req, res) {
@@ -34,23 +33,17 @@ module.exports = function (app) {
         errors: errors.array()
       });
     }
-
     let projectInstance = new Project({
       name: req.body.name,
       description: req.body.description,
       members: [req.user.id]
     })
-
-    projectInstance.save(function (err, project) {
-      if (err) throw err;
-      User.findOneAndUpdate(
-        { login: req.params.login },
-        { $push: { projects: project.id } },
-        function (err, user) {
-          if (err) throw err;
-          res.redirect('/user/' + user.login + '/projects');
-        });
-    });
+    Project.createProject(projectInstance, req.user,
+      function (err, user) {
+        if (err) throw err;
+        res.redirect('/user/' + user.login + '/projects');
+      }
+    );
   });
 
 }

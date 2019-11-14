@@ -98,7 +98,7 @@ module.exports = function (app) {
       return res.send('Accès non autorisé');
     Project.findById(req.params.project_id).then((project) => {
       Issue.findById(req.params.id).then((issue) => {
-        return res.render('updateIssue', { user: req.user.login, projectName: project.name, issue: issue });
+        return res.render('updateIssue', { user: req.user.login, project: project, issue: issue });
       });
     });
   });

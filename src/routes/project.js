@@ -69,8 +69,9 @@ module.exports = function (app) {
     else if (typeOfUser === 'mail')
       query = { mail: req.body.memberString }
 
-    User.findOne(
+    User.findOneAndUpdate(
       query,
+      { $addToSet: { projects: req.params.project_id } }, //ajoute project au user
       function (err, userInvited) {
         if (err) throw err;
         if (!userInvited) {
@@ -79,21 +80,10 @@ module.exports = function (app) {
         }
         //ajoute user au project        
         Project.findOneAndUpdate(
-          {
-            _id: req.params.project_id,
-            members: req.user.id
-          },
+          { _id: req.params.project_id },
           { $addToSet: { members: userInvited.id } },
-          //ajoute project au user
-          function (err, project, doc) {
-            User.findOneAndUpdate(
-              query,
-              { $addToSet: { projects: project.id } },
-              function (err, user) {
-                res.redirect('/user/' + req.params.login + '/projects/' + project.id);
-              }
-            )
-
+          function (err, project) {
+            res.redirect('/user/' + req.params.login + '/projects/' + project.id);
           }
         )
       }
@@ -133,22 +123,9 @@ module.exports = function (app) {
   app.get('/user/:login/projects/:project_id/delete', function (req, res) {
     if (typeof req.user == 'undefined' || req.params.login !== req.user.login)
       return res.send('Accès non autorisé');
-    Project.findOneAndRemove({
-      _id: req.params.project_id,
-      members: req.user.id
-    }, function (err, project) {
+    Project.deleteProject(req.params.project_id, function (err, result) {
       if (err) throw err;
-      User.updateMany(
-        {
-          _id: { $in: project.members }
-        },
-        {
-          $pull: { projects: project.id }
-        },
-        function (err, result) {
-          if (err) throw err;
-          res.redirect('/user/' + req.params.login + '/projects/');
-        })
+      res.redirect('/user/' + req.params.login + '/projects/');
     });
   });
 }
