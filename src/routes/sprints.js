@@ -61,4 +61,45 @@ module.exports = function (app) {
     })
   });
 
+  app.get('/user/:login/projects/:project_id/sprints/delete/:sprint_id', function (req, res) {
+    if (typeof req.user == 'undefined' || req.params.login !== req.user.login)
+      return res.send('Accès non autorisé');
+
+    Release.findOneAndRemove(
+      { _id: req.params.sprint_id },
+      function (err, project) {
+        if (err) throw err;
+        res.redirect('/user/' + req.params.login + '/projects/' + req.params.project_id + '/sprints');
+      }
+    );
+  })
+
+  app.get('/user/:login/projects/:project_id/sprints/update/:sprint_id', function (req, res) {
+    if (typeof req.user == 'undefined' || req.params.login !== req.user.login)
+      return res.send('Accès non autorisé');
+
+    Release.findOne({
+      _id: req.params.sprint_id
+    }, function (err, sprint) {
+      if (err) throw err;
+      Project.findById(req.params.project_id).then((project) => {
+        return res.render('updateSprint', { user: req.user, project: project, sprint: sprint});
+      });
+    });
+  });
+
+  app.post('/user/:login/projects/:project_id/sprints/update/:sprint_id', function (req, res) {
+    Release.findOneAndUpdate({
+      _id: req.params.sprint_id,
+    },
+      {
+        releaseDate: new Date(req.body.date),
+        description: req.body.description
+      },
+      function (err, project) {
+        if (err) throw err;
+        res.redirect('/user/' + req.params.login + '/projects/' + req.params.project_id + "/sprints");
+      });
+  });
+
 }

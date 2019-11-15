@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="fr" dir="ltr">
+<head>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="/css/materialize.css">
+  <link rel="stylesheet" href="/css/style.css">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <title>Modification d'un sprint</title>
+</head>
+
+<body>
+  <nav class="navmargin">
+    <div class="nav-wrapper">
+      <ul id="nav-mobile" class="left hide-on-med-and-down">
+        <li>
+          <% if(typeof project != 'undefined') { %>
+            <a href="/user/<%= user.login %>/projects/<%= project.id %>">
+              <i class="material-icons left">keyboard_backspace</i>Retour au projet</a></li>
+
+            </ul>
+            <a href="/" class="brand-logo center">Gestion projets</a>
+            <ul id="nav-mobile" class="right hide-on-med-and-down">
+              <li><a>Bienvenue <%= user.login %></a></li>
+              <li><a href="/logout">Déconnexion</a></li>
+            </ul>
+          </div>
+          <%}%>
+        </nav>
+        <div class="container">
+          <div class="row">
+            <% if(typeof  sprint.releaseDate != 'undefined' && sprint.description) { %>
+              <form action="/user/<%= user.login %>/projects/<%= project.id %>/sprints/update/<%= sprint.id %>" method="POST">
+                <div class="row">
+                  <div class="col s12">
+                    <div class="card center-align mg">
+                      <div class="card-content">
+                        <span class="card-title">Modifiez le sprint</span>
+                        <% if (typeof  error != 'undefined') { %>
+                          <div class="card-pannel small red darken-2 white-text"><%= error %></div>
+                          <% } %>
+                          <div class="input-field">
+                            <input id="date" name="date" type="text" class="datepicker" value="<%= sprint.releaseDate.getFullYear() %>/<%= sprint.releaseDate.getMonth()+1 %>/<%= sprint.releaseDate.getDate() %>" placeholder="yyyy/mm/dd" required>
+                          </div>
+                          <div class="input-field" >
+                            <input name="description" type="text" class="validate materialize-textarea" value="<%= sprint.description %>" placeholder="Description" required>
+                          </div>
+                          <button class="btn waves-effect waves-light" type="submit">Modifier</button>
+                          <a class="btn waves-effect waves-light red" href="/user/<%= user.login %>/projects/<%= project.id %>/sprints">Annuler</a>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </form>
+                <% } %>
+
+                <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+                <script>
+                  const Calender = document.querySelector('.datepicker');
+                  const date = document.getElementById("date").value;
+                  M.Datepicker.init(Calender, {
+                    format: 'yyyy/mm/dd',
+                    yearRange: 4,
+                    firstDay: 1,
+                    i18n: {
+                      months: ["Janvier", "Février", "Mars", "Avril", "Mai", "Juin", "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"],
+                      monthsShort: ["Jan", "Fév", "Mar", "Avr", "Mai", "Jun", "Jul", "Aoû", "Sep", "Oct", "Nov", "Déc"],
+                      weekdays: ["Dimanche", "Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi"],
+                      weekdaysShort: ["Dim", "Lun", "Mar", "Mer", "Jeu", "Ven", "Sam"],
+                      weekdaysAbbrev: ["D", "L", "M", "M", "J", "V", "S"],
+                      cancel: "Annuler"
+
+                    }
+                  });
+                  var instance = M.Datepicker.getInstance(Calender);
+                  instance.gotoDate(new Date(date));
+                </script>
+
+              </body>

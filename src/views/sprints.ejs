@@ -41,11 +41,12 @@
                   <% sprints.forEach(function(sprint) { if(sprint != null){%>
                     <div class="row">
                       <tr>
-                        <td><p><%= sprint.releaseDate.getUTCDate() %>/<%= sprint.releaseDate.getMonth() %>/<%= sprint.releaseDate.getFullYear(); %></p></td>
+                        <td><p><%= sprint.releaseDate.getDate() %>/<%= sprint.releaseDate.getMonth() +1 %>/<%= sprint.releaseDate.getFullYear(); %></p></td>
                         <td><%= sprint.description %></td>
 
-                        <td> <p><a href="/user/<%= user %>/projects/<%= project.id %>/backlog/<%= sprint._id %>/update" class="center-align"><i class="material-icons left">edit</i></a></p>
-                          <p><a href="/user/<%= user %>/projects/<%= project.id %>/backlog/<%= sprint._id %>/delete" class="materialize-red-text"><i class="material-icons left">delete_forever</i></a></p></td>
+
+                        <td> <p><a href="/user/<%= user.login %>/projects/<%= project.id %>/sprints/update/<%= sprint._id %>" class="center-align"><i class="material-icons left">edit</i></a></p>
+                          <p><a href="/user/<%= user.login %>/projects/<%= project.id %>/sprints/delete/<%= sprint._id %>" class="materialize-red-text"><i class="material-icons left">delete_forever</i></a></p></td>
                         </tr>
                         <% }}); %>
 
