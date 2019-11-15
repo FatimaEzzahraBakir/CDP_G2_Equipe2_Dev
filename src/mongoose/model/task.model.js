@@ -1,5 +1,4 @@
 var mongoose = require("mongoose");
-
 var Schema = mongoose.Schema;
 
 var taskSchema = new mongoose.Schema({
@@ -10,10 +9,11 @@ var taskSchema = new mongoose.Schema({
     dev:{ type: Schema.Types.ObjectId, ref: 'users' },
     issue: { type: Schema.Types.ObjectId, ref: 'issues' }
 });
+
 module.exports = mongoose.model('tasks', taskSchema);
 
-module.exports.createTask = function createTask(taskInstance, user, callback) {
-    const Issue = require('./user.model'); 
+module.exports.createTask = function createTask(taskInstance,callback) {
+    const Issue = require('./issue.model'); 
     taskInstance.save(function (err, task) {
       if (err) throw err;
       Issue.findOneAndUpdate(
@@ -22,4 +22,4 @@ module.exports.createTask = function createTask(taskInstance, user, callback) {
         callback
       );
     });
-  }
+}
