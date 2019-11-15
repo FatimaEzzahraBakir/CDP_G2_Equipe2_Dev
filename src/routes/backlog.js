@@ -8,8 +8,8 @@ module.exports = function (app) {
     if (typeof req.user == 'undefined' || req.params.login !== req.user.login)
       return res.send('Accès non autorisé');
 
-    /*
-  let userProjects = await User.find({ login: req.params.login });
+
+  /* let userProjects = await User.find({ login: req.params.login });
   let projectPromise = new Promise(function (resolve, reject) {
     userProjects[0].projects.forEach(async function (p) {
       let tmp = await Project.findById(p);
@@ -55,7 +55,6 @@ module.exports = function (app) {
     Issue.findOneAndDelete({ _id: req.params.id }, async function (err) {
       if (err) console.log(err);
       let userProjects = await User.find({ login: req.params.login });
-      let project;
       //On recupere le projet
       let projectPromise = new Promise(function (resolve, reject) {
         userProjects[0].projects.forEach(async function (p) {

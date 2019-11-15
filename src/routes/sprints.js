@@ -6,7 +6,7 @@ const { check, validationResult } = require('express-validator');
 module.exports = function (app) {
   app.get('/user/:login/projects/:project_id/sprints/newSprint', function (req, res) {
     if (typeof req.user == 'undefined' || req.params.login !== req.user.login)
-      return res.send('Accès non autorisé');
+    return res.send('Accès non autorisé');
     Project.findById(req.params.project_id, (err, project) => {
       res.render('newSprint', {
         user: req.user,
@@ -20,9 +20,9 @@ module.exports = function (app) {
     check('date').not().isEmpty().withMessage('Date requise').custom((value) => {
       return new Promise((resolve, reject) => {
         if (!isNaN(Date.parse(value)))
-          resolve(true);
+        resolve(true);
         else
-          reject(new Error("Format de date attendu : yyyy/mm/dd"));
+        reject(new Error("Format de date attendu : yyyy/mm/dd"));
       });
     }),
     check('description').not().isEmpty().withMessage('description attendue')
@@ -48,5 +48,17 @@ module.exports = function (app) {
       res.redirect('/user/' + req.params.login + '/projects/' + req.params.project_id + '/sprints')
     });
   })
+
+  app.get('/user/:login/projects/:project_id/sprints', async function (req, res) {
+    if (typeof req.user == 'undefined' || req.params.login !== req.user.login)
+      return res.send('Accès non autorisé');
+
+    Release.find({project: req.params.project_id}, function (err, sprints) {
+      if(err) throw err;
+      Project.findById(req.params.project_id).then((project) => {
+        return res.render('sprints', { user: req.user, project: project, sprints: sprints});
+      });
+    })
+  });
 
 }

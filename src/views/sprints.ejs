@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="fr" dir="ltr">
+
+<head>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="/css/materialize.css">
+  <link rel="stylesheet" href="/css/style.css">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <title>Sprints</title>
+</head>
+
+<body>
+  <nav class="navmargin">
+    <div class="nav-wrapper">
+      <ul id="nav-mobile" class="left hide-on-med-and-down">
+        <li>
+          <% if(typeof project != 'undefined') { %>
+            <a href="/user/<%= user.login %>/projects/<%= project.id %>">
+              <i class="material-icons left">keyboard_backspace</i>Retour au projet</a></li>
+
+            </ul>
+            <a href="/" class="brand-logo center">Gestion projets</a>
+            <ul id="nav-mobile" class="right hide-on-med-and-down">
+              <li><a>Bienvenue <%= user.login %></a></li>
+              <li><a href="/logout">Déconnexion</a></li>
+            </ul>
+          </div>
+          <%}%>
+        </nav>
+        <div class="container">
+          <div class="col s8">
+            <table>
+              <thead>
+                <tr>
+                  <th>Date de sortie</th>
+                  <th>Description</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% if(typeof sprints != 'undefined') { %>
+                  <% sprints.forEach(function(sprint) { if(sprint != null){%>
+                    <div class="row">
+                      <tr>
+                        <td><p><%= sprint.releaseDate.getUTCDate() %>/<%= sprint.releaseDate.getMonth() %>/<%= sprint.releaseDate.getFullYear(); %></p></td>
+                        <td><%= sprint.description %></td>
+
+                        <td> <p><a href="/user/<%= user %>/projects/<%= project.id %>/backlog/<%= sprint._id %>/update" class="center-align"><i class="material-icons left">edit</i></a></p>
+                          <p><a href="/user/<%= user %>/projects/<%= project.id %>/backlog/<%= sprint._id %>/delete" class="materialize-red-text"><i class="material-icons left">delete_forever</i></a></p></td>
+                        </tr>
+                        <% }}); %>
+
+                      </tbody>
+                    </table>
+                    <% } %>
+
+                  </div>
+                  <div class="col s4">
+                    <div class="cardmargin">
+                      <a href="/user/<%= user.login %>/projects/<%= project.id %>/sprints/newSprint" class="waves-effect waves-light btn btn-large"><i
+                        class="material-icons left">add</i>Nouveau sprint</a>
+                      </div>
+                    </div>
+                  </div>
+
+                </body>
+
+                </html>
