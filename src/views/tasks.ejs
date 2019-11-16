@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="fr" dir="ltr">
+
+<head>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="/css/materialize.css">
+  <link rel="stylesheet" href="/css/style.css">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <title>TÂCHES</title>
+</head>
+
+<body>
+  <nav class="navmargin">
+    <div class="nav-wrapper">
+      <ul id="nav-mobile" class="left hide-on-med-and-down">
+        <li>
+          <% if(typeof project != 'undefined') { %>
+            <a href="/user/<%= user %>/projects/<%= project.id %>">
+              <i class="material-icons left">keyboard_backspace</i>Retour au projet</a></li>
+
+            </ul>
+            <a href="/" class="brand-logo center">Gestion projets</a>
+            <ul id="nav-mobile" class="right hide-on-med-and-down">
+              <li><a>Bienvenue <%= user %></a></li>
+              <li><a href="/logout">Déconnexion</a></li>
+            </ul>
+          </div>
+          <%}%>
+        </nav>
+        <div class="container">
+          <div class="col s8">
+            <table>
+              <thead>
+                <tr>
+                  <th>Déscription</th>
+                  <th>Définition Of Done</th>
+                  <th>Etat</th>
+                  <th>Coût</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% if(typeof tasks != 'undefined') { %>
+                  <% tasks.forEach(function(task) { if(task != null){%>
+                    <div class="row">
+                      <tr>
+                        <td><p><%= task.description %></p></td>
+                        <td><%= task.dod %></td>
+                        <td><%= task.state %></td>
+                        <td><%= task.length %></td>
+                        <td> <p><a href="/user/<%= user %>/projects/<%= project.id %>/tasks/<%= task._id %>/update" class="center-align"><i class="material-icons left">edit</i></a></p>
+                          <p><a href="/user/<%= user %>/projects/<%= project.id %>/tasks/<%= task._id %>/delete" class="materialize-red-text"><i class="material-icons left">delete_forever</i></a></p></td>
+                        </tr>
+                        <% }}); %>
+
+                      </tbody>
+                    </table>
+                    <% } %>
+
+                  </div>
+                  <div class="col s4">
+                    <div class="cardmargin">
+                      <a href="/user/<%= user %>/projects/<%= project.id %>/addtask" class="waves-effect waves-light btn btn-large"><i
+                        class="material-icons left">add</i>Nouvelle tâche</a>
+                      </div>
+                    </div>
+                  </div>
+
+                </body>
+
+                </html>

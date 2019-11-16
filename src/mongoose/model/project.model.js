@@ -1,4 +1,5 @@
 const Issue = require('./issue.model');
+const Task = require('./task.model');
 var mongoose = require("mongoose");
 var Schema = mongoose.Schema;
 
@@ -6,7 +7,8 @@ var projectSchema = new Schema({
   name: String,
   description: String,
   members: [{ type: Schema.Types.ObjectId, ref: 'users' }],
-  issues: [{ type: Schema.Types.ObjectId, ref: 'issues' }]
+  issues: [{ type: Schema.Types.ObjectId, ref: 'issues' }],
+  tasks: [{ type: Schema.Types.ObjectId, ref: 'tasks' }]
 });
 
 const Project = module.exports = mongoose.model('projects', projectSchema);
@@ -64,6 +66,21 @@ module.exports.getIssues = function getIssues(project) {
     let promises = [];
     project.issues.forEach(issue_id => {
       promises.push(Issue.findById(issue_id).exec());
+    });
+    Promise.all(promises).then(values => {
+      resolve(values);
+    });
+  });
+}
+module.exports.getTasks = function getTasks(project){
+  return new Promise(function (resolve) {
+    let res = [];
+    if (typeof project.tasks == 'undefined' || project.tasks.length === 0) {
+      resolve(res);
+    }
+    let promises = [];
+    project.tasks.forEach(task_id => {
+      promises.push(Task.findById(task_id).exec());
     });
     Promise.all(promises).then(values => {
       resolve(values);

@@ -43,5 +43,6 @@ require('./src/routes/project')(app)
 require('./src/routes/backlog')(app)
 require('./src/routes/addIssue')(app)
 require('./src/routes/sprints')(app)
+require('./src/routes/tasks')(app)
 
 app.listen(8080);
