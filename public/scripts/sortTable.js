@@ -23,7 +23,6 @@ function SortTable() {
   else {
 
     //reset fleche ancienne colonne 
-    console.log(TableLastSortedColumn);
     if (TableLastSortedColumn != -1)
       table.getElementsByTagName('th')[TableLastSortedColumn].firstElementChild.innerHTML = 'unfold_more';
 

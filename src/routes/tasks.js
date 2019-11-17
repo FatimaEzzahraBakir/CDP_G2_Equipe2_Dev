@@ -6,25 +6,41 @@ const { check, validationResult } = require('express-validator');
 
 module.exports = function (app) {
 
+  function getDevsMap(project) {
+    return new Promise((resolve, reject) => {
+      let map = new Map();
+      Project.getMembers(project).then((members) => {
+        if (members.length == 0) resolve(map);
+        members.forEach(member => {
+          map.set(member.id, member.login);
+        });
+        resolve(map);
+      });
+    });
+  };
+
   app.get('/user/:login/projects/:project_id/tasks', async function (req, res) {
     if (typeof req.user == 'undefined' || req.params.login !== req.user.login)
       return res.send('Accès non autorisé');
     Project.findById(req.params.project_id).then((project) => {
       Project.getTasks(project).then((tasks) => {
-        res.render('tasks', {
-          user: req.user.login,
-          project: project,
-          tasks: tasks
+        getDevsMap(project).then((dev_maps) => {
+          res.render('tasks', {
+            user: req.user.login,
+            project: project,
+            tasks: tasks,
+            dev_maps: dev_maps
+          });
         });
-      })
+      });
     });
   });
 
-app.get('/user/:login/projects/:project_id/addTask', function (req, res) {
-  if (typeof req.user == 'undefined' || req.params.login !== req.user.login)
-  return res.send('Accès non autorisé');
+  app.get('/user/:login/projects/:project_id/addTask', function (req, res) {
+    if (typeof req.user == 'undefined' || req.params.login !== req.user.login)
+      return res.send('Accès non autorisé');
     Project.findById(req.params.project_id).then((project) => {
-        res.render('addTask', { userLogin: req.params.login, project: project, error: req.flash("error") });
+      res.render('addTask', { userLogin: req.params.login, project: project, error: req.flash("error") });
     });
   });
 
@@ -73,7 +89,7 @@ app.get('/user/:login/projects/:project_id/addTask', function (req, res) {
     }
     );
   });
-  
+
   app.get('/user/:login/projects/:project_id/tasks/:task_id/delete', function (req, res) {
     if (typeof req.user == 'undefined' || req.params.login !== req.user.login)
       return res.send('Accès non autorisé');
@@ -85,5 +101,43 @@ app.get('/user/:login/projects/:project_id/addTask', function (req, res) {
         res.redirect('/user/' + req.params.login + '/projects/' + req.params.project_id + '/tasks');
       }
     );
-  })
+  });
+
+  app.get('/user/:login/projects/:project_id/tasks/:task_id/addDev', function (req, res) {
+    if (typeof req.user == 'undefined' || req.params.login !== req.user.login)
+      return res.send('Accès non autorisé');
+    Project.findById(req.params.project_id, (err, project) => {
+      if (err) throw err;
+      Project.getMembers(project).then((devs) => {
+        res.render('addDev',
+          {
+            user: req.user,
+            project: project,
+            task: { id: req.params.task_id },
+            devs: devs,
+            errors: [req.flash('error')]
+          }
+        );
+      });
+    })
+  });
+
+  app.post('/user/:login/projects/:project_id/tasks/:task_id/addDev', function (req, res) {
+    //ajouter dev à task
+    Task.findOneAndUpdate(
+      { _id: req.params.task_id },
+      { dev: req.body.dev },
+      (err, task) => {
+        if (err) throw err;
+        //ajouter task a dev
+        User.findOneAndUpdate(
+          { _id: req.body.dev },
+          { $addToSet: { tasks: req.params.task_id } },
+          (err, user) => {
+            if (err) throw err;
+            res.redirect('/user/' + req.params.login + '/projects/' + req.params.project_id + '/tasks/');
+          }
+        );
+      });
+  });
 }
