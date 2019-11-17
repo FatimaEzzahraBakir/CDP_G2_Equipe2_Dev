@@ -123,9 +123,10 @@ module.exports = function (app) {
   });
 
   app.post('/user/:login/projects/:project_id/tasks/:task_id/addDev', function (req, res) {
+    User.findOneAndUpdate({ tasks: req.params.task_id }, { $pull: { tasks: req.params.task_id }}, (err, user) => { console.log(user);} );
     //ajouter dev à task
-    Task.findOneAndUpdate(
-      { _id: req.params.task_id },
+    Task.findByIdAndUpdate(
+      req.params.task_id,
       { dev: req.body.dev },
       (err, task) => {
         if (err) throw err;
