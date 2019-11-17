@@ -9,7 +9,7 @@
   <title>TÂCHES</title>
 </head>
 
-<body>
+<body  onload="SortTable(2, 'S', 'tasksTable')">
   <nav class="navmargin">
     <div class="nav-wrapper">
       <ul id="nav-mobile" class="left hide-on-med-and-down">
@@ -29,14 +29,14 @@
   </nav>
     <div class="container">
       <div class="col s8">
-        <table>
+        <table id="tasksTable">
           <thead>
             <tr>
               <th>Déscription</th>
-              <th>Définition Of Done</th>
-              <th>Etat</th>
-              <th>Développeur</th>
-              <th>Coût</th>
+              <th>Definition Of Done</th>
+              <th onClick="SortTable(2, 'S', 'tasksTable')">État <i class="material-icons">unfold_more</i></th>
+              <th onClick="SortTable(3, 'T', 'tasksTable')">Développeur <i class="material-icons">unfold_more</i></th>
+              <th onClick="SortTable(4, 'N', 'tasksTable')">Coût <i class="material-icons">unfold_more</i></th>
             </tr>
           </thead>
           <tbody>
@@ -79,6 +79,9 @@
       </div>
     </div>
     </div>
+
+    <script src="/scripts/sortTable.js">
+    </script>
 
 </body>
 

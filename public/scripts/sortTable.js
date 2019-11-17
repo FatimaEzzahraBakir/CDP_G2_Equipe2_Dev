@@ -1,9 +1,9 @@
-var TableIDvalue = "issuesTable";
 var TableLastSortedColumn = -1;
 
 function SortTable() {
   var sortColumn = parseInt(arguments[0]);
   var type = arguments.length > 1 ? arguments[1] : 'T';
+  var TableIDvalue = arguments[2];
   var table = document.getElementById(TableIDvalue);
   var tbody = table.getElementsByTagName("tbody")[0];
   var rows = tbody.getElementsByTagName("tr");
