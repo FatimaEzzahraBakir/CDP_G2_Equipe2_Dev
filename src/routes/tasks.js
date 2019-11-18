@@ -141,4 +141,33 @@ module.exports = function (app) {
         );
       });
   });
+  
+  app.get('/user/:login/projects/:project_id/tasks/:task_id/updateTask', async function (req, res) {
+    if (typeof req.user == 'undefined' || req.params.login !== req.user.login)
+      return res.send('Accès non autorisé');
+    Project.findById(req.params.project_id).then((project) => {
+      Task.findById(req.params.task_id).then((task) => {
+        return res.render('updateTask', { user: req.user.login, project: project, task: task });
+      });
+    });
+  });
+  app.post('/user/:login/projects/:project_id/tasks/:task_id/updateTask', async function (req, res) {
+    if (typeof req.user == 'undefined' || req.params.login !== req.user.login)
+      return res.send('Accès non autorisé');
+
+    Task.findOneAndUpdate({
+      _id: req.params.task_id,
+    },
+      {
+        description: req.body.description,
+        dod: req.body.dod,
+        state: req.body.state,
+        length: req.body.length
+      },
+      function (err, project) {
+        if (err) throw err;
+        res.redirect('/user/' + req.params.login + '/projects/' + req.params.project_id + '/tasks');
+      });
+
+  });
 }

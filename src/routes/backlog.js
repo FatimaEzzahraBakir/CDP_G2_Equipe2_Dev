@@ -8,39 +8,6 @@ module.exports = function (app) {
   app.get('/user/:login/projects/:project_id/backlog', async function (req, res) {
     if (typeof req.user == 'undefined' || req.params.login !== req.user.login)
       return res.send('Accès non autorisé');
-
-
-  /* let userProjects = await User.find({ login: req.params.login });
-  let projectPromise = new Promise(function (resolve, reject) {
-    userProjects[0].projects.forEach(async function (p) {
-      let tmp = await Project.findById(p);
-      if (tmp.id == req.params.project_id)
-        resolve(tmp);
-    })
-  });
-
-  projectPromise.then(function (project) {
-    let issues = new Promise(function (resolve) {
-      let res = [];
-      if (typeof project.issues == 'undefined') {
-        resolve(res);
-      }
-      if (project.issues.length == 0)
-        resolve(res);
-      project.issues.forEach(function (issue_id, i) {
-        Issue.findById(issue_id).exec().then(function (issue) {
-          res.push(issue);
-          if (i === (project.issues.length - 1)) resolve(res);
-        });
-      });
-    }).then(function (issues) {
-      return res.render('backlog', {
-        user: req.user.login,
-        project: project,
-        issues: issues
-      });
-    });
-  });*/
     Project.findById(req.params.project_id).then((project) => {
       Project.getIssues(project).then((issues) => {
         res.render('backlog', {
