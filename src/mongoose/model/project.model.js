@@ -86,4 +86,5 @@ module.exports.getTasks = function getTasks(project){
       resolve(values);
     });
   });
+  
 }
