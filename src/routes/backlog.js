@@ -6,8 +6,6 @@ const { check, validationResult } = require('express-validator');
 module.exports = function (app) {
 
   app.get('/user/:login/projects/:project_id/backlog', async function (req, res) {
-    if (typeof req.user == 'undefined' || req.params.login !== req.user.login)
-      return res.send('Accès non autorisé');
     Project.findById(req.params.project_id).then((project) => {
       Project.getIssues(project).then((issues) => {
         res.render('backlog', {
@@ -61,8 +59,6 @@ module.exports = function (app) {
   });
 
   app.get('/user/:login/projects/:project_id/backlog/:id/update', async function (req, res) {
-    if (typeof req.user == 'undefined' || req.params.login !== req.user.login)
-      return res.send('Accès non autorisé');
     Project.findById(req.params.project_id).then((project) => {
       Issue.findById(req.params.id).then((issue) => {
         return res.render('updateIssue', { user: req.user.login, project: project, issue: issue });
@@ -71,9 +67,6 @@ module.exports = function (app) {
   });
 
   app.post('/user/:login/projects/:project_id/backlog/:id/update', async function (req, res) {
-    if (typeof req.user == 'undefined' || req.params.login !== req.user.login)
-      return res.send('Accès non autorisé');
-
     Issue.findOneAndUpdate({
       _id: req.params.id,
     },
@@ -90,8 +83,6 @@ module.exports = function (app) {
 
   });
   app.get('/user/:login/projects/:project_id/addIssue', function (req, res) {
-    if (typeof req.user == 'undefined' || req.params.login !== req.user.login)
-      return res.send('Accès non autorisé');
     Project.findById(req.params.project_id).then((project) => {
       res.render('addIssue', { userLogin: req.params.login, project: project, error: req.flash("error") });
     });

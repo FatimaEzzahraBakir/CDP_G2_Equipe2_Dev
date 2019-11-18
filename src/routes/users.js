@@ -2,13 +2,9 @@ const User = require('../mongoose/model/user.model');
 const Project = require('../mongoose/model/project.model');
 const { check, validationResult } = require('express-validator');
 
-
 module.exports = function (app) {
 
   app.get('/user/:login/projects', function (req, res) {
-    if (typeof req.user == 'undefined' || req.params.login !== req.user.login)
-      return res.send('Accès non autorisé');
-
     User.getProjects(req.user).then(function (user_projects) {
       res.render('projects', {
         user: req.user.login,
@@ -18,8 +14,6 @@ module.exports = function (app) {
   });
 
   app.get('/user/:login/newProject', function (req, res) {
-    if (typeof req.user == 'undefined' || req.params.login !== req.user.login)
-      return res.send('Accès non autorisé');
     res.render('newProject', { user: req.user.login });
   });
 
