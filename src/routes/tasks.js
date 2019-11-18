@@ -123,13 +123,20 @@ module.exports = function (app) {
   });
 
   app.post('/user/:login/projects/:project_id/tasks/:task_id/addDev', function (req, res) {
-    User.findOneAndUpdate({ tasks: req.params.task_id }, { $pull: { tasks: req.params.task_id }}, (err, user) => { console.log(user);} );
+    //enlever la task à l'ancien dev
+    User.findOneAndUpdate({ tasks: req.params.task_id }, { $pull: { tasks: req.params.task_id } });
+    let taskQuery = { dev: req.body.dev };
+    if (req.body.dev == '') taskQuery = { dev: undefined };
+
     //ajouter dev à task
     Task.findByIdAndUpdate(
       req.params.task_id,
-      { dev: req.body.dev },
+      taskQuery,
       (err, task) => {
         if (err) throw err;
+        if (req.body.dev == '')
+          return res.redirect('/user/' + req.params.login + '/projects/' + req.params.project_id + '/tasks/');
+
         //ajouter task a dev
         User.findOneAndUpdate(
           { _id: req.body.dev },
@@ -141,7 +148,7 @@ module.exports = function (app) {
         );
       });
   });
-  
+
   app.get('/user/:login/projects/:project_id/tasks/:task_id/updateTask', async function (req, res) {
     if (typeof req.user == 'undefined' || req.params.login !== req.user.login)
       return res.send('Accès non autorisé');

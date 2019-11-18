@@ -35,6 +35,7 @@
                     <label for="dev" class="active">Sélectionnez un développeur</label>
                     <select class="browser-default" name="dev">
                       <option value="" disabled selected>Développeurs</option>
+                      <option value="">Personne</option>
                       <% devs.forEach(function(dev) { %>
                       <option value="<%=dev.id%>"><%= dev.login %> (<%= dev.firstName %> <%= dev.lastName %>) </option>
                       <% }); %>
