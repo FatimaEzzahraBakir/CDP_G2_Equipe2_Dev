@@ -1,5 +1,6 @@
 const Issue = require('./issue.model');
 const Task = require('./task.model');
+const Release = require('./release.model');
 var mongoose = require("mongoose");
 var Schema = mongoose.Schema;
 
@@ -25,19 +26,24 @@ module.exports.createProject = function createProject(projectInstance, user, cal
   });
 }
 
-module.exports.deleteProject = function deleteProject(project_id, callback) {
-  const User = require('./user.model'); // ?
-  Project.findOneAndRemove(
-    { _id: project_id },
-    function (err, project) {
-      if (err) throw err;
-      User.updateMany(
-        { _id: project.members },
-        { $pull: { projects: project.id } },
-        callback
-      );
-    }
-  );
+module.exports.deleteProject = function deleteProject(project, callback) {
+  const User = require('./user.model'); //?
+
+  let promises = [
+    Task.deleteMany({ project: project.id }).exec(),
+    Issue.deleteMany({ project: project.id }).exec(),
+    Release.deleteMany({ project: project.id }).exec()
+  ]
+
+  User.updateMany(
+    { _id: project.members },
+    { $pull: { tasks: { $in: project.tasks }, projects: project.id } },
+    (err, user) => {
+    if(err) throw err;
+      Promise.all(promises).then(() => {
+        Project.findByIdAndDelete(project.id, callback);
+      });
+    });
 }
 
 module.exports.getMembers = function getMembers(project) {
@@ -72,7 +78,7 @@ module.exports.getIssues = function getIssues(project) {
     });
   });
 }
-module.exports.getTasks = function getTasks(project){
+module.exports.getTasks = function getTasks(project) {
   return new Promise(function (resolve) {
     let res = [];
     if (typeof project.tasks == 'undefined' || project.tasks.length === 0) {
@@ -86,5 +92,5 @@ module.exports.getTasks = function getTasks(project){
       resolve(values);
     });
   });
-  
+
 }

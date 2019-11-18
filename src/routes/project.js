@@ -73,7 +73,7 @@ module.exports = function (app) {
   });
 
   app.get('/user/:login/projects/:project_id/delete', function (req, res) {
-    Project.deleteProject(req.params.project_id, function (err, result) {
+    Project.deleteProject(res.locals.project, function (err, result) {
       if (err) throw err;
       res.redirect('/user/' + req.params.login + '/projects/');
     });

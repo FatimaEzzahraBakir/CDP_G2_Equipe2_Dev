@@ -99,7 +99,7 @@ module.exports = function (app) {
   });
 
   app.get('/user/:login/projects/:project_id/tasks/:task_id/addDev', function (req, res) {
-    Project.getMembers(project).then((devs) => {
+    Project.getMembers(res.locals.project).then((devs) => {
       res.render('addDev',
         {
           user: req.user,
