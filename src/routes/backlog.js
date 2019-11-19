@@ -1,52 +1,45 @@
 const Project = require('../mongoose/model/project.model');
 const User = require('../mongoose/model/user.model');
 const Issue = require('../mongoose/model/issue.model');
+const Release = require('../mongoose/model/release.model');
 const { check, validationResult } = require('express-validator');
 
 module.exports = function (app) {
 
-  app.get('/user/:login/projects/:project_id/backlog', async function (req, res) {
-    if (typeof req.user == 'undefined' || req.params.login !== req.user.login)
-      return res.send('Accès non autorisé');
+  function getSprintsMap(issues) {
+    return new Promise((resolve, reject) => {
+      let map = new Map();
 
-
-  /* let userProjects = await User.find({ login: req.params.login });
-  let projectPromise = new Promise(function (resolve, reject) {
-    userProjects[0].projects.forEach(async function (p) {
-      let tmp = await Project.findById(p);
-      if (tmp.id == req.params.project_id)
-        resolve(tmp);
-    })
-  });
-
-  projectPromise.then(function (project) {
-    let issues = new Promise(function (resolve) {
-      let res = [];
-      if (typeof project.issues == 'undefined') {
-        resolve(res);
-      }
-      if (project.issues.length == 0)
-        resolve(res);
-      project.issues.forEach(function (issue_id, i) {
-        Issue.findById(issue_id).exec().then(function (issue) {
-          res.push(issue);
-          if (i === (project.issues.length - 1)) resolve(res);
+      Release.find({}).then(function(allReleases){
+        allReleases.forEach(release => {
+          Release.getIssues(release).then((issues) => {
+            for (let i = 0; i < issues.length; i++) {
+              let issue = issues[i];
+              if(issue != null){
+                map.set(issue.id, release.description);
+              }
+              if(i == issues.length-1){
+                resolve(map);
+              }
+            }
+          })
         });
       });
-    }).then(function (issues) {
-      return res.render('backlog', {
-        user: req.user.login,
-        project: project,
-        issues: issues
-      });
     });
-  });*/
+  };
+
+  app.get('/user/:login/projects/:project_id/backlog', async function (req, res) {
+    if (typeof req.user == 'undefined' || req.params.login !== req.user.login)
+    return res.send('Accès non autorisé');
     Project.findById(req.params.project_id).then((project) => {
       Project.getIssues(project).then((issues) => {
-        res.render('backlog', {
-          user: req.user.login,
-          project: project,
-          issues: issues
+        getSprintsMap(issues).then((sprint_map) => {
+          console.log(sprint_map);
+          res.render('backlog', {
+            user: req.user.login,
+            project: project,
+            issues: issues
+          });
         });
       })
     });
@@ -61,7 +54,7 @@ module.exports = function (app) {
         userProjects[0].projects.forEach(async function (p) {
           let tmp = await Project.findById(p);
           if (tmp.id == req.params.project_id)
-            resolve(tmp);
+          resolve(tmp);
         })
       }).then(function (project) {
         if (err) throw err;
@@ -72,7 +65,7 @@ module.exports = function (app) {
             resolve(res);
           }
           if (project.issues.length == 0)
-            resolve(res);
+          resolve(res);
           project.issues.forEach(function (issue_id, i) {
             Issue.findById(issue_id).exec().then(function (issue) {
               res.push(issue);
@@ -95,7 +88,7 @@ module.exports = function (app) {
 
   app.get('/user/:login/projects/:project_id/backlog/:id/update', async function (req, res) {
     if (typeof req.user == 'undefined' || req.params.login !== req.user.login)
-      return res.send('Accès non autorisé');
+    return res.send('Accès non autorisé');
     Project.findById(req.params.project_id).then((project) => {
       Issue.findById(req.params.id).then((issue) => {
         return res.render('updateIssue', { user: req.user.login, project: project, issue: issue });
@@ -105,26 +98,26 @@ module.exports = function (app) {
 
   app.post('/user/:login/projects/:project_id/backlog/:id/update', async function (req, res) {
     if (typeof req.user == 'undefined' || req.params.login !== req.user.login)
-      return res.send('Accès non autorisé');
+    return res.send('Accès non autorisé');
 
     Issue.findOneAndUpdate({
       _id: req.params.id,
     },
-      {
-        description: req.body.description,
-        difficulty: req.body.difficulty,
-        state: req.body.state,
-        priority: req.body.priority
-      },
-      function (err, project) {
-        if (err) throw err;
-        res.redirect('/user/' + req.params.login + '/projects/' + req.params.project_id + '/backlog');
-      });
+    {
+      description: req.body.description,
+      difficulty: req.body.difficulty,
+      state: req.body.state,
+      priority: req.body.priority
+    },
+    function (err, project) {
+      if (err) throw err;
+      res.redirect('/user/' + req.params.login + '/projects/' + req.params.project_id + '/backlog');
+    });
 
   });
   app.get('/user/:login/projects/:project_id/addIssue', function (req, res) {
     if (typeof req.user == 'undefined' || req.params.login !== req.user.login)
-      return res.send('Accès non autorisé');
+    return res.send('Accès non autorisé');
     Project.findById(req.params.project_id).then((project) => {
       res.render('addIssue', { userLogin: req.params.login, project: project, error: req.flash("error") });
     });
@@ -173,6 +166,6 @@ module.exports = function (app) {
         )
       })
     }
-    );
-  });
+  );
+});
 }

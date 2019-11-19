@@ -4,6 +4,22 @@ const Release = require('../mongoose/model/release.model');
 const { check, validationResult } = require('express-validator');
 
 module.exports = function (app) {
+
+  function getIssuesMap(sprints) {
+    return new Promise((resolve, reject) => {
+      let map = new Map();
+      sprints.forEach(function(sprint){
+        Release.getIssues(sprint).then((issues) => {
+          if (issues.length == 0) resolve(map);
+          issues.forEach(issue => {
+            map.set(issue.id, issue.description);
+          });
+          resolve(map);
+        });
+      })
+    });
+  };
+
   app.get('/user/:login/projects/:project_id/sprints/newSprint', function (req, res) {
     if (typeof req.user == 'undefined' || req.params.login !== req.user.login)
     return res.send('Accès non autorisé');
@@ -51,19 +67,26 @@ module.exports = function (app) {
 
   app.get('/user/:login/projects/:project_id/sprints', async function (req, res) {
     if (typeof req.user == 'undefined' || req.params.login !== req.user.login)
-      return res.send('Accès non autorisé');
+    return res.send('Accès non autorisé');
+
+    console.log("on y est");
 
     Release.find({project: req.params.project_id}, function (err, sprints) {
       if(err) throw err;
+      console.log("la aussi");
       Project.findById(req.params.project_id).then((project) => {
-        return res.render('sprints', { user: req.user, project: project, sprints: sprints});
+        ("et la");
+        getIssuesMap(sprints).then((issues_map) => {
+          console.log(issues_map);
+          return res.render('sprints', { user: req.user, project: project, sprints: sprints, issues_map : issues_map});
+        });
       });
     })
   });
 
   app.get('/user/:login/projects/:project_id/sprints/delete/:sprint_id', function (req, res) {
     if (typeof req.user == 'undefined' || req.params.login !== req.user.login)
-      return res.send('Accès non autorisé');
+    return res.send('Accès non autorisé');
 
     Release.findOneAndRemove(
       { _id: req.params.sprint_id },
@@ -76,7 +99,7 @@ module.exports = function (app) {
 
   app.get('/user/:login/projects/:project_id/sprints/update/:sprint_id', function (req, res) {
     if (typeof req.user == 'undefined' || req.params.login !== req.user.login)
-      return res.send('Accès non autorisé');
+    return res.send('Accès non autorisé');
 
     Release.findOne({
       _id: req.params.sprint_id
@@ -92,14 +115,14 @@ module.exports = function (app) {
     Release.findOneAndUpdate({
       _id: req.params.sprint_id,
     },
-      {
-        releaseDate: new Date(req.body.date),
-        description: req.body.description
-      },
-      function (err, project) {
-        if (err) throw err;
-        res.redirect('/user/' + req.params.login + '/projects/' + req.params.project_id + "/sprints");
-      });
+    {
+      releaseDate: new Date(req.body.date),
+      description: req.body.description
+    },
+    function (err, project) {
+      if (err) throw err;
+      res.redirect('/user/' + req.params.login + '/projects/' + req.params.project_id + "/sprints");
+    });
   });
 
 }

@@ -28,41 +28,44 @@
           <%}%>
         </nav>
         <div class="container">
-          <div class="col s8">
-            <table>
-              <thead>
-                <tr>
-                  <th>Date de sortie</th>
-                  <th>Description</th>
-                </tr>
-              </thead>
-              <tbody>
-                <% if(typeof sprints != 'undefined') { %>
-                  <% sprints.forEach(function(sprint) { if(sprint != null){%>
-                    <div class="row">
-                      <tr>
-                        <td><p><%= sprint.releaseDate.getDate() %>/<%= sprint.releaseDate.getMonth() +1 %>/<%= sprint.releaseDate.getFullYear(); %></p></td>
-                        <td><%= sprint.description %></td>
+          <div class="row">
+            <div class="col s8">
+              <% if(typeof sprints != 'undefined') { %>
+                <% sprints.forEach(function(sprint) { if(sprint != null){%>
+                  <div class="row">
+                    <div class="card z-depth-3">
+                      <div class="card-content">
+                        <h6 class="card-title"><%= sprint.description %></h6>
+                        <p><%= sprint.releaseDate.getDate() %>/<%= sprint.releaseDate.getMonth() +1 %>/<%= sprint.releaseDate.getFullYear(); %></p>
+                        <ul class="collection">
+                          <% sprint.issues.forEach(function(issue){ issues_map.forEach( (issueDesc, issueID) => {%>
+                            <%if(issueID == issue) { %>
+                              <li class="collection-item"><%= issueDesc %></li>
+                              <%}%>
+                              <% })%>
+                              <% }) %>
+                            </ul>
+                          </div>
+                          <div class="card-action">
+                            <a href="/user/<%= user.login %>/projects/<%= project.id %>/sprints/update/<%= sprint._id %>" class="center-align">Modifier</a>
+                            <a href="/user/<%= user.login %>/projects/<%= project.id %>/sprints/delete/<%= sprint._id %>"
+                              class="right materialize-red-text">Supprimer</a>
+                            </div>
+                          </div>
+                        </div>
+                        <% } }); %>
+                        <% } %>
 
-
-                        <td> <p><a href="/user/<%= user.login %>/projects/<%= project.id %>/sprints/update/<%= sprint._id %>" class="center-align"><i class="material-icons left">edit</i></a></p>
-                          <p><a href="/user/<%= user.login %>/projects/<%= project.id %>/sprints/delete/<%= sprint._id %>" class="materialize-red-text"><i class="material-icons left">delete_forever</i></a></p></td>
-                        </tr>
-                        <% }}); %>
-
-                      </tbody>
-                    </table>
-                    <% } %>
-
-                  </div>
-                  <div class="col s4">
-                    <div class="cardmargin">
-                      <a href="/user/<%= user.login %>/projects/<%= project.id %>/sprints/newSprint" class="waves-effect waves-light btn btn-large"><i
-                        class="material-icons left">add</i>Nouveau sprint</a>
+                      </div>
+                      <div class="col s4">
+                        <div class="cardmargin">
+                          <a href="/user/<%= user.login %>/projects/<%= project.id %>/sprints/newSprint" class="waves-effect waves-light btn btn-large"><i
+                            class="material-icons left">add</i>Nouveau sprint</a>
+                          </div>
+                        </div>
                       </div>
                     </div>
-                  </div>
 
-                </body>
+                  </body>
 
-                </html>
+                  </html>
