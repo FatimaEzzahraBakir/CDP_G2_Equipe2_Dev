@@ -4,60 +4,20 @@ const User = require('../mongoose/model/user.model');
 module.exports = function (app) {
 
   app.get('/user/:login/projects/:project_id', async function (req, res) {
-    if (typeof req.user == 'undefined' || req.params.login !== req.user.login)
-      return res.send('Accès non autorisé');
-
-    /*
-    let userProjects = await User.find({ login: req.params.login });
-    let project;
-    let projectPromise = new Promise(function (resolve, reject) {
-      userProjects[0].projects.forEach(async function (p) {
-        let tmp = await Project.findById(p);
-        if (tmp.id == req.params.project_id)
-          resolve(tmp);
-      })
-    });
-
-    projectPromise.then(function (p) {
-      project = p;
-
-      let members = new Promise(function (resolve) {
-        let res = [];
-        if (typeof project.members == 'undefined') {
-          resolve(res);
-        }
-        project.members.forEach(function (user_id, i) {
-          User.findById(user_id).exec().then(function (user) {
-            res.push(user);
-            if (i === (project.members.length - 1)) resolve(res);
-          });
-        });
-      }).then(function (mem) {
-        return res.render('myProject', {
-          user: req.user.login,
-          project: project,
-          members: mem
-        });
+    Project.getMembers(res.locals.project).then((members) => {
+      res.render('myProject', {
+        user: req.user.login,
+        project: res.locals.project,
+        members: members
       });
-
-
-    }); */
-    Project.findById(req.params.project_id).then((project) => {
-      Project.getMembers(project).then((members) => {
-        res.render('myProject', {
-          user: req.user.login,
-          project: project,
-          members: members
-        });
-      })
     });
   });
 
   app.get('/user/:login/projects/:project_id/addMember', function (req, res) {
-    Project.findById(req.params.project_id).then((project) => {
-      res.render('addMember', { userLogin: req.params.login, project: project, error: req.flash("error") });
-    }).catch((error) => {
-      console.log('catch get addmember' + error); // TODO
+    res.render('addMember', {
+      userLogin: req.params.login,
+      project: res.locals.project,
+      error: req.flash("error")
     });
   });
 
@@ -91,18 +51,10 @@ module.exports = function (app) {
   });
 
   app.get('/user/:login/projects/:project_id/update', function (req, res) {
-    if (typeof req.user == 'undefined' || req.params.login !== req.user.login)
-      return res.send('Accès non autorisé');
-    Project.findOne({
-      _id: req.params.project_id
-    }, function (err, project) {
-      if (err) throw err;
-      res.render('updateProject',
-        {
-          userLogin: req.params.login,
-          project: project,
-          projectDescription: project.description
-        });
+    res.render('updateProject', {
+      userLogin: req.params.login,
+      project: res.locals.project,
+      projectDescription: res.locals.project.description
     });
   });
 
@@ -121,9 +73,7 @@ module.exports = function (app) {
   });
 
   app.get('/user/:login/projects/:project_id/delete', function (req, res) {
-    if (typeof req.user == 'undefined' || req.params.login !== req.user.login)
-      return res.send('Accès non autorisé');
-    Project.deleteProject(req.params.project_id, function (err, result) {
+    Project.deleteProject(res.locals.project, function (err, result) {
       if (err) throw err;
       res.redirect('/user/' + req.params.login + '/projects/');
     });

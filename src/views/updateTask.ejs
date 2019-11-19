@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="fr" dir="ltr">
+
+<head>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="/css/materialize.css">
+  <link rel="stylesheet" href="/css/style.css">
+  <title>Modifier tâche</title>
+</head>
+
+<body>
+  <nav class="navmargin">
+    <div class="nav-wrapper">
+      <a href="/" class="brand-logo">Gestion projets</a>
+    </div>
+  </nav>
+  <div class="container">
+    <div class="row">
+      <form action="/user/<%= user %>/projects/<%= project.id %>/tasks/<%= task._id %>/updateTask" method="POST">
+        <div class="row">
+          <div class="col s12">
+            <div class="card center-align mg">
+              <div class="card-content">
+                <span class="card-title">Modifer la tâche</span>
+                <% if (typeof  error != 'undefined') { %>
+                <div class="card-pannel small red darken-2 white-text"><%= error %></div>
+                <% } %>
+                <div class="input-field">
+                  <input name="description" type="text" class="validate" value="<%=task.description%>" required>
+                </div>
+                <div class="input-field">
+                  <input name="dod" type="text" class="validate" value="<%=task.dod%>" required>
+                </div>
+                <div class="input-field">
+                    <input name="state" type="text" class="validate" value="<%=task.state%>" required>
+                  </div>
+                  <div class="input-field">
+                    <input name="Coût" type="number" class="validate" value="<%=task.length%>" required>
+                  </div>
+                  <button class="btn waves-effect waves-light" type="submit">Mettre à jour</button>
+                  <a class="btn waves-effect waves-light red" href="/user/<%= user %>/projects/<%= project.id %>/tasks">Annuler </a>
+                      </div> </div> </div> </div> </div> </form> </div> </div> </body> </html>

@@ -21,14 +21,10 @@ module.exports = function (app) {
   };
 
   app.get('/user/:login/projects/:project_id/sprints/newSprint', function (req, res) {
-    if (typeof req.user == 'undefined' || req.params.login !== req.user.login)
-    return res.send('Accès non autorisé');
-    Project.findById(req.params.project_id, (err, project) => {
-      res.render('newSprint', {
-        user: req.user,
-        project: project,
-        errors: [req.flash('error')]
-      });
+    res.render('newSprint', {
+      user: req.user,
+      project: res.locals.project,
+      errors: [req.flash('error')]
     });
   });
 
@@ -36,9 +32,9 @@ module.exports = function (app) {
     check('date').not().isEmpty().withMessage('Date requise').custom((value) => {
       return new Promise((resolve, reject) => {
         if (!isNaN(Date.parse(value)))
-        resolve(true);
+          resolve(true);
         else
-        reject(new Error("Format de date attendu : yyyy/mm/dd"));
+          reject(new Error("Format de date attendu : yyyy/mm/dd"));
       });
     }),
     check('description').not().isEmpty().withMessage('description attendue')
@@ -48,7 +44,7 @@ module.exports = function (app) {
       req.flash('error', 'erreur check newSprint post')
       return res.render('newSprint', {
         user: req.user,
-        project: { id: req.params.project_id }, //peut provoquer des bugs si sprints.ejs change
+        project: res.locals.project,
         errors: errors.array()
       });
     }
@@ -60,24 +56,16 @@ module.exports = function (app) {
       project: req.params.project_id
     });
     releaseInstance.save((err) => {
-      if(err) throw err;
+      if (err) throw err;
       res.redirect('/user/' + req.params.login + '/projects/' + req.params.project_id + '/sprints')
     });
   })
 
   app.get('/user/:login/projects/:project_id/sprints', async function (req, res) {
-    if (typeof req.user == 'undefined' || req.params.login !== req.user.login)
-    return res.send('Accès non autorisé');
-
-    console.log("on y est");
-
     Release.find({project: req.params.project_id}, function (err, sprints) {
       if(err) throw err;
-      console.log("la aussi");
       Project.findById(req.params.project_id).then((project) => {
-        ("et la");
         getIssuesMap(sprints).then((issues_map) => {
-          console.log(issues_map);
           return res.render('sprints', { user: req.user, project: project, sprints: sprints, issues_map : issues_map});
         });
       });
@@ -85,9 +73,6 @@ module.exports = function (app) {
   });
 
   app.get('/user/:login/projects/:project_id/sprints/delete/:sprint_id', function (req, res) {
-    if (typeof req.user == 'undefined' || req.params.login !== req.user.login)
-    return res.send('Accès non autorisé');
-
     Release.findOneAndRemove(
       { _id: req.params.sprint_id },
       function (err, project) {
@@ -98,15 +83,14 @@ module.exports = function (app) {
   })
 
   app.get('/user/:login/projects/:project_id/sprints/update/:sprint_id', function (req, res) {
-    if (typeof req.user == 'undefined' || req.params.login !== req.user.login)
-    return res.send('Accès non autorisé');
-
     Release.findOne({
       _id: req.params.sprint_id
     }, function (err, sprint) {
       if (err) throw err;
-      Project.findById(req.params.project_id).then((project) => {
-        return res.render('updateSprint', { user: req.user, project: project, sprint: sprint});
+      return res.render('updateSprint', {
+        user: req.user,
+        project: res.locals.project,
+        sprint: sprint
       });
     });
   });
