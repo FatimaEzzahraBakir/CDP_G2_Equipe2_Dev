@@ -6,23 +6,18 @@ const { check, validationResult } = require('express-validator');
 
 module.exports = function (app) {
 
-  function getSprintsMap(issues) {
+  function getReleasesMap(issues) {
     return new Promise((resolve, reject) => {
       let map = new Map();
 
-      Release.find({}).then(function(allReleases){
-        allReleases.forEach(release => {
-          Release.getIssues(release).then((issues) => {
-            for (let i = 0; i < issues.length; i++) {
-              let issue = issues[i];
-              if(issue != null){
-                map.set(issue.id, release.description);
-              }
-              if(i == issues.length-1){
-                resolve(map);
-              }
-            }
-          })
+      issues.forEach(function(issue, index, array) {
+        Release.findById(issue.release).then((release) => {
+          if(release != null){
+            map.set(issue.id, release.description);
+          }
+          if(index == issues.length-1){
+            resolve(map);
+          }
         });
       });
     });
@@ -31,13 +26,23 @@ module.exports = function (app) {
   app.get('/user/:login/projects/:project_id/backlog', async function (req, res) {
     Project.findById(req.params.project_id).then((project) => {
       Project.getIssues(project).then((issues) => {
-        getSprintsMap(issues).then((sprint_map) => {
+        getReleasesMap(issues).then((sprint_map) => {
           console.log(sprint_map);
-          res.render('backlog', {
-            user: req.user.login,
-            project: project,
-            issues: issues
-          });
+          if(sprint_map != null){
+            res.render('backlog', {
+              user: req.user.login,
+              project: project,
+              issues: issues,
+              sprints: sprint_map
+            });
+          }
+          else{
+            res.render('backlog', {
+              user: req.user.login,
+              project: project,
+              issues: issues
+            });
+          }
         });
       })
     });
@@ -87,27 +92,35 @@ module.exports = function (app) {
   app.get('/user/:login/projects/:project_id/backlog/:id/update', async function (req, res) {
     Project.findById(req.params.project_id).then((project) => {
       Issue.findById(req.params.id).then((issue) => {
-        return res.render('updateIssue', { user: req.user.login, project: project, issue: issue });
+        Release.find({project: req.params.project_id}).then((releases) => {
+          return res.render('updateIssue', { user: req.user.login, project: project, issue: issue, sprints: releases });
+        })
       });
     });
   });
 
   app.post('/user/:login/projects/:project_id/backlog/:id/update', async function (req, res) {
-    Issue.findOneAndUpdate({
-      _id: req.params.id,
-    },
-    {
-      description: req.body.description,
-      difficulty: req.body.difficulty,
-      state: req.body.state,
-      priority: req.body.priority
-    },
-    function (err, project) {
-      if (err) throw err;
-      res.redirect('/user/' + req.params.login + '/projects/' + req.params.project_id + '/backlog');
-    });
-
+    Release.find({description: req.body.sprint}).then((release) => {
+      Issue.findOneAndUpdate({
+        _id: req.params.id
+      },
+      {
+        description: req.body.description,
+        difficulty: req.body.difficulty,
+        state: req.body.state,
+        priority: req.body.priority,
+        release: release[0].id
+      },
+      function (err, project) {
+        if (err) throw err;
+        Release.findOneAndUpdate({_id: release[0].id, issues: { $ne: req.params.id }},
+          {$push: { issues:  req.params.id }}, function(err, releas){
+          res.redirect('/user/' + req.params.login + '/projects/' + req.params.project_id + '/backlog');
+        });
+      });
+    })
   });
+
   app.get('/user/:login/projects/:project_id/addIssue', function (req, res) {
     Project.findById(req.params.project_id).then((project) => {
       res.render('addIssue', { userLogin: req.params.login, project: project, error: req.flash("error") });

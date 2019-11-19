@@ -50,7 +50,13 @@
                         <td><%= issue.priority %></td>
                         <td><%= issue.state %></td>
                         <td><%= issue.difficulty %></td>
-                        <td></td>
+                        <td>
+                        <% sprints.forEach( (sprintDesc, issueID) => {%>
+                        <% if(issueID == issue.id) { %>
+                        <%= sprintDesc %>
+                        <% } });%>
+                        </td>
+
                         <td>
                           <p><a href="/user/<%= user %>/projects/<%= project.id %>/backlog/<%= issue._id %>/update"
                             class="center-align"><i class="material-icons left">edit</i></a></p>
