@@ -12,7 +12,9 @@ module.exports = function (app) {
         Release.getIssues(sprint).then((issues) => {
           if (issues.length == 0) resolve(map);
           issues.forEach(issue => {
-            map.set(issue.id, issue.description);
+            if(issue != null){
+              map.set(issue.id, issue.description);
+            }
           });
           resolve(map);
         });
@@ -65,9 +67,14 @@ module.exports = function (app) {
     Release.find({project: req.params.project_id}, function (err, sprints) {
       if(err) throw err;
       Project.findById(req.params.project_id).then((project) => {
-        getIssuesMap(sprints).then((issues_map) => {
-          return res.render('sprints', { user: req.user, project: project, sprints: sprints, issues_map : issues_map});
-        });
+        if(sprints.length == 0){
+          return res.render('sprints', { user: req.user, project: project, sprints: sprints, issues_map : []});
+        }
+        else{
+          getIssuesMap(sprints).then((issues_map) => {
+            return res.render('sprints', { user: req.user, project: project, sprints: sprints, issues_map : issues_map});
+          });
+        }
       });
     })
   });
