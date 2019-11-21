@@ -22,8 +22,10 @@
             <div class="card center-align mg">
               <div class="card-content">
                 <span class="card-title">Ajouter une issue</span>
-                <% if (typeof  error != 'undefined') { %>
-                <div class="card-pannel small red darken-2 white-text"><%= error %></div>
+                <% if (typeof  errors != 'undefined') { %>
+                <% errors.forEach(function(error) { %>
+                <div class="card-pannel small red darken-2 white-text"><%= error.msg %></div>
+                <% }); %>
                 <% } %>
                 <div class="input-field">
                   <input name="description" type="text" class="validate" placeholder="description" required>

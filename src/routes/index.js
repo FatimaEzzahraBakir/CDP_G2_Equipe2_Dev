@@ -1,4 +1,4 @@
-const Project = require('../mongoose/model/project.model');
+const Project = require('../models/project.model');
 
 module.exports = function(app){
 
