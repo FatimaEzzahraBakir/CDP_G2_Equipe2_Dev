@@ -5,15 +5,25 @@
   <meta charset="utf-8">
   <link rel="stylesheet" href="/css/materialize.css">
   <link rel="stylesheet" href="/css/style.css">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   <title>Ajouter Tâche</title>
 </head>
 
 <body>
-  <nav class="navmargin">
-    <div class="nav-wrapper">
-      <a href="/" class="brand-logo">Gestion projets</a>
-    </div>
-  </nav>
+    <nav class="navmargin">
+        <div class="nav-wrapper">
+          <ul id="nav-mobile" class="left hide-on-med-and-down">
+            <li>
+              <a href="/user/<%= userLogin %>/projects/<%= project.id %>/tasks/">
+                <i class="material-icons left">keyboard_backspace</i>Retour à la liste</a></li>
+    
+          </ul>
+          <a href="/" class="brand-logo center">Gestion projets</a>
+          <ul id="nav-mobile" class="right hide-on-med-and-down">
+            <li><a href="/logout">Déconnexion</a></li>
+          </ul>
+        </div>
+      </nav>
   <div class="container">
     <div class="row">
       <form action="/user/<%= userLogin %>/projects/<%= project.id %>/addTask" method="POST">
