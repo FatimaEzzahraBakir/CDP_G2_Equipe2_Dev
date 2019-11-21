@@ -6,10 +6,11 @@ const { check, validationResult } = require('express-validator');
 
 module.exports.validateNewIssue = function () {
   return [
-    check('description').not().isEmpty(),
-    check('difficulty').not().isEmpty(),
-    check('state').not().isEmpty(),
-    check('priority').not().isEmpty()
+    check('num', 'ID invalide').not().isEmpty().isInt(),
+    check('description', 'descrption invalide').not().isEmpty(),
+    check('difficulty', 'difficulté invalide').not().isEmpty().isInt(),
+    check('state', 'état invalide').not().isEmpty().matches(/^(TODO|DOING|DONE)$/),
+    check('priority', 'priorité invalide').not().isEmpty().matches(/^(HIGH|LOW)$/)
   ];
 }
 

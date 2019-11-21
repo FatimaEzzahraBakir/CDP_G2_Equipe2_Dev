@@ -44,7 +44,7 @@ module.exports.backlogUpdateIssueGet = async function (req, res, next) {
 
   let promises = await [
     IssueService.getIssue(issue_id),
-    ReleaseService.getReleasesFromProject(project).id
+    ReleaseService.getReleasesFromProject(project.id)
   ];
 
   Promise.all(promises).then((values) => {
@@ -54,12 +54,11 @@ module.exports.backlogUpdateIssueGet = async function (req, res, next) {
 }
 
 module.exports.backlogUpdateIssuePost = async function (req, res, next) {
-  let release_id;
+  let release_id = null;
   if (typeof req.body.sprint != 'undefined') {
     let release = await ReleaseService.getReleaseFromDescription(req.body.sprint);
-    release_id = release.id;
-  } else {
-    release_id = null;
+    if(release)
+      release_id = release.id;
   }
   let issue_id = req.params.id;
   await IssueService.updateIssue(issue_id, req.body.description, req.body.difficulty, req.body.state, req.body.priority, release_id);
@@ -85,6 +84,7 @@ module.exports.backlogAddIssuePost = async function (req, res, next) {
 
   let issueObject = {
     project: project.id,
+    num: req.body.num,
     description: req.body.description,
     priority: req.body.priority,
     difficulty: req.body.difficulty,

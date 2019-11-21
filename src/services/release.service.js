@@ -26,7 +26,7 @@ module.exports.getRelease = function (release_id) {
 
 module.exports.getReleaseFromDescription = function (description) {
   return new Promise(function (resolve) {
-    Release.findOne({ descprition: description },
+    Release.findOne({ description: description },
       (err, release) => {
         if (err) throw err;
         resolve(release);

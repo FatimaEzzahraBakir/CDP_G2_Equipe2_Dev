@@ -32,13 +32,18 @@
                   <input name="dod" type="text" class="validate" placeholder="Définition Of Done" required>
                 </div>
                 <div class="input-field">
-                  <input name="state" type="text" class="validate" placeholder="state" required>
+                  <select class="browser-default" name="state" required>
+                    <option value="" disabled selected>Etat</option>
+                    <option value="DONE">Done</option>
+                    <option value="DOING">Doing</option>
+                    <option value="TODO">ToDo</option>
+                  </select>
                 </div>
                 <div class="input-field">
-                    <input name="length" type="number" class="validate" placeholder="Coût" required>
+                  <input name="length" type="number" class="validate" placeholder="Coût" required>
                 </div>
                 <button class="btn waves-effect waves-light" type="submit">Ajouter</button>
-                <a class="btn waves-effect waves-light red" href="/">Retour</a>
+                <a class="btn waves-effect waves-light red" href="/user/<%= userLogin %>/projects/<%= project.id %>/tasks/">Retour</a>
               </div>
             </div>
           </div>
