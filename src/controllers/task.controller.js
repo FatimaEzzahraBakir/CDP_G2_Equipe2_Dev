@@ -1,5 +1,6 @@
 const TaskService = require('../services/task.service');
 const ProjectService = require('../services/project.service');
+const Task = require('../models/task.model');
 const { check, validationResult } = require('express-validator');
 
 exports.validate = () => {
@@ -72,10 +73,10 @@ exports.TaskAddDevPost = async function (req, res, next) {
 
 exports.TaskUpdateGet = async function (req, res, next) {
   let task = await Task.findById(req.params.task_id);
-  return res.render('updateTask', { 
-    user: req.user.login, 
-    project: res.locals.project, 
-    task: task 
+  return res.render('updateTask', {
+    user: req.user.login,
+    project: res.locals.project,
+    task: task
   });
 }
 

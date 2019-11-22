@@ -1,4 +1,5 @@
 const Release = require('../models/release.model');
+const Issue = require('../models/issue.model');
 const { check, validationResult } = require('express-validator');
 
 module.exports.validateNewRelease = function () {
@@ -72,9 +73,9 @@ module.exports.getIssuesMap = function (releases) {
             map.set(issue.id, issue.description);
           }
         });
+        resolve(map);
       });
     });
-    resolve(map);
   });
 }
 

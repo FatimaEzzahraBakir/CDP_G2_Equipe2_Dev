@@ -88,7 +88,10 @@ module.exports.updateIssue = function (issue_id, description, difficulty, state,
       },
       (err) => {
         if (err) throw err;
-        resolve();
+        Release.findOneAndUpdate({_id: release_id, issues: { $ne: issue_id }},
+          {$push: { issues:  issue_id }}, function(err, release){
+            resolve();
+          });
       }
     );
   });
