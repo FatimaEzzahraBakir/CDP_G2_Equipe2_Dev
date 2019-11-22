@@ -1,10 +1,17 @@
+const mongoose = require('mongoose');
+const mongoDB = 'mongodb+srv://dbAdmin:admindbCDP@cluster0-ryf5h.azure.mongodb.net/test?retryWrites=true&w=majority'
+
 const User = require('../../src/models/user.model');
+
 const puppeteer = require('puppeteer');
 var assert = require('chai').assert;
 
 
 (async () => {
-  const browser = await puppeteer.launch({headless:false});
+  mongoose.connect(mongoDB, {useNewUrlParser: true});
+  const db = mongoose.connection;
+
+  const browser = await puppeteer.launch();
   const page = await browser.newPage();
 
   await page.goto('http://localhost:8080/');
@@ -44,6 +51,11 @@ var assert = require('chai').assert;
   await browser.close();
 
   assert.equal(pageUrl, expectedUrl, 'Inscription valide');
+
+  await User.deleteOne({login: '123456Test123456'});
+
+  mongoose.connection.close();
+
 
 
 })();
