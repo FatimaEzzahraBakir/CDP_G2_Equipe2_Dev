@@ -6,7 +6,8 @@ function SortTable() {
   var TableIDvalue = arguments[2];
   var table = document.getElementById(TableIDvalue);
   var tbody = table.getElementsByTagName("tbody")[0];
-  var rows = tbody.getElementsByTagName("tr");
+  //var rows = tbody.getElementsByTagName("tr");
+  var rows = tbody.querySelectorAll('tr:not(.ignore-sorting)');
   var arrayOfRows = new Array();
 
   for (var i = 0, len = rows.length; i < len; i++) {
@@ -37,6 +38,7 @@ function SortTable() {
 
   //inversion fleche
   let icon = table.getElementsByTagName('th')[sortColumn].firstElementChild.innerHTML;
+  let ignored_rows = table.getElementsByClassName('ignore-sorting');
   if (icon === 'expand_more' || icon === 'unfold_more')
     icon = 'expand_less';
   else
@@ -46,6 +48,10 @@ function SortTable() {
   for (var i = 0, len = arrayOfRows.length; i < len; i++) {
     newTableBody.appendChild(rows[arrayOfRows[i].oldIndex].cloneNode(true));
   }
+  for (var i = 0, len = ignored_rows.length; i < len; i++) {
+    newTableBody.appendChild(ignored_rows[i]);
+  }
+
   table.replaceChild(newTableBody, tbody);
 } // function SortTable()
 

@@ -12,21 +12,24 @@ module.exports.backlogGet = async function (req, res, next) {
 
   let project = res.locals.project;
   let issues = await ProjectService.getIssues(project);
-  let sprint_map = await IssueService.getReleasesMap(issues);
+  let sprints_map = await IssueService.getReleasesMap(issues);
+  let sprints = await ReleaseService.getReleasesFromProject(project.id);
 
-  if (sprint_map != null) {
+  if (sprints_map != null) {
     return res.render('backlog', {
       user: req.user.login,
       project: project,
       issues: issues,
-      sprints: sprint_map
+      sprints_map: sprints_map,
+      sprints: sprints
     });
   }
   else {
     return res.render('backlog', {
       user: req.user.login,
       project: project,
-      issues: issues
+      issues: issues,
+      sprints: sprints
     });
   }
 
@@ -92,6 +95,7 @@ module.exports.backlogAddIssuePost = async function (req, res, next) {
     tasks: []
   };
 
-  let issue = await IssueService.createIssue(issueObject);
-  return res.redirect('/user/' + req.user.login + '/projects/' + req.params.project_id + '/backlog');
+  await IssueService.createIssue(issueObject);
+  return res.status(200).json({status:"ok"})
+  //return res.redirect(200, '/user/' + req.user.login + '/projects/' + req.params.project_id + '/backlog');
 }

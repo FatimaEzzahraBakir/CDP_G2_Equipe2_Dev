@@ -1,0 +1,33 @@
+<td>
+  <input name='num' id='idfield' type='number' class='validate num-input' maxlength='2' placeholder='ID' required>
+</td>
+<td>
+  <input name='description' id='descfield' type='text' class='validate' placeholder='description' required>
+</td>
+<td>
+  <select class='browser-default' id='priofield' name='priority'>
+    <option value='' disabled selected>Priorité</option>
+    <option value='HIGH'>High</option>
+    <option value='LOW'>Low</option>
+  </select></td>
+<td>
+  <select class='browser-default' id='statefield' name='state'>
+    <option value='' disabled selected>Etat</option>
+    <option value='DONE'>Done</option>
+    <option value='DOING'>Doing</option>
+    <option value='TODO'>ToDo</option>
+  </select></td>
+<td><input name='difficulty' id='difffield' type='number' class='validate num-input' required>
+</td>
+<td>
+  <select class='browser-default' id='sprintfield' name='sprint'>
+    <% if(typeof sprints != 'undefined') { %>
+    <% sprints.forEach(function(sprint)  { %>
+    <option value='<%= sprint.description %>'><%=sprint.description%></option>
+    <% })} %>
+  </select>
+</td>
+<td>
+  <a id='submitNewIssue' class='btn-floating waves-effect waves-light'><i class='material-icons'>done</i></a>
+  <a id='dismissNewIssue' class='btn-floating waves-effect waves-light red'><i class='material-icons'>close</i></a>
+</td>

@@ -56,3 +56,7 @@ nav {
 .row.membersubmitrow{
   margin-bottom: 0px;
 }
+
+.num-input {
+  width: 3em !important;
+}

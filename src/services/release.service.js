@@ -64,7 +64,7 @@ module.exports.getIssues = function (sprint) {
 module.exports.getIssuesMap = function (releases) {
   return new Promise((resolve, reject) => {
     let map = new Map();
-    if (!releases) resolve(map);
+    if (!releases || releases.length === 0) resolve(map);
     releases.forEach(function (release) {
       exports.getIssues(release).then((issues) => {
         if (issues.length == 0) resolve(map);
