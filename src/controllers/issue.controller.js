@@ -75,7 +75,7 @@ module.exports.backlogAddIssueGet = function (req, res, next) {
 module.exports.backlogAddIssuePost = async function (req, res, next) {
 
   const errors = validationResult(req);
-  if (!errors.isEmpty()) {
+  if (!errors.isEmpty()) { //TODO status d'erreur propre
     return res.render('addIssue', {
       userLogin: req.params.login,
       project: res.locals.project,
@@ -84,6 +84,8 @@ module.exports.backlogAddIssuePost = async function (req, res, next) {
   }
 
   let project = res.locals.project;
+  let release = req.body.release;
+  if(release == '') release = undefined;
 
   let issueObject = {
     project: project.id,
@@ -92,6 +94,7 @@ module.exports.backlogAddIssuePost = async function (req, res, next) {
     priority: req.body.priority,
     difficulty: req.body.difficulty,
     state: req.body.state,
+    release: release,
     tasks: []
   };
 

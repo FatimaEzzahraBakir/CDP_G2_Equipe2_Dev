@@ -21,9 +21,10 @@
 </td>
 <td>
   <select class='browser-default' id='sprintfield' name='sprint'>
+    <option value='' selected>Sprint</option>
     <% if(typeof sprints != 'undefined') { %>
     <% sprints.forEach(function(sprint)  { %>
-    <option value='<%= sprint.description %>'><%=sprint.description%></option>
+    <option value='<%= sprint._id %>'><%=sprint.description%></option>
     <% })} %>
   </select>
 </td>
