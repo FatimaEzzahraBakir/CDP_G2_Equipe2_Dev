@@ -31,32 +31,33 @@
           <div class="row">
             <div class="col s8">
               <% if(sprints && typeof sprints != 'undefined') { %>
-                <% sprints.forEach(function(sprint) { if(sprint != null){%>
+                <% sprints.forEach(function(sprint) { %>
+                  <% if(sprint != null){%>
                   <div class="row">
                     <div class="card z-depth-3">
                       <div class="card-content">
                         <h6 class="card-title"><%= sprint.num %> : </%=><%= sprint.description %></h6>
-                        <p><%= sprint.startDate.getDate() %>/<%= sprint.startDate.getMonth() +1 %>/<%= sprint.startDate.getFullYear(); %> - 
-                          <%= sprint.endDate.getDate() %>/<%= sprint.endDate.getMonth() +1 %>/<%= sprint.endDate.getFullYear(); %> </p>
+                        <p><%= sprint.startDate.getDate() %>/<%= sprint.startDate.getMonth() +1 %>/<%= sprint.startDate.getFullYear(); %> - <%= sprint.endDate.getDate() %>/<%= sprint.endDate.getMonth() +1 %>/<%= sprint.endDate.getFullYear(); %> </p>
                         <ul class="collection">
-                          <% sprint.tasks.forEach(function(task_id){ tasks_map.forEach( (elemID, task) => {%>
-                            <%if(elemID == task_id) { %>
-                              <li class="collection-item"><%= task.num %></li>
+                          <% sprint.tasks.forEach(function(task_id){ %>
+                            <% tasks_map.forEach( (task_num, elemID) => {%>
+                              <%if(elemID == task_id) { %>
+                                <li class="collection-item">Tâche #<%= task_num %></li>
                               <%}%>
-                              <% })%>
-                              <% }) %>
-                            </ul>
-                          </div>
-                          <div class="card-action">
-                            <a href="/user/<%= user.login %>/projects/<%= project.id %>/sprints/update/<%= sprint._id %>" class="center-align">Modifier</a>
-                            <a href="/user/<%= user.login %>/projects/<%= project.id %>/sprints/delete/<%= sprint._id %>"
-                              class="right materialize-red-text">Supprimer</a>
-                            </div>
-                          </div>
+                            <% })%>
+                          <% }) %>
+                        </ul>
+                      </div>
+                      <div class="card-action">
+                        <a href="/user/<%= user.login %>/projects/<%= project.id %>/sprints/update/<%= sprint._id %>" class="center-align">Modifier</a>
+                        <a href="/user/<%= user.login %>/projects/<%= project.id %>/sprints/delete/<%= sprint._id %>"
+                          class="right materialize-red-text">Supprimer</a>
                         </div>
-                        <% } }); %>
-                        <% } %>
-
+                      </div>
+                    </div>
+                    <% } %>
+                    <%}); %>
+                    <% } %>
                       </div>
                       <div class="col s4">
                         <div class="cardmargin">

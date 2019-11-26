@@ -1,5 +1,6 @@
 const TaskService = require('../services/task.service');
 const ProjectService = require('../services/project.service');
+const SprintService = require('../services/sprint.service');
 const Task = require('../models/task.model');
 const { check, validationResult } = require('express-validator');
 
@@ -10,18 +11,22 @@ exports.validate = () => {
 exports.TaskGetList = async function (req, res, next) {
   let tasks = await ProjectService.getTasks(res.locals.project);
   let dev_maps = await TaskService.getDevsMap(res.locals.project);
+  let sprints_map = await TaskService.getSprintsMap(tasks);
   return res.render('tasks', {
     user: req.user.login,
     project: res.locals.project,
     tasks: tasks,
-    dev_maps: dev_maps
+    dev_maps: dev_maps,
+    sprints_map: sprints_map
   });
 }
 
-exports.TaskAddGet = function (req, res, next) {
+exports.TaskAddGet = async function (req, res, next) {
+  let sprints = await SprintService.getSprintsFromProject(res.locals.project.id);
   return res.render('addTask', {
     userLogin: req.params.login,
     project: res.locals.project,
+    sprints : sprints,
     error: req.flash("error")
   });
 }
@@ -36,11 +41,13 @@ exports.TaskAddPost = async function (req, res, next) {
 
   let project = res.locals.project;
   let taskObject = {
+    num: req.body.num,
     project: project.id,
     description: req.body.description,
     dod: req.body.dod,
     state: req.body.state,
     length: req.body.length,
+    sprint: req.body.sprint,
     issues: []
   };
   await TaskService.createTask(taskObject);

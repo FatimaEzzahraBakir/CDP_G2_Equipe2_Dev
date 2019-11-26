@@ -28,7 +28,7 @@
     <div class="row">
       <form action="/user/<%= userLogin %>/projects/<%= project.id %>/addTask" method="POST">
         <div class="row">
-          <div class="col s12">
+          <div class="col s8 offset-m2">
             <div class="card center-align mg">
               <div class="card-content">
                 <span class="card-title">Ajouter une tâche</span>
@@ -50,6 +50,14 @@
                     <option value="DONE">Done</option>
                     <option value="DOING">Doing</option>
                     <option value="TODO">ToDo</option>
+                  </select>
+                </div>
+                <div class="input-field">
+                  <select class="browser-default" name="sprint" required>
+                    <option value="" selected>Sprint</option>
+                    <% sprints.forEach(sprint => { %>
+                      <option value="<%= sprint.id %>"><%=sprint.num%></option>
+                    <% }); %>
                   </select>
                 </div>
                 <div class="input-field">

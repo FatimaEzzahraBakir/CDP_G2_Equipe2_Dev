@@ -72,17 +72,21 @@ module.exports.getTasks = function (sprint) {
 module.exports.getTasksMap = function (sprints) {
   return new Promise((resolve, reject) => {
     let map = new Map();
+    let promises = [];
     if (!sprints || sprints.length === 0) resolve(map);
-    sprints.forEach(function (sprints) {
-      exports.getTasks(sprints).then((tasks) => {
+    sprints.forEach(function (sprint) {
+      promises.push(exports.getTasks(sprint));
+    });
+    Promise.all(promises).then(array_of_tasks => {
+      array_of_tasks.forEach(tasks => {
         if (tasks.length == 0) resolve(map);
         tasks.forEach(task => {
           if (task != null) {
-            map.set(task.id, task);
+            map.set(task.id, task.num);
           }
         });
-        resolve(map);
       });
+      resolve(map);
     });
   });
 }
