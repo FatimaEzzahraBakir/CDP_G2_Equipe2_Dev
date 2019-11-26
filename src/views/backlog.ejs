@@ -38,7 +38,6 @@
               <th onClick="SortTable(2, 'P', 'issuesTable')">Priorité <i class="material-icons">unfold_more</i></th>
               <th onClick="SortTable(3, 'S', 'issuesTable')">État <i class="material-icons">unfold_more</i></th>
               <th onClick="SortTable(4, 'N', 'issuesTable')">Difficulté <i class="material-icons">unfold_more</i></th>
-              <th>Sprint associé</th>
             </tr>
           </thead>
           <tbody>
@@ -52,12 +51,6 @@
       <td><%= issue.priority %></td>
       <td><%= issue.state %></td>
       <td><%= issue.difficulty %></td>
-      <td>
-        <% sprints_map.forEach( (sprintDesc, issueID) => {%>
-        <% if(issueID == issue.id) { %>
-        <%= sprintDesc %>
-        <% } });%>
-      </td>
 
       <td>
         <p><a href="/user/<%= user %>/projects/<%= project.id %>/backlog/<%= issue._id %>/update"
@@ -82,15 +75,15 @@
     </div>
     </div>
 
+    <script src="/scripts/sortTable.js"></script>
     <script src="/jquery/jquery-3.4.1.min.js"></script>
     <script src="/ejs/ejs.js"></script>
     <script>
-      var sprints = <%-JSON.stringify(sprints)%>; //déclare les variables pour addNewIssue.js
+      //déclare les variables pour addNewIssue.js
       var userLogin = "<%= user %>";
       var projectID = "<%=project.id%>";
     </script>
     <script src="/scripts/addNewIssue.js"></script>
-    <script src="/scripts/sortTable.js"></script>
 
 </body>
 

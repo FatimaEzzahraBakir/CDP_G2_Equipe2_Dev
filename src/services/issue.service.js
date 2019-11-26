@@ -1,5 +1,4 @@
 const Issue = require('../models/issue.model');
-const Release = require('../models/release.model');
 const Project = require('../models/project.model');
 const { check, validationResult } = require('express-validator');
 
@@ -20,24 +19,6 @@ module.exports.getIssue = function (issue_id) {
       if (err) throw err;
       resolve(issue);
     });
-  });
-}
-
-module.exports.getReleasesMap = function (issues) {
-  return new Promise((resolve, reject) => {
-    let map = new Map();
-    let promises = [];
-    issues.forEach(function (issue, index, array) {
-      promises.push(Release.findById(issue.release).exec());
-    });
-    Promise.all(promises).then((releases) => {
-      releases.forEach(function (release, i) {
-        if (release != null)
-          map.set(issues[i].id, release.description);
-      });
-      resolve(map);
-    });
-
   });
 }
 
@@ -74,7 +55,7 @@ module.exports.deleteIssue = function (issue_id) {
   });
 }
 
-module.exports.updateIssue = function (issue_id, description, difficulty, state, priority, release_id) {
+module.exports.updateIssue = function (issue_id, description, difficulty, state, priority) {
   return new Promise(function (resolve) {
     Issue.findByIdAndUpdate({
       _id: issue_id
@@ -83,16 +64,11 @@ module.exports.updateIssue = function (issue_id, description, difficulty, state,
         description: description,
         difficulty: difficulty,
         state: state,
-        priority: priority,
-        release: release_id
+        priority: priority
       },
       (err) => {
         if (err) throw err;
-        Release.findOneAndUpdate({_id: release_id, issues: { $ne: issue_id }},
-          {$push: { issues:  issue_id }}, function(err, release){
-            resolve();
-          });
-      }
-    );
+        resolve();
+      });
   });
 }

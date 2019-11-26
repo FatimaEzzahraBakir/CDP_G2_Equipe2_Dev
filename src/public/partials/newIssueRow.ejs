@@ -20,15 +20,6 @@
 <td><input name='difficulty' id='difffield' type='number' class='validate num-input' required>
 </td>
 <td>
-  <select class='browser-default' id='sprintfield' name='sprint'>
-    <option value='' selected>Sprint</option>
-    <% if(typeof sprints != 'undefined') { %>
-    <% sprints.forEach(function(sprint)  { %>
-    <option value='<%= sprint._id %>'><%=sprint.description%></option>
-    <% })} %>
-  </select>
-</td>
-<td>
   <a id='submitNewIssue' class='btn-floating waves-effect waves-light'><i class='material-icons'>done</i></a>
   <a id='dismissNewIssue' class='btn-floating waves-effect waves-light red'><i class='material-icons'>close</i></a>
 </td>

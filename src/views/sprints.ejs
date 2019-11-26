@@ -35,12 +35,13 @@
                   <div class="row">
                     <div class="card z-depth-3">
                       <div class="card-content">
-                        <h6 class="card-title"><%= sprint.description %></h6>
-                        <p><%= sprint.releaseDate.getDate() %>/<%= sprint.releaseDate.getMonth() +1 %>/<%= sprint.releaseDate.getFullYear(); %></p>
+                        <h6 class="card-title"><%= sprint.num %> : </%=><%= sprint.description %></h6>
+                        <p><%= sprint.startDate.getDate() %>/<%= sprint.startDate.getMonth() +1 %>/<%= sprint.startDate.getFullYear(); %> - 
+                          <%= sprint.endDate.getDate() %>/<%= sprint.endDate.getMonth() +1 %>/<%= sprint.endDate.getFullYear(); %> </p>
                         <ul class="collection">
-                          <% sprint.issues.forEach(function(issue){ issues_map.forEach( (issueDesc, issueID) => {%>
-                            <%if(issueID == issue) { %>
-                              <li class="collection-item"><%= issueDesc %></li>
+                          <% sprint.tasks.forEach(function(task_id){ tasks_map.forEach( (elemID, task) => {%>
+                            <%if(elemID == task_id) { %>
+                              <li class="collection-item"><%= task.num %></li>
                               <%}%>
                               <% })%>
                               <% }) %>

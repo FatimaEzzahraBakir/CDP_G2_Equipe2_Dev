@@ -8,7 +8,6 @@ var issueSchema = new Schema({
   difficulty: Number,
   state:String,
   project: { type: Schema.Types.ObjectId, ref: 'projects' },
-  release: { type: Schema.Types.ObjectId, ref: 'release' },
   tasks: [{ type: Schema.Types.ObjectId, ref: 'tasks' }]
 });
 

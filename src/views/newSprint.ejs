@@ -26,8 +26,16 @@
                 <div class="card-pannel small red darken-2 white-text"><%= error.msg %></div>
                 <% }); %>
                 <div class="input-field">
-                  <label for="date" class="active">Date</label>
-                  <input name="date" type="text" class="datepicker" placeholder="dd/mm/yyyy" required>
+                  <label for="ID" class="active">ID</label>
+                  <input name="num" type="number" required>
+                </div>
+                <div class="input-field">
+                  <label for="startDate" class="active">Date de début</label>
+                  <input name="startDate" type="text" id="datepicker1" placeholder="yyyy/mm/dd" required>
+                </div>
+                <div class="input-field">
+                  <label for="endDate" class="active">Date de fin</label>
+                  <input name="endDate" type="text" id="datepicker2" placeholder="yyyy/mm/dd" required>
                 </div>
                 <div class="input-field">
                   <label for="description" class="active">Description</label>
@@ -42,8 +50,7 @@
         </div>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
         <script>
-          const Calender = document.querySelector('.datepicker');
-          M.Datepicker.init(Calender, {
+          CalenderObject = {
             format: 'yyyy/mm/dd',
             yearRange: 4,
             firstDay: 1,
@@ -55,8 +62,11 @@
               weekdaysAbbrev: ["D", "L", "M", "M", "J", "V", "S"],
               cancel: "Annuler"
 
-            }
-          });
+            }};
+          const Calender1 = document.querySelector('#datepicker1');
+          M.Datepicker.init(Calender1, CalenderObject);
+          const Calender2 = document.querySelector('#datepicker2');
+          M.Datepicker.init(Calender2, CalenderObject);
         </script>
 </body>
 

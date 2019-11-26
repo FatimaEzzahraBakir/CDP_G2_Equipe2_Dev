@@ -1,11 +1,11 @@
 var mongoose = require("mongoose");
-const Issue = require('./issue.model');
 var Schema = mongoose.Schema;
 
-var releaseSchema = new mongoose.Schema({
+var releaseSchema = new Schema({
     description: String,
     features: String,
     releaseDate: Date,
+    version: String,
     issues: [{ type: Schema.Types.ObjectId, ref: 'issues' }],
     project: { type: Schema.Types.ObjectId, ref: 'projects' }
 });

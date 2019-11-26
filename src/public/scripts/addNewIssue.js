@@ -6,7 +6,7 @@ document.getElementById("newIssueButton").addEventListener("click", function () 
       url: "/partials/newIssueRow.ejs",
       async: false
     }).responseText;
-    let element = ejs.render(raw_ejs, { sprints: sprints });
+    let element = ejs.render(raw_ejs);
     $("#newIssueRow").append(element);
 
     $("#dismissNewIssue").click(function () {
@@ -25,7 +25,6 @@ document.getElementById("newIssueButton").addEventListener("click", function () 
           priority: $('#priofield').val(),
           difficulty: $('#difffield').val(),
           state: $('#statefield').val(),
-          release: $('#sprintfield').val()
         },
         error: function () {
           $("#newIssueRow").empty();
