@@ -5,7 +5,22 @@ const { check, validationResult } = require('express-validator');
 
 module.exports.validateNewIssue = function () {
   return [
-    check('num', 'ID invalide').not().isEmpty().isInt(),
+    check('num', 'ID invalide').not().isEmpty().isInt().custom((value, {req} ) => {
+      console.log(' dans issue au moins');
+      return new Promise((resolve, reject) => {
+        Issue.findOne({ num: req.body.num,
+                        project: req.params.project_id },
+                        function (err, issue) { //ID unique dans le projet
+          if (err) {
+            reject(new Error('Erreur Serveur'))
+          }
+          if (Boolean(issue)) {
+            reject(new Error('ID déjà utilisé'))
+          }
+          resolve(true)
+        });
+      });
+    }),
     check('description', 'descrption invalide').not().isEmpty(),
     check('difficulty', 'difficulté invalide').not().isEmpty().isInt(),
     check('state', 'état invalide').not().isEmpty().matches(/^(TODO|DOING|DONE)$/),

@@ -7,7 +7,9 @@ module.exports = function (app) {
 
   app.get('/user/:login/projects/:project_id/addTask', TaskController.TaskAddGet);
 
-  app.post('/user/:login/projects/:project_id/addTask', TaskController.TaskAddPost);
+  app.post('/user/:login/projects/:project_id/addTask',
+    TaskController.validate(),
+    TaskController.TaskAddPost);
 
   app.get('/user/:login/projects/:project_id/tasks/:task_id/delete', TaskController.TaskDeleteGet);
 

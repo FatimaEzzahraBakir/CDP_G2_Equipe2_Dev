@@ -51,7 +51,7 @@ module.exports.backlogAddIssueGet = function (req, res, next) {
 module.exports.backlogAddIssuePost = async function (req, res, next) {
 
   const errors = validationResult(req);
-  if (!errors.isEmpty()) { //TODO status d'erreur propre
+  if (!errors.isEmpty()) {
     return res.render('addIssue', {
       userLogin: req.params.login,
       project: res.locals.project,

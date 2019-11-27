@@ -4,6 +4,21 @@ const { check, validationResult } = require('express-validator');
 
 module.exports.validateNewSprint = function () {
   return [
+    check('num').not().isEmpty().isInt().custom((value, {req} ) => {
+      return new Promise((resolve, reject) => {
+        Sprint.findOne({ num: req.body.num,
+                        project: req.params.project_id },
+                        function (err, sprint) { //ID unique dans le projet
+          if (err) {
+            reject(new Error('Erreur Serveur'))
+          }
+          if (Boolean(sprint)) {
+            reject(new Error('ID déjà utilisé'))
+          }
+          resolve(true)
+        });
+      });
+    }),
     check('startDate').not().isEmpty().withMessage('Date de début requise').custom((value) => {
       return new Promise((resolve, reject) => {
         if (!isNaN(Date.parse(value)))
@@ -104,9 +119,13 @@ module.exports.createSprint = function (sprintObject) {
 module.exports.deleteSprint = function (sprint_id) {
   return new Promise(function (resolve) {
     Sprint.findByIdAndDelete(sprint_id,
-      (err) => {
-        if (err) throw err;
-        resolve();
+      (err, sprint) => {
+        Task.update({ sprint: sprint.id },
+          { sprint: undefined },
+          (err) => {
+            if (err) throw err;
+            resolve();
+          });
       });
   });
 }

@@ -7,10 +7,26 @@ const { check, validationResult } = require('express-validator');
 
 module.exports.validateNewTask = function () {
   return [
-    check('description').not().isEmpty(),
-    check('dod').not().isEmpty(),
-    check('state').not().isEmpty(),
-    check('length').not().isEmpty()
+    check('num', 'ID invalide').not().isEmpty().isInt().custom((value, {req} ) => {
+      return new Promise((resolve, reject) => {
+        Task.findOne({ num: req.body.num,
+                        project: req.params.project_id },
+                        function (err, task) { //ID unique dans le projet
+          if (err) {
+            reject(new Error('Erreur Serveur'))
+          }
+          if (Boolean(task)) {
+            reject(new Error('ID déjà utilisé'))
+          }
+          resolve(true)
+        });
+      });
+    }),
+    check('description', 'description requise').not().isEmpty(),
+    check('sprint', 'sprint requis').not().isEmpty(),
+    check('dod', 'def of done requise').not().isEmpty(),
+    check('state', 'état requis').not().isEmpty(),
+    check('length', 'difficulté requise').not().isEmpty()
   ];
 }
 
