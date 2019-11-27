@@ -7,6 +7,7 @@ const session = require('express-session');
 const passport = require('passport');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
+//const mongoDB = 'mongodb://localhost:27017/cdpdb';
 const mongoDB = 'mongodb://database:27017/cdp-project'
 //const mongoDB = 'mongodb+srv://dbAdmin:admindbCDP@cluster0-ryf5h.azure.mongodb.net/test?retryWrites=true&w=majority'
 
@@ -39,5 +40,6 @@ require('./routes/project')(app);
 require('./routes/backlog')(app);
 require('./routes/sprints')(app);
 require('./routes/tasks')(app);
+require('./routes/doc')(app);
 
 app.listen(8080);
