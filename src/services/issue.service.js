@@ -6,7 +6,6 @@ const { check, validationResult } = require('express-validator');
 module.exports.validateNewIssue = function () {
   return [
     check('num', 'ID invalide').not().isEmpty().isInt().custom((value, {req} ) => {
-      console.log(' dans issue au moins');
       return new Promise((resolve, reject) => {
         Issue.findOne({ num: req.body.num,
                         project: req.params.project_id },

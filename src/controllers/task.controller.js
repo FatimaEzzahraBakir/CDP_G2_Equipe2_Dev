@@ -5,7 +5,6 @@ const Task = require('../models/task.model');
 const { check, validationResult } = require('express-validator');
 
 exports.validate = () => {
-  console.log('juila');
   return TaskService.validateNewTask();
 }
 
@@ -33,7 +32,6 @@ exports.TaskAddGet = async function (req, res, next) {
 }
 
 exports.TaskAddPost = async function (req, res, next) {
-  console.log('dans le post (pas bon signe)');
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     let sprints = await SprintService.getSprintsFromProject(res.locals.project.id);
