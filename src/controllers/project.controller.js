@@ -18,7 +18,7 @@ exports.projectNewPost = async function (req, res, next) {
     description: req.body.description,
     members: [req.user.id]
   };
-  
+
   await ProjectService.createProject(projectObject, req.user);
   return res.redirect('/user/' + req.params.login + '/projects');
 }
@@ -82,7 +82,7 @@ exports.projectUpdatePost = async function (req, res, next) {
   return res.redirect('/user/' + req.params.login + '/projects/' + req.params.project_id);
 }
 
-exports.projectDeleteGet = async function (req, res, next){
+exports.projectDeleteGet = async function (req, res, next) {
   let project = res.locals.project;
   await ProjectService.deleteProject(project);
   res.redirect('/user/' + req.params.login + '/projects/');
@@ -90,4 +90,27 @@ exports.projectDeleteGet = async function (req, res, next){
 
 exports.projectNewGet = async function (req, res, next) {
   return res.render('newProject', { user: req.user.login });
+}
+
+exports.docNewGet = function (req, res) {
+  return res.render('newDoc', {
+    user: req.user.login,
+    project: res.locals.project
+  });
+}
+
+exports.docNewPost = function (req, res) {
+  const userDoc = req.body.userDoc;
+  const adminDoc = req.body.adminDoc;
+  let response = {};
+  //TODO ajouter les docs au projet
+  if(userDoc) {
+    response.user = true;
+    //ProjectService.setUserDoc(project_id, userDoc);
+  }
+  if(adminDoc) {
+    response.admin = true;
+    //ProjectService.setAdminDoc(project_id, adminDoc);
+  }
+  return res.send(response);
 }
