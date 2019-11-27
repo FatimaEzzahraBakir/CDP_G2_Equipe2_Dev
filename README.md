@@ -1,5 +1,8 @@
 # CDP_G2_Equipe2_Dev
 
+[![Build Status](https://travis-ci.org/FatimaEzzahraBakir/CDP_G2_Equipe2_Dev.svg?branch=master)](https://travis-ci.org/FatimaEzzahraBakir/CDP_G2_Equipe2_Dev)
+
+
 ## Docker
 
 On peut maintenant lancer notre application avec Docker :

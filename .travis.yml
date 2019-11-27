@@ -1,0 +1,14 @@
+language: node_js
+
+node_js:
+  - "10"
+sudo: required
+addons:
+  apt:
+    packages:
+      - docker-ce
+services:
+  - docker
+before_install:
+  - docker-compose  build
+  - docker-compose up -d 
