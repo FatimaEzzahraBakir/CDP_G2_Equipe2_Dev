@@ -4,3 +4,15 @@ services:
     build: .
     ports:
       - "8080:8080"
+  database:
+    image: mongo
+    volumes:
+      - "mongodb_data:/data/db"
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_DATABASE: cdp-project
+
+volumes:
+  mongodb_data:
+    driver: local

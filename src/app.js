@@ -7,8 +7,8 @@ const session = require('express-session');
 const passport = require('passport');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
-//const mongoDB = 'mongodb://localhost:27017/cdpdb'
-const mongoDB = 'mongodb+srv://dbAdmin:admindbCDP@cluster0-ryf5h.azure.mongodb.net/test?retryWrites=true&w=majority'
+const mongoDB = 'mongodb://database:27017/cdp-project'
+//const mongoDB = 'mongodb+srv://dbAdmin:admindbCDP@cluster0-ryf5h.azure.mongodb.net/test?retryWrites=true&w=majority'
 
 mongoose.connect(mongoDB, {useNewUrlParser: true});
 const db = mongoose.connection;
