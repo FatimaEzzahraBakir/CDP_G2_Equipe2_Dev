@@ -7,7 +7,7 @@ On peut maintenant lancer notre application avec Docker :
 Se placer à la racine du projet, là où est présent le Dockerfile et rentrer ces commandes :
 
 ```
-docker build -t web-app
+docker build -t web-app .
 ```
 Une fois la commande finie, faire :
 ```
