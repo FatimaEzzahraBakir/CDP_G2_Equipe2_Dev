@@ -12,3 +12,5 @@ services:
 before_install:
   - docker-compose  build
   - docker-compose up -d 
+script:
+  - "npm run test"

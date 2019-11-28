@@ -1,7 +1,7 @@
 var expect  = require('chai').expect;
 var request = require('request');
 
-var home_url = 'http://localhost:8080';
+var home_url = 'http://192.168.99.100/:8080';
 
 it('Home page status', function(done) {
   request(home_url , function(error, response, body) {
