@@ -123,6 +123,32 @@ exports.addMember = function (query, project_id) {
     });
 }
 
+exports.setUserDoc = function (project_id, userDoc) {
+    return new Promise(function (resolve) {
+        Project.findByIdAndUpdate(
+            project_id,
+            { userDoc: userDoc },
+            (err) => {
+                if (err) throw err;
+                resolve();
+            }
+        );
+    })
+}
+
+exports.setAdminDoc = function (project_id, adminDoc) {
+    return new Promise(function (resolve) {
+        Project.findByIdAndUpdate(
+            project_id,
+            { adminDoc: adminDoc },
+            (err) => {
+                if (err) throw err;
+                resolve();
+            }
+        );
+    })
+}
+
 exports.updateProject = function (project_id, name, description) {
     return new Promise(function (resolve) {
         Project.findOneAndUpdate({

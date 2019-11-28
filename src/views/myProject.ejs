@@ -40,8 +40,7 @@
         <a href="/user/<%= user %>/projects/<%= project.id %>/tasks" class="collection-item btn ">Tâches</a>
         <a href="/user/<%= user %>/projects/<%= project.id %>/sprints" class="collection-item btn ">Sprints</a>
         <a href="/user/<%= user %>/projects/<%= project.id %>/tests" class="collection-item btn disabled">Tests</a>
-        <a href="/user/<%= user %>/projects/<%= project.id %>/newDoc"
-          class="collection-item btn">Documentations</a>
+        <a href="/user/<%= user %>/projects/<%= project.id %>/newDoc" class="collection-item btn">Documentations</a>
       </div>
 
       <div class="row">
@@ -92,6 +91,16 @@
           <a href="/user/<%= user %>/projects/<%= project.id %>/addMember" class="center-align green-text accent-4">
             <i class="material-icons left">group_add</i>Ajouter un membre</a>
         </div>
+        <% } %>
+      </div>
+      <div class="collection">
+        <% if(project.adminDoc) { %>
+        <a class="collection-item" href="/user/<%= user %>/projects/<%= project.id %>/doc/adminDoc.txt">Doc
+          Administrateur <i class="material-icons left">file_download</i></a>
+        <% } %>
+        <% if(project.userDoc) { %>
+        <a class="collection-item" href="/user/<%= user %>/projects/<%= project.id %>/doc/userDoc.txt">Doc Utilisateur
+          <i class="material-icons left">file_download</i></a>
         <% } %>
       </div>
     </div>

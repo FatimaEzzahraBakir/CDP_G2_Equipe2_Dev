@@ -103,14 +103,25 @@ exports.docNewPost = function (req, res) {
   const userDoc = req.body.userDoc;
   const adminDoc = req.body.adminDoc;
   let response = {};
-  //TODO ajouter les docs au projet
   if(userDoc) {
     response.user = true;
-    //ProjectService.setUserDoc(project_id, userDoc);
+    ProjectService.setUserDoc(req.params.project_id, userDoc);
   }
   if(adminDoc) {
     response.admin = true;
-    //ProjectService.setAdminDoc(project_id, adminDoc);
+    ProjectService.setAdminDoc(req.params.project_id, adminDoc);
   }
   return res.send(response);
+}
+
+exports.docGet = function (req, res) {
+  let fileName = req.params.docname;
+  if(fileName !== 'adminDoc.txt' && fileName !== 'userDoc.txt' )
+    return res.status(404).send();
+
+  let docs = { "adminDoc.txt" : res.locals.project.adminDoc,
+    "userDoc.txt" : res.locals.project.userDoc };
+
+  res.set({"Content-Disposition":"attachment; filename=\"" + fileName + "\""});
+  return res.send(docs[fileName]);
 }

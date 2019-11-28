@@ -6,4 +6,6 @@ module.exports = function (app) {
 
   app.post('/user/:login/projects/:project_id/newDoc', ProjectController.docNewPost);
 
+  app.get('/user/:login/projects/:project_id/doc/:docname', ProjectController.docGet);
+
 }

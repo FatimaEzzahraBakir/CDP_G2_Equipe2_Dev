@@ -6,7 +6,9 @@ var projectSchema = new Schema({
   description: String,
   members: [{ type: Schema.Types.ObjectId, ref: 'users' }],
   issues: [{ type: Schema.Types.ObjectId, ref: 'issues' }],
-  tasks: [{ type: Schema.Types.ObjectId, ref: 'tasks' }]
+  tasks: [{ type: Schema.Types.ObjectId, ref: 'tasks' }],
+  userDoc : String,
+  adminDoc : String
 });
 
 const Project = mongoose.model('projects', projectSchema);
