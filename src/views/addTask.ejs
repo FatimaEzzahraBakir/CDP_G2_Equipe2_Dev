@@ -10,33 +10,33 @@
 </head>
 
 <body>
-    <nav class="navmargin">
-        <div class="nav-wrapper">
-          <ul id="nav-mobile" class="left hide-on-med-and-down">
-            <li>
-              <a href="/user/<%= userLogin %>/projects/<%= project.id %>/tasks/">
-                <i class="material-icons left">keyboard_backspace</i>Retour à la liste</a></li>
-    
-          </ul>
-          <a href="/" class="brand-logo center">Gestion projets</a>
-          <ul id="nav-mobile" class="right hide-on-med-and-down">
-            <li><a href="/logout">Déconnexion</a></li>
-          </ul>
-        </div>
-      </nav>
+  <nav class="navmargin">
+    <div class="nav-wrapper">
+      <ul id="nav-mobile" class="left hide-on-med-and-down">
+        <li>
+          <a href="/user/<%= userLogin %>/projects/<%= project.id %>/sprints/<%= sprint.id %>#tasks">
+            <i class="material-icons left">keyboard_backspace</i>Retour à la liste</a></li>
+
+      </ul>
+      <a href="/" class="brand-logo center">Gestion projets</a>
+      <ul id="nav-mobile" class="right hide-on-med-and-down">
+        <li><a href="/logout">Déconnexion</a></li>
+      </ul>
+    </div>
+  </nav>
   <div class="container">
     <div class="row">
-      <form action="/user/<%= userLogin %>/projects/<%= project.id %>/addTask" method="POST">
+      <form action="/user/<%= userLogin %>/projects/<%= project.id %>/sprints/<%= sprint.id %>/addTask" method="POST">
         <div class="row">
           <div class="col s8 offset-m2">
             <div class="card center-align mg">
               <div class="card-content">
                 <span class="card-title">Ajouter une tâche</span>
                 <% if (typeof  errors != 'undefined') { %>
-                  <% errors.forEach(function(error) { %>
-                  <div class="card-pannel small red darken-2 white-text"><%= error.msg %></div>
-                  <% }); %>
-                  <% } %>
+                <% errors.forEach(function(error) { %>
+                <div class="card-pannel small red darken-2 white-text"><%= error.msg %></div>
+                <% }); %>
+                <% } %>
                 <div class="input-field">
                   <input name="num" type="number" class="validate" placeholder="ID" required>
                 </div>
@@ -54,19 +54,23 @@
                     <option value="TODO">ToDo</option>
                   </select>
                 </div>
-                <div class="input-field">
-                  <select class="browser-default" name="sprint">
-                    <option disabled value selected>Sprint</option>
-                    <% sprints.forEach(sprint => { %>
-                      <option value="<%= sprint.id %>"><%=sprint.num%></option>
-                    <% }); %>
-                  </select>
-                </div>
+
                 <div class="input-field">
                   <input name="length" type="number" class="validate" placeholder="Coût" required>
                 </div>
+                <div class="input-field">
+                  <% sprintIssues.forEach( issue => { %>
+                  <p>
+                    <label>
+                      <input type="checkbox" name="issues" value="<%= issue._id %>"/>
+                      <span>Issue #<%= issue.num %>: <%=issue.description%></span>
+                    </label>
+                  </p>
+                  <% }) %>
+                </div>
                 <button class="btn waves-effect waves-light" type="submit">Ajouter</button>
-                <a class="btn waves-effect waves-light red" href="/user/<%= userLogin %>/projects/<%= project.id %>/tasks/">Retour</a>
+                <a class="btn waves-effect waves-light red"
+                  href="/user/<%= userLogin %>/projects/<%= project.id %>/sprints/<%= sprint.id %>#tasks">Retour</a>
               </div>
             </div>
           </div>

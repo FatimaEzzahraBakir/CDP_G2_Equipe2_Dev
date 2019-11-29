@@ -1,5 +1,6 @@
 const IssueService = require('../services/issue.service');
 const ProjectService = require('../services/project.service');
+const SprintService = require('../services/sprint.service');
 const { check, validationResult } = require('express-validator');
 
 
@@ -11,10 +12,12 @@ module.exports.backlogGet = async function (req, res, next) {
 
   let project = res.locals.project;
   let issues = await ProjectService.getIssues(project);
+  let sprints = await SprintService.getSprintsFromProject(project.id);
   return res.render('backlog', {
     user: req.user.login,
     project: project,
-    issues: issues
+    issues: issues,
+    sprints: sprints
   });
 }
 
@@ -60,6 +63,10 @@ module.exports.backlogAddIssuePost = async function (req, res, next) {
   }
 
   let project = res.locals.project;
+  let sprint_id = req.body.sprint;
+  if(sprint_id === '') 
+    sprint_id = undefined;
+
 
   let issueObject = {
     project: project.id,
@@ -68,6 +75,7 @@ module.exports.backlogAddIssuePost = async function (req, res, next) {
     priority: req.body.priority,
     difficulty: req.body.difficulty,
     state: req.body.state,
+    sprint: sprint_id,
     tasks: []
   };
 

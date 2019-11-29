@@ -29,7 +29,7 @@
     <%}%>
     </nav>
     <div class="container">
-      <div class="col s8">
+      <div class="row">
         <table class = "highlight responsive-table" id="issuesTable">
           <thead>
             <tr>
@@ -38,6 +38,7 @@
               <th onClick="SortTable(2, 'P', 'issuesTable')">Priorité <i class="material-icons">unfold_more</i></th>
               <th onClick="SortTable(3, 'S', 'issuesTable')">État <i class="material-icons">unfold_more</i></th>
               <th onClick="SortTable(4, 'N', 'issuesTable')">Difficulté <i class="material-icons">unfold_more</i></th>
+              <th onClick="SortTable(5, 'N', 'issuesTable')">Sprint <i class="material-icons">unfold_more</i></th>
             </tr>
           </thead>
           <tbody>
@@ -52,11 +53,19 @@
       <td><%= issue.state %></td>
       <td><%= issue.difficulty %></td>
 
+      <% if(issue.sprint) { %>
+      <td><a href="/user/<%= user %>/projects/<%= project.id %>/sprints/<%= issue.sprint %>">
+        <%- sprints.find((sprint) => { return (sprint._id.equals(issue.sprint));}).num %>
+        </a></td>
+      <% } else { %>
+      <td></td>
+      <%}%>
+
       <td>
         <p><a href="/user/<%= user %>/projects/<%= project.id %>/backlog/<%= issue._id %>/update"
-            class="center-align"><i class="material-icons left">edit</i></a></p>
-        <p><a href="/user/<%= user %>/projects/<%= project.id %>/backlog/<%= issue._id %>/delete"
-            class="materialize-red-text"><i class="material-icons left">delete_forever</i></a></p>
+      class="center-align"><i class="material-icons left">edit</i></a></p>
+      <p><a href="/user/<%= user %>/projects/<%= project.id %>/backlog/<%= issue._id %>/delete"
+          class="materialize-red-text"><i class="material-icons left">delete_forever</i></a></p>
       </td>
     </tr>
     <% }}); %>
@@ -66,7 +75,7 @@
     </tbody>
     </table>
 
-    <div class="col s4">
+    <div class="row">
       <div class="cardmargin">
         <!-- href="/user/<%= user %>/projects/<%= project.id %>/addIssue" -->
         <a id="newIssueButton" class="waves-effect waves-light btn btn-large"><i
@@ -75,13 +84,19 @@
     </div>
     </div>
 
+
     <script src="/scripts/sortTable.js"></script>
     <script src="/jquery/jquery-3.4.1.min.js"></script>
+
     <script src="/ejs/ejs.js"></script>
     <script>
       //déclare les variables pour addNewIssue.js
       var userLogin = "<%= user %>";
       var projectID = "<%=project.id%>";
+      var sprints = [];
+      <% if (sprints) {%>
+        sprints = <%- JSON.stringify(sprints) %>;
+      <%} %>
     </script>
     <script src="/scripts/addNewIssue.js"></script>
 

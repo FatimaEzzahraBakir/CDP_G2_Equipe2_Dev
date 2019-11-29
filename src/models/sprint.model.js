@@ -7,6 +7,7 @@ var sprintSchema = new Schema({
     features: String,
     startDate: Date,
     endDate: Date,
+    issues: [{ type: Schema.Types.ObjectId, ref: 'issues' }],
     tasks: [{ type: Schema.Types.ObjectId, ref: 'tasks' }],
     project: { type: Schema.Types.ObjectId, ref: 'projects' }
 });

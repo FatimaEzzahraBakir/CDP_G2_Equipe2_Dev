@@ -15,59 +15,84 @@
       <ul id="nav-mobile" class="left hide-on-med-and-down">
         <li>
           <% if(typeof project != 'undefined') { %>
-            <a href="/user/<%= user.login %>/projects/<%= project.id %>">
-              <i class="material-icons left">keyboard_backspace</i>Retour au projet</a></li>
+          <a href="/user/<%= user.login %>/projects/<%= project.id %>">
+            <i class="material-icons left">keyboard_backspace</i>Retour au projet</a></li>
 
-            </ul>
-            <a href="/" class="brand-logo center">Gestion projets</a>
-            <ul id="nav-mobile" class="right hide-on-med-and-down">
-              <li><a>Bienvenue <%= user.login %></a></li>
-              <li><a href="/logout">Déconnexion</a></li>
-            </ul>
-          </div>
-          <%}%>
+      </ul>
+      <a href="/" class="brand-logo center">Gestion projets</a>
+      <ul id="nav-mobile" class="right hide-on-med-and-down">
+        <li><a>Bienvenue <%= user.login %></a></li>
+        <li><a href="/logout">Déconnexion</a></li>
+      </ul>
+    </div>
+    <%}%>
         </nav>
         <div class="container">
           <div class="row">
             <div class="col s8">
               <% if(sprints && typeof sprints != 'undefined') { %>
-                <% sprints.forEach(function(sprint) { %>
-                  <% if(sprint != null){%>
-                  <div class="row">
-                    <div class="card z-depth-3">
-                      <div class="card-content">
-                        <h6 class="card-title"><%= sprint.num %> : </%=><%= sprint.description %></h6>
-                        <p><%= sprint.startDate.getDate() %>/<%= sprint.startDate.getMonth() +1 %>/<%= sprint.startDate.getFullYear(); %> - <%= sprint.endDate.getDate() %>/<%= sprint.endDate.getMonth() +1 %>/<%= sprint.endDate.getFullYear(); %> </p>
-                        <ul class="collection">
-                          <% sprint.tasks.forEach(function(task_id){ %>
-                            <% tasks_map.forEach( (task_num, elemID) => {%>
-                              <%if(elemID == task_id) { %>
-                                <li class="collection-item">Tâche #<%= task_num %></li>
-                              <%}%>
+    <% sprints.forEach(function(sprint) { %>
+    <% if(sprint != null){%>
+    <div class="row">
+      <div class="card z-depth-3">
+        <div class="card-content">
+          <h6 class="card-title"><%= sprint.num %> : </%=><%= sprint.description %></h6>
+          <p>
+            <%= sprint.startDate.getDate() %>/<%= sprint.startDate.getMonth() +1 %>/<%= sprint.startDate.getFullYear(); %>
+            - <%= sprint.endDate.getDate() %>/<%= sprint.endDate.getMonth() +1 %>/<%= sprint.endDate.getFullYear(); %>
+          </p>
+          <ul class="collection">
+            <% sprint.tasks.forEach(function(task_id){ %>
+            <% tasks_map.forEach( (task_num, elemID) => {%>
+            <%if(elemID == task_id) { %>
+            <li class="collection-item">Tâche #<%= task_num %></li>
+            <%}%>
                             <% })%>
-                          <% }) %>
-                        </ul>
-                      </div>
-                      <div class="card-action">
-                        <a href="/user/<%= user.login %>/projects/<%= project.id %>/sprints/update/<%= sprint._id %>" class="center-align">Modifier</a>
-                        <a href="/user/<%= user.login %>/projects/<%= project.id %>/sprints/delete/<%= sprint._id %>"
-                          class="right materialize-red-text">Supprimer</a>
-                        </div>
-                      </div>
-                    </div>
-                    <% } %>
-                    <%}); %>
-                    <% } %>
-                      </div>
-                      <div class="col s4">
-                        <div class="cardmargin">
-                          <a href="/user/<%= user.login %>/projects/<%= project.id %>/sprints/newSprint" class="waves-effect waves-light btn btn-large"><i
-                            class="material-icons left">add</i>Nouveau sprint</a>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
+            <% }) %>
+          </ul>
+        </div>
+        <div class="card-action">
+          <a href="/user/<%= user.login %>/projects/<%= project.id %>/sprints/<%= sprint._id %>"
+            class="left">Accéder</a>
+          <a href="/user/<%= user.login %>/projects/<%= project.id %>/sprints/<%= sprint._id %>/update"
+            class="center-align">Modifier</a>
+          <a href="/user/<%= user.login %>/projects/<%= project.id %>/sprints/<%= sprint._id %>/delete"
+            class="right materialize-red-text">Supprimer</a>
+        </div>
+      </div>
+    </div>
+    <% } %>
+    <%}); %>
+    <% } %>
+    </div>
+    <div class="col s4">
+      <div class="cardmargin">
+        <a href="/user/<%= user.login %>/projects/<%= project.id %>/sprints/newSprint"
+          class="waves-effect waves-light btn btn-large"><i class="material-icons left">add</i>Nouveau sprint</a>
+      </div>
+    </div>
+    </div>
+    </div>
 
-                  </body>
+    <!-- Modal Structure -->
+    <div id="modal1" class="modal">
+      <div class="modal-content">
+        <h3 class="red-text text-darken-3">Supression</h3>
+        <h5>Êtes vous sûr de vouloir supprimer ce sprint et toutes ses tâches associées ? </h5>
+      </div>
+      <div class="modal-footer">
+        <a href="#!" class="modal-close waves-effect waves-blue btn-flat">Anuler</a>
+        <a href="#!" class="modal-close waves-effect waves-red btn-flat">Confirmer</a>
+      </div>
+    </div>
 
-                  </html>
+    <script src="/jquery/jquery-3.4.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/js/materialize.min.js"></script>
+
+    <script>$(document).ready(function () {
+        $('.modal').modal();
+      });</script>
+
+</body>
+
+</html>

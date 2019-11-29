@@ -18,6 +18,15 @@
     <option value='TODO'>ToDo</option>
   </select></td>
 <td><input name='difficulty' id='difffield' type='number' class='validate num-input' required>
+<td>
+  <select class='browser-default' id='sprintfield' name='sprint'>
+    <option value='' disabled selected>Sprint</option>
+    <option value=''>Aucun</option>
+    <% sprints.forEach(sprint => { %>
+      <option value='<%= sprint._id %>' ><%= sprint.num %></option>
+    <% }); %>
+  </select>
+</td>
 </td>
 <td>
   <a id='submitNewIssue' class='btn-floating waves-effect waves-light'><i class='material-icons'>done</i></a>

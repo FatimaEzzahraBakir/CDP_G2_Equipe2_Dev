@@ -1,23 +1,26 @@
 const Issue = require('../models/issue.model');
 const Project = require('../models/project.model');
+const Sprint = require('../models/sprint.model');
 const { check, validationResult } = require('express-validator');
 
 
 module.exports.validateNewIssue = function () {
   return [
-    check('num', 'ID invalide').not().isEmpty().isInt().custom((value, {req} ) => {
+    check('num', 'ID invalide').not().isEmpty().isInt().custom((value, { req }) => {
       return new Promise((resolve, reject) => {
-        Issue.findOne({ num: req.body.num,
-                        project: req.params.project_id },
-                        function (err, issue) { //ID unique dans le projet
-          if (err) {
-            reject(new Error('Erreur Serveur'))
-          }
-          if (Boolean(issue)) {
-            reject(new Error('ID déjà utilisé'))
-          }
-          resolve(true)
-        });
+        Issue.findOne({
+          num: req.body.num,
+          project: req.params.project_id
+        },
+          function (err, issue) { //ID unique dans le projet
+            if (err) {
+              reject(new Error('Erreur Serveur'))
+            }
+            if (Boolean(issue)) {
+              reject(new Error('ID déjà utilisé'))
+            }
+            resolve(true)
+          });
       });
     }),
     check('description', 'descrption invalide').not().isEmpty(),
@@ -41,12 +44,18 @@ module.exports.createIssue = async function (issueObject) {
     let issueInstance = new Issue(issueObject);
     issueInstance.save((err, issue) => {
       if (err) throw err;
-      Project.findByIdAndUpdate(
-        issue.project,
+      Sprint.findByIdAndUpdate(
+        issue.sprint,
         { $push: { issues: issue.id } },
         (err) => {
           if (err) throw err;
-          resolve();
+          Project.findByIdAndUpdate(
+            issue.project,
+            { $push: { issues: issue.id } },
+            (err) => {
+              if (err) throw err;
+              resolve();
+            });
         });
     });
   });
@@ -58,13 +67,20 @@ module.exports.deleteIssue = function (issue_id) {
       { _id: issue_id },
       (err, issue) => {
         if (err) throw err;
-        Project.findByIdAndUpdate(
-          issue.project,
+        Sprint.findByIdAndUpdate(
+          issue.sprint,
           { $pull: { issues: issue_id } },
           (err) => {
             if (err) throw err;
-            resolve();
+            Project.findByIdAndUpdate(
+              issue.project,
+              { $pull: { issues: issue_id } },
+              (err) => {
+                if (err) throw err;
+                resolve();
+              });
           });
+
       });
   });
 }

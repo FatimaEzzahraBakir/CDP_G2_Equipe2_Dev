@@ -25,6 +25,7 @@ document.getElementById("newIssueButton").addEventListener("click", function () 
           priority: $('#priofield').val(),
           difficulty: $('#difffield').val(),
           state: $('#statefield').val(),
+          sprint: $('#sprintfield').val()
         },
         error: function () {
           $("#newIssueRow").empty();

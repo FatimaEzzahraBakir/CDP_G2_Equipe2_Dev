@@ -29,7 +29,7 @@
                 <% }); %>
                 <% } %>
               </div>
-              <form action="/user/<%= user.login %>/projects/<%= project.id %>/tasks/<%=task.id%>/addDev" method="POST">
+              <form action="/user/<%= user.login %>/projects/<%= project.id %>/sprints/<%= sprint._id %>/tasks/<%=task.id%>/addDev" method="POST">
                 <div class="row">
                   <div class="input-field col s12 ">
                     <label for="dev" class="active">Sélectionnez un développeur</label>

@@ -1,22 +1,26 @@
 const Sprint = require('../models/sprint.model');
 const Task = require('../models/task.model');
+const TaskService = require('../services/task.service');
+const Issue = require('../models/issue.model');
 const { check, validationResult } = require('express-validator');
 
 module.exports.validateNewSprint = function () {
   return [
-    check('num').not().isEmpty().isInt().custom((value, {req} ) => {
+    check('num').not().isEmpty().isInt().custom((value, { req }) => {
       return new Promise((resolve, reject) => {
-        Sprint.findOne({ num: req.body.num,
-                        project: req.params.project_id },
-                        function (err, sprint) { //ID unique dans le projet
-          if (err) {
-            reject(new Error('Erreur Serveur'))
-          }
-          if (Boolean(sprint)) {
-            reject(new Error('ID déjà utilisé'))
-          }
-          resolve(true)
-        });
+        Sprint.findOne({
+          num: req.body.num,
+          project: req.params.project_id
+        },
+          function (err, sprint) { //ID unique dans le projet
+            if (err) {
+              reject(new Error('Erreur Serveur'))
+            }
+            if (Boolean(sprint)) {
+              reject(new Error('ID déjà utilisé'))
+            }
+            resolve(true)
+          });
       });
     }),
     check('startDate').not().isEmpty().withMessage('Date de début requise').custom((value) => {
@@ -84,6 +88,22 @@ module.exports.getTasks = function (sprint) {
   });
 }
 
+module.exports.getIssues = function (sprint) {
+  return new Promise(function (resolve) {
+    let res = [];
+    if (typeof sprint.issues == 'undefined' || sprint.issues.length === 0) {
+      resolve(res);
+    }
+    let promises = [];
+    sprint.issues.forEach(issue_id => {
+      promises.push(Issue.findById(issue_id).exec());
+    });
+    Promise.all(promises).then(values => {
+      resolve(values);
+    });
+  });
+}
+
 module.exports.getTasksMap = function (sprints) {
   return new Promise((resolve, reject) => {
     let map = new Map();
@@ -120,27 +140,36 @@ module.exports.deleteSprint = function (sprint_id) {
   return new Promise(function (resolve) {
     Sprint.findByIdAndDelete(sprint_id,
       (err, sprint) => {
-        Task.update({ sprint: sprint.id },
+        if (err) throw err;
+        Issue.update({ sprint: sprint_id },
           { sprint: undefined },
-          (err) => {
+          (err) => { 
+            //delete toutes les tâches du sprint
             if (err) throw err;
-            resolve();
+            let promises = []
+            sprint.tasks.forEach(task_id => {
+              promises.push(TaskService.deleteTask(task_id));
+            });
+            Promise.all(promises).then(
+              () => {
+                resolve();
+              });
           });
       });
   });
 }
 
 module.exports.updateSprint = function (sprint_id, startDate, endDate, description) {
-  return new Promise(function (resolve) {
-    Sprint.findByIdAndUpdate(sprint_id,
-      {
-        startDate: new Date(startDate),
-        endDate: new Date(endDate),
-        description: description
-      },
-      function (err) {
-        if (err) throw err;
-        resolve();
-      })
-  });
-}
+      return new Promise(function (resolve) {
+        Sprint.findByIdAndUpdate(sprint_id,
+          {
+            startDate: new Date(startDate),
+            endDate: new Date(endDate),
+            description: description
+          },
+          function (err) {
+            if (err) throw err;
+            resolve();
+          })
+      });
+    }

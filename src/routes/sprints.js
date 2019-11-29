@@ -10,10 +10,17 @@ module.exports = function (app) {
 
   app.get('/user/:login/projects/:project_id/sprints', SprintController.SprintsGet);
 
-  app.get('/user/:login/projects/:project_id/sprints/delete/:sprint_id', SprintController.SprintDeleteGet);
+  app.get('/user/:login/projects/:project_id/sprints/:sprint_id/delete', SprintController.SprintDeleteGet);
 
-  app.get('/user/:login/projects/:project_id/sprints/update/:sprint_id', SprintController.SprintUpdateGet);
+  app.get('/user/:login/projects/:project_id/sprints/:sprint_id/update', SprintController.SprintUpdateGet);
 
-  app.post('/user/:login/projects/:project_id/sprints/update/:sprint_id', SprintController.SprintUpdatePost);
+  app.post('/user/:login/projects/:project_id/sprints/:sprint_id/update', SprintController.SprintUpdatePost);
+
+  app.get('/user/:login/projects/:project_id/sprints/:sprint_id', SprintController.SprintDetailsGet);
+
+  app.get('/user/:login/projects/:project_id/sprints/:sprint_id/issues', SprintController.SprintIssuesGet);
+
+  app.get('/user/:login/projects/:project_id/sprints/:sprint_id/tasks', SprintController.SprintTasksGet);
+
 
 }

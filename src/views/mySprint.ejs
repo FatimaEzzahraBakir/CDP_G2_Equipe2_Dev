@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="fr" dir="ltr">
+
+<head>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="/css/materialize.css">
+  <link rel="stylesheet" href="/css/style.css">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <title>Sprint <%= sprint.num %></title>
+</head>
+
+<body>
+
+  <nav class="navmargin">
+    <div class="nav-wrapper">
+      <ul id="nav-mobile" class="left hide-on-med-and-down">
+        <li>
+          <% if(typeof project != 'undefined') { %>
+          <a href="/user/<%= user.login %>/projects/<%= project.id %>/sprints">
+            <i class="material-icons left">keyboard_backspace</i>Retour aux sprints</a></li>
+      </ul>
+      <a class="brand-logo center">Sprint <%= sprint.num %></a>
+      <ul id="nav-mobile" class="right hide-on-med-and-down">
+        <li><a>Bienvenue <%= user.login %></a></li>
+        <li><a href="/logout">Déconnexion</a></li>
+      </ul>
+    </div>
+    <%}%>
+  </nav>
+
+  <div class="row">
+    <div class="col s12">
+      <ul class="tabs">
+        <li class="tab col s6"><a href="#issues">Issues</a></li>
+        <li class="tab col s5"><a href="#tasks">Tasks</a></li>
+      </ul>
+
+      <div id="issues" class="col s12">
+        <div class="container">
+          <table id="issuesTable">
+            <thead>
+              <tr>
+                <th onClick="SortTable(0, 'N', 'issuesTable')">ID <i class="material-icons">unfold_more</i></th>
+                <th>Description</th>
+                <th onClick="SortTable(2, 'P', 'issuesTable')">Priorité <i class="material-icons">unfold_more</i></th>
+                <th onClick="SortTable(3, 'S', 'issuesTable')">État <i class="material-icons">unfold_more</i></th>
+                <th onClick="SortTable(4, 'N', 'issuesTable')">Difficulté <i class="material-icons">unfold_more</i></th>
+                <th>Tasks</th>
+              </tr>
+            </thead>
+            <tbody>
+                <% if(typeof issues != 'undefined') {%>
+                  <% issues.forEach(issue => { %>
+                    <tr>
+                      <td><%= issue.num %></td>
+                      <td><p><%= issue.description %></p></td>
+                      <td><%= issue.priority %></td>
+                      <td><%= issue.state %></td>
+                      <td><%= issue.difficulty %></td>
+                      <td>
+                        <% if(issue.tasks) {%>
+                        <% issue.tasks.forEach(issuetask => { %>
+                          <%- tasks.find(task => { return issuetask.equals(task._id);}).num %>,
+                        <% }); %>
+                        <% } %>
+                      </td>
+                    </tr>
+                  <% }); %>
+                <% } %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    <div id="tasks" class="col s12">
+      <div class="preloader-wrapper big active">
+        <div class="spinner-layer spinner-blue-only">
+          <div class="circle-clipper left">
+            <div class="circle"></div>
+          </div>
+          <div class="gap-patch">
+            <div class="circle"></div>
+          </div>
+          <div class="circle-clipper right">
+            <div class="circle"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    </div>
+    </div>
+    
+    <script src="/jquery/jquery-3.4.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/js/materialize.min.js"></script>
+    <script src="/ejs/ejs.js"></script>
+
+    <script>
+      $(document).ready(function () {
+
+        $('.tabs').tabs();
+
+        let tasks_page = $.ajax({
+          url: "/user/<%= user.login %>/projects/<%= project.id %>/sprints/<%= sprint.id %>/tasks",
+          async: false
+        }).responseText;
+
+        $('#tasks').empty();
+        $('#tasks').append(tasks_page);
+      });
+    </script>
+
+</body>
+
+</html>

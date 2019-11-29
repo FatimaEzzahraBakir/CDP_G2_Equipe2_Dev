@@ -1,4 +1,5 @@
 const SprintService = require('../services/sprint.service');
+const ProjectService = require('../services/project.service');
 const { check, validationResult } = require('express-validator');
 
 exports.validate = function () {
@@ -59,4 +60,37 @@ exports.SprintUpdateGet = async function (req, res, next) {
 exports.SprintUpdatePost = async function (req, res, next) {
   await SprintService.updateSprint(req.params.sprint_id, req.body.date, req.body.description);
   res.redirect('/user/' + req.params.login + '/projects/' + req.params.project_id + "/sprints");
+}
+
+exports.SprintDetailsGet = async function (req, res, next) {
+  let sprint = await SprintService.getSprint(req.params.sprint_id);
+  let tasks = await SprintService.getTasks(sprint);
+  let issues = await SprintService.getIssues(sprint);
+  res.render('mySprint', {
+    project: res.locals.project,
+    user: req.user,
+    sprint: sprint,
+    issues, issues,
+    tasks: tasks
+  });
+}
+
+exports.SprintTasksGet = async function (req, res, next) { 
+  let sprint = await SprintService.getSprint(req.params.sprint_id);
+  let tasks = await SprintService.getTasks(sprint);
+  let members = await ProjectService.getMembers(res.locals.project.members);
+  return res.render('tasks', {
+    project: res.locals.project,
+    user: req.user.login,
+    tasks: tasks,
+    sprint: sprint,
+    memvers: members,
+    sprints_map: []
+  });
+}
+
+exports.SprintIssuesGet = async function (req, res, next) {
+  let sprint = await SprintService.getSprint(req.params.sprint_id);
+  let issues = await SprintService.getIssues(sprint);
+  return res.send(issues);
 }
