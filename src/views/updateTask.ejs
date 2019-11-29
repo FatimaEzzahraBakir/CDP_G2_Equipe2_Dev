@@ -14,7 +14,7 @@
     <div class="nav-wrapper">
       <ul id="nav-mobile" class="left hide-on-med-and-down">
         <li>
-          <a href="/user/<%= user.login %>/projects/<%= project.id %>/sprints/<%= sprint.id %>#issues">
+          <a href="/user/<%= user.login %>/projects/<%= project.id %>/sprints/<%= task.sprint %>#issues">
             <i class="material-icons left">keyboard_backspace</i>Retour au sprint</a>
         </li>
       </ul>
@@ -26,7 +26,7 @@
   </nav>
   <div class="container">
     <div class="row">
-      <form action="/user/<%= user.login %>/projects/<%= project.id %>/sprints/<%= sprint._id %>/tasks/<%= task._id %>/update" method="POST">
+      <form action="/user/<%= user.login %>/projects/<%= project.id %>/sprints/<%= task.sprint %>/tasks/<%= task._id %>/update" method="POST">
         <div class="row">
           <div class="col s12">
             <div class="card center-align mg">
@@ -36,31 +36,49 @@
                 <div class="card-pannel small red darken-2 white-text"><%= error %></div>
                 <% } %>
                 <div class="input-field">
-                  <input name="description" type="text" class="validate" value="<%=task.description%>" required>
+                  <label for="description" class="active">Description</label>
+                  <input name="description" id="description" type="text" class="validate" value="<%=task.description%>" required>
                 </div>
                 <div class="input-field">
-                  <input name="dod" type="text" class="validate" value="<%=task.dod%>" required>
+                    <label for="dod" class="active">Definition of done</label>
+                  <input name="dod" id="dod" type="text" class="validate" value="<%=task.dod%>" required>
                 </div>
                 <div class="input-field">
-                  <input name="state" type="text" class="validate" value="<%=task.state%>" required>
+                    <label for="state" class="active">État</label>
+                  <input name="state" id="state" type="text" class="validate" value="<%=task.state%>" required>
                 </div>
                 <div class="input-field">
-                  <input name="length" type="number" class="validate" value="<%=task.length%>" required>
+                  <label for="length" class="active">Difficulté</label>
+                  <input name="length" id="length" type="number" class="validate" value="<%=task.length%>" required>
                 </div>
+                <% if(sprintIssues.length > 0 ) {%>
                 <div class="input-field">
-                    <% sprintIssues.forEach( issue => { %>
-                    <p>
-                      <label>
-                        <% if(task.issues.some(taskissue => taskissue.equals(issue._id))){ %>
-                          <input type="checkbox" name="issues" value="<%= issue._id %>" checked/>
-                        <% } else {%>
-                          <input type="checkbox" name="issues" value="<%= issue._id %>"/>
-                        <% } %>
-                        <span>Issue #<%= issue.num %>: <%=issue.description%></span>
-                      </label>
-                    </p>
-                    <% }) %>
-                  </div>
+                  <label for="issues" class="active">Issues</label>
+                  <% sprintIssues.forEach( issue => { %>
+                  <p>
+                    <label>
+                      <% if(task.issues && task.issues.some(taskissue => taskissue.equals(issue._id))){ %>
+                        <input type="checkbox" name="issues" value="<%= issue._id %>" checked/>
+                      <% } else {%>
+                        <input type="checkbox" name="issues" value="<%= issue._id %>"/>
+                      <% } %>
+                      <span>Issue #<%= issue.num %>: <%=issue.description%></span>
+                    </label>
+                  </p>
+                  <% }) %>
+                </div>
+                <% } %>
+                <div class="input-field">
+                  <label for="sprint" class="active">Sprint</label>
+                    <select class='browser-default' name='sprint' id="sprint">
+                      <option value='' disabled selected>Sprint</option>
+                      
+                      <% sprints.forEach(sprint => { %>
+                        <option value='<%= sprint._id %>' <%if(task.sprint.equals(sprint._id)){%><%="selected"%><%}%>  ><%= sprint.num %></option>
+                      <% }); %>
+                      
+                    </select>
+                </div>
                 <button class="btn waves-effect waves-light" type="submit">Mettre à jour</button>
                 <a class="btn waves-effect waves-light red"
                   href="/user/<%= user.login %>/projects/<%= project.id %>/tasks">Annuler </a>

@@ -37,38 +37,52 @@
 
       <div id="issues" class="col s12">
         <div class="container">
-          <table id="issuesTable">
-            <thead>
-              <tr>
-                <th onClick="SortTable(0, 'N', 'issuesTable')">ID <i class="material-icons">unfold_more</i></th>
-                <th>Description</th>
-                <th onClick="SortTable(2, 'P', 'issuesTable')">Priorité <i class="material-icons">unfold_more</i></th>
-                <th onClick="SortTable(3, 'S', 'issuesTable')">État <i class="material-icons">unfold_more</i></th>
-                <th onClick="SortTable(4, 'N', 'issuesTable')">Difficulté <i class="material-icons">unfold_more</i></th>
-                <th>Tasks</th>
-              </tr>
-            </thead>
-            <tbody>
-                <% if(typeof issues != 'undefined') {%>
-                  <% issues.forEach(issue => { %>
-                    <tr>
-                      <td><%= issue.num %></td>
-                      <td><p><%= issue.description %></p></td>
-                      <td><%= issue.priority %></td>
-                      <td><%= issue.state %></td>
-                      <td><%= issue.difficulty %></td>
-                      <td>
-                        <% if(issue.tasks) {%>
-                        <% issue.tasks.forEach(issuetask => { %>
-                          <%- tasks.find(task => { return issuetask.equals(task._id);}).num %>,
-                        <% }); %>
-                        <% } %>
-                      </td>
-                    </tr>
-                  <% }); %>
-                <% } %>
-            </tbody>
-          </table>
+          <div class="row">
+            <table id="issuesTable">
+              <thead>
+                <tr>
+                  <th onClick="SortTable(0, 'N', 'issuesTable')">ID <i class="material-icons">unfold_more</i></th>
+                  <th>Description</th>
+                  <th onClick="SortTable(2, 'P', 'issuesTable')">Priorité <i class="material-icons">unfold_more</i></th>
+                  <th onClick="SortTable(3, 'S', 'issuesTable')">État <i class="material-icons">unfold_more</i></th>
+                  <th onClick="SortTable(4, 'N', 'issuesTable')">Difficulté <i class="material-icons">unfold_more</i></th>
+                  <th>Tasks</th>
+                </tr>
+              </thead>
+              <tbody>
+                  <% if(typeof issues != 'undefined') {%>
+                    <% issues.forEach(issue => { %>
+                      <tr>
+                        <td><%= issue.num %></td>
+                        <td><p><%= issue.description %></p></td>
+                        <td><%= issue.priority %></td>
+                        <td><%= issue.state %></td>
+                        <td><%= issue.difficulty %></td>
+                        <td>
+                          <% if(issue.tasks) {%>
+                          <% issue.tasks.forEach(issuetask => { %>
+                            <% let task = tasks.find(task => { return issuetask.equals(task._id);}); %>
+                            <% if(task.state === 'DONE') { %>
+                              <span class="green-text text-darken-3"><%= task.num %>/</span>
+                            <% } else if(task.state === 'DOING') { %> 
+                              <span class="blue-text text-darken-3"><%= task.num %>/</span>
+                            <% } else {%>
+                              <span class="red-text text-darken-3"><%= task.num %>/</span>
+                            <% } %>
+                          <% }); %>
+                          <% } %>
+                        </td>
+                      </tr>
+                    <% }); %>
+                  <% } %>
+              </tbody>
+            </table>
+          </div>
+          <div class="row">
+            <div class="col s6 offset-s3">
+              <a href="/user/<%= user.login %>/projects/<%= project.id %>/backlog" class="btn-large">Accéder aux issues du projet</a>
+            </div>
+          </div>
         </div>
       </div>
 

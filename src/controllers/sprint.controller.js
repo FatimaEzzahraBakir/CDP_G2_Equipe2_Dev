@@ -39,8 +39,13 @@ exports.SprintNewPost = async function (req, res, next) {
 
 exports.SprintsGet = async function (req, res, next) {
   let sprints = await SprintService.getSprintsFromProject(req.params.project_id);
-  let tasks_map = await SprintService.getTasksMap(sprints);
-  return res.render('sprints', { user: req.user, project: res.locals.project, sprints: sprints, tasks_map: tasks_map });
+  let tasks = await ProjectService.getTasks(res.locals.project);
+  return res.render('sprints', { 
+    user: req.user, 
+    project: res.locals.project, 
+    sprints: sprints, 
+    tasks : tasks
+  });
 }
 
 exports.SprintDeleteGet = async function (req, res, next) {
@@ -84,8 +89,7 @@ exports.SprintTasksGet = async function (req, res, next) {
     user: req.user.login,
     tasks: tasks,
     sprint: sprint,
-    memvers: members,
-    sprints_map: []
+    members: members
   });
 }
 

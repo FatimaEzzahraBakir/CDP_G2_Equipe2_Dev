@@ -30,13 +30,19 @@ module.exports.backlogUpdateIssueGet = async function (req, res, next) {
 
   let project = res.locals.project;
   let issue_id = req.params.id;
+  let sprints = await SprintService.getSprintsFromProject(project._id);
 
   let promises = await [
     IssueService.getIssue(issue_id)
   ];
 
   Promise.all(promises).then((values) => {
-    return res.render('updateIssue', { user: req.user.login, project: project, issue: values[0] });
+    return res.render('updateIssue', { 
+      user: req.user.login, 
+      project: project, 
+      issue: values[0],
+      sprints: sprints
+    });
   }).catch((err) => { throw err; });
 
 }

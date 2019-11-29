@@ -90,16 +90,17 @@ exports.TaskUpdateGet = async function (req, res, next) {
   let task = await Task.findById(req.params.task_id);
   let sprint = await SprintService.getSprint(req.params.sprint_id);
   let sprintIssues = await SprintService.getIssues(sprint);
+  let sprints = await SprintService.getSprintsFromProject(res.locals.project._id);
   return res.render('updateTask', {
     user: req.user,
     project: res.locals.project,
     task: task,
-    sprint: sprint,
-    sprintIssues: sprintIssues
+    sprintIssues: sprintIssues,
+    sprints: sprints
   });
 }
 
 exports.TaskUpdatePost = async function (req, res, next) {
-  await TaskService.updateTask(req.params.task_id, req.body.description, req.body.dod, req.body.state, req.body.length, req.body.issues);
+  await TaskService.updateTask(req.params.task_id, req.body.description, req.body.dod, req.body.state, req.body.length, req.body.issues, req.body.sprint);
   return res.redirect('/user/' + req.user.login + '/projects/' + req.params.project_id + '/sprints/' + req.params.sprint_id + '#tasks');
 }

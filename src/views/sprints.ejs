@@ -41,14 +41,44 @@
             <%= sprint.startDate.getDate() %>/<%= sprint.startDate.getMonth() +1 %>/<%= sprint.startDate.getFullYear(); %>
             - <%= sprint.endDate.getDate() %>/<%= sprint.endDate.getMonth() +1 %>/<%= sprint.endDate.getFullYear(); %>
           </p>
-          <ul class="collection">
-            <% sprint.tasks.forEach(function(task_id){ %>
-            <% tasks_map.forEach( (task_num, elemID) => {%>
-            <%if(elemID == task_id) { %>
-            <li class="collection-item">Tâche #<%= task_num %></li>
-            <%}%>
-                            <% })%>
-            <% }) %>
+          <h6 class="center-align">Vos tâches :</h4>
+          <ul class="collapsible">
+            <% tasks.forEach(function(task) { %>
+            <%if(sprint.tasks.some(sprinttask => sprinttask.equals(task._id)) 
+            && task.dev 
+            && task.dev.equals(user._id)) { %>
+            <li>
+              <% 
+              let badge_color = 'blue';
+              if(task.state === 'DONE')
+                  badge_color = 'green'
+              else if(task.state === 'TODO')
+                  badge_color = 'red'
+              %>
+              <div class="collapsible-header">Tâche #<%= task.num %> <span class="new badge <%= badge_color %>" data-badge-caption=""><%= task.state %></span></div>
+              <div class="collapsible-body"><%= task.description %></div>
+            </li>
+            <% } %>
+            <% }); %>
+          </ul>
+          <h6 class="center-align">Les autres tâches du sprint :</h4>
+          <ul class="collapsible">
+            <% tasks.forEach(function(task) { %>
+            <%if(sprint.tasks.some(sprinttask => sprinttask.equals(task._id)) 
+            && (!task.dev || !task.dev.equals(user._id))) { %>
+            <li>
+                <% 
+              let badge_color = 'blue';
+              if(task.state === 'DONE')
+                  badge_color = 'green'
+              else if(task.state === 'TODO')
+                  badge_color = 'red'
+              %>
+              <div class="collapsible-header">Tâche #<%= task.num %> <span class="new badge <%= badge_color %>" data-badge-caption=""><%= task.state %></span></div>
+              <div class="collapsible-body"><%= task.description %></div>
+            </li>
+            <% } %>
+            <% }); %>
           </ul>
         </div>
         <div class="card-action">
@@ -91,6 +121,9 @@
 
     <script>$(document).ready(function () {
         $('.modal').modal();
+        $(document).ready(function () {
+          $('.collapsible').collapsible();
+        });
       });</script>
 
 </body>

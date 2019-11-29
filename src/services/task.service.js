@@ -129,19 +129,31 @@ module.exports.assignDev = function (task_id, dev_id) {
   });
 }
 
-module.exports.updateTask = function (task_id, description, dod, state, length, issues) {
-  if (!Array.isArray(issues))
-    issues = [issues];
+module.exports.updateTask = function (task_id, description, dod, state, length, issues, sprint) {
   return new Promise(function (resolve) {
     Task.findByIdAndUpdate(task_id, {
       description: description,
       dod: dod,
       state: state,
       length: length,
-      $addToSet: { issues: { $each: issues } }
+      sprint: sprint,
+      issues: issues
     },
       function (err) {
         if (err) throw err;
+        Sprint.updateMany(
+          { tasks: task_id },
+          { $pull: { tasks: task_id } },
+          err => {
+            if (err) throw err;
+            Sprint.findByIdAndUpdate(
+              {_id: sprint},
+              { $addToSet: { tasks: task_id } },
+              err => {
+                if(err) throw err;
+              }
+            );
+          });
         Issue.updateMany(
           { tasks: task_id },
           { $pull: { tasks: task_id } },
