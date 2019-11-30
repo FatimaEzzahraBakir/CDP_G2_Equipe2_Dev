@@ -1,6 +1,7 @@
 const Issue = require('../models/issue.model');
 const Project = require('../models/project.model');
 const Sprint = require('../models/sprint.model');
+const TaskService = require('../services/task.service');
 const { check, validationResult } = require('express-validator');
 
 
@@ -39,7 +40,7 @@ module.exports.getIssue = function (issue_id) {
   });
 }
 
-module.exports.createIssue = async function (issueObject) {
+module.exports.createIssue = function (issueObject) {
   return new Promise(function (resolve) {
     let issueInstance = new Issue(issueObject);
     issueInstance.save((err, issue) => {
@@ -85,7 +86,46 @@ module.exports.deleteIssue = function (issue_id) {
   });
 }
 
-module.exports.updateIssue = function (issue_id, description, difficulty, state, priority) {
+module.exports.updateIssueState = function (issue_id) {
+  return new Promise(function (resolve) {
+    Issue.findById(issue_id,
+      (err, issue) => {
+        if (err) throw err;
+        console.log('updating issue state.. ' + issue.num);
+        let number_of_tasks = issue.tasks.length;
+        if (number_of_tasks === 0)
+          resolve();
+        TaskService.getTasksByIssue(issue).then(tasks => {
+          let todo_tasks = tasks.filter(task => task.state === 'TODO');
+          console.log(todo_tasks.length);
+          let done_tasks = tasks.filter(task => task.state === 'DONE');
+          console.log(done_tasks.length);
+          let new_state = 'DOING';
+          //TODO attention quand l'issue n'a pas de tâches
+          if(issue.tasks && issue.tasks.length > 0){
+            if (todo_tasks.length === issue.tasks.length)
+              new_state = 'TODO';
+            else if (done_tasks.length === issue.tasks.length)
+              new_state = 'DONE';
+          }
+          else{
+            new_state = 'TODO';
+          }
+
+          console.log(new_state);
+          Issue.findByIdAndUpdate(
+            issue_id,
+            { state: new_state },
+            (err) => {
+              if (err) throw err;
+              resolve();
+            });
+        });
+      });
+  });
+}
+
+module.exports.updateIssue = function (issue_id, description, difficulty, priority, sprint) {
   return new Promise(function (resolve) {
     Issue.findByIdAndUpdate({
       _id: issue_id
@@ -93,8 +133,8 @@ module.exports.updateIssue = function (issue_id, description, difficulty, state,
       {
         description: description,
         difficulty: difficulty,
-        state: state,
-        priority: priority
+        priority: priority,
+        sprint: sprint
       },
       (err) => {
         if (err) throw err;

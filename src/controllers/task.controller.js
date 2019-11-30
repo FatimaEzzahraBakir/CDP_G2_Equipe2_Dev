@@ -101,6 +101,6 @@ exports.TaskUpdateGet = async function (req, res, next) {
 }
 
 exports.TaskUpdatePost = async function (req, res, next) {
-  await TaskService.updateTask(req.params.task_id, req.body.description, req.body.dod, req.body.state, req.body.length, req.body.issues, req.body.sprint);
+  await TaskService.updateTask(req.params.task_id, req.body);
   return res.redirect('/user/' + req.user.login + '/projects/' + req.params.project_id + '/sprints/' + req.params.sprint_id + '#tasks');
 }

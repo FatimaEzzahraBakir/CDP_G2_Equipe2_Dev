@@ -49,7 +49,7 @@ module.exports.backlogUpdateIssueGet = async function (req, res, next) {
 
 module.exports.backlogUpdateIssuePost = async function (req, res, next) {
   let issue_id = req.params.id;
-  await IssueService.updateIssue(issue_id, req.body.description, req.body.difficulty, req.body.state, req.body.priority);
+  await IssueService.updateIssue(issue_id, req.body.description, req.body.difficulty, req.body.priority, req.body.sprint);
   res.redirect('/user/' + req.params.login + '/projects/' + req.params.project_id + '/backlog');
 }
 

@@ -3,6 +3,7 @@ const Project = require('../models/project.model');
 const User = require('../models/user.model');
 const Issue = require('../models/issue.model');
 const Sprint = require('../models/sprint.model');
+const IssueService = require('../services/issue.service');
 const { check, validationResult } = require('express-validator');
 
 module.exports.validateNewTask = function () {
@@ -44,6 +45,7 @@ module.exports.createTask = function (taskObject) {
   return new Promise(function (resolve) {
     let taskInstance = new Task(taskObject);
     taskInstance.save(function (err, task) {
+
       if (err) throw err;
       Sprint.findByIdAndUpdate(task.sprint,
         { $push: { tasks: task.id } },
@@ -56,6 +58,10 @@ module.exports.createTask = function (taskObject) {
         { $push: { tasks: task.id } },
         (err) => {
           if (err) throw err;
+          //update les states des issues assignées
+          task.issues.forEach(task_issue => { 
+            IssueService.updateIssueState(task_issue);
+          });
         }
       );
       Project.findOneAndUpdate(
@@ -81,6 +87,10 @@ module.exports.deleteTask = function (task_id) {
           { $pull: { tasks: task_id } },
           (err) => {
             if (err) throw err;
+            //update les états des issues
+            task.issues.forEach(task_issue_id => {
+              IssueService.updateIssueState(task_issue_id);
+            });
           });
         Sprint.findByIdAndUpdate(task.sprint, //enleve la tache au sprint
           { $pull: { tasks: task_id } },
@@ -129,15 +139,26 @@ module.exports.assignDev = function (task_id, dev_id) {
   });
 }
 
-module.exports.updateTask = function (task_id, description, dod, state, length, issues, sprint) {
+module.exports.updateTask = function (task_id, newTask) {
   return new Promise(function (resolve) {
+
+    let old_issues;
+    Issue.find({tasks: task_id},
+      function(err, docs) {
+        old_issues = docs;
+      }
+    );
+
+    if(!Array.isArray(newTask.issues))
+      newTask.issues = [newTask.issues];
+
     Task.findByIdAndUpdate(task_id, {
-      description: description,
-      dod: dod,
-      state: state,
-      length: length,
-      sprint: sprint,
-      issues: issues
+      description: newTask.description,
+      dod: newTask.dod,
+      state: newTask.state,
+      length: newTask.length,
+      sprint: newTask.sprint,
+      issues: newTask.issues
     },
       function (err) {
         if (err) throw err;
@@ -147,7 +168,7 @@ module.exports.updateTask = function (task_id, description, dod, state, length, 
           err => {
             if (err) throw err;
             Sprint.findByIdAndUpdate(
-              {_id: sprint},
+              {_id: newTask.sprint},
               { $addToSet: { tasks: task_id } },
               err => {
                 if(err) throw err;
@@ -159,13 +180,33 @@ module.exports.updateTask = function (task_id, description, dod, state, length, 
           { $pull: { tasks: task_id } },
           err => {
             if (err) throw err;
+            old_issues.forEach(old_isssue => {
+              IssueService.updateIssueState(old_isssue._id);
+            });
             Issue.updateMany(
-              { _id: issues },
+              { _id: newTask.issues },
               { $addToSet: { tasks: task_id } },
-              (err => { if (err) throw err; })
+              err => { 
+                newTask.issues.forEach( new_issue => {
+                  IssueService.updateIssueState(new_issue);
+                });
+                if (err) throw err; 
+              }
             )
           });
         resolve();
       });
+  });
+}
+
+module.exports.getTasksByIssue = function (issue) {
+  return new Promise(function(resolve) {
+    let promises = [];
+    issue.tasks.forEach(task_id => {
+      promises.push(Task.findById(task_id).exec());
+    })
+    Promise.all(promises).then( tasks => {
+      resolve(tasks);
+    });
   });
 }

@@ -24,7 +24,7 @@ document.getElementById("newIssueButton").addEventListener("click", function () 
           description: $('#descfield').val(),
           priority: $('#priofield').val(),
           difficulty: $('#difffield').val(),
-          state: $('#statefield').val(),
+          state: 'TODO',
           sprint: $('#sprintfield').val()
         },
         error: function () {

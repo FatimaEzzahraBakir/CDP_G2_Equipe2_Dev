@@ -3,6 +3,7 @@ const Issue = require('../models/issue.model');
 const Task = require('../models/task.model');
 const Release = require('../models/release.model');
 const User = require('../models/user.model');
+const Sprint = require('../models/sprint.model');
 const FlashError = require('../utils/flashError');
 const { check, validationResult } = require('express-validator');
 
@@ -36,7 +37,8 @@ exports.deleteProject = function (project) {
         let promises = [
             Task.deleteMany({ project: project.id }).exec(),
             Issue.deleteMany({ project: project.id }).exec(),
-            Release.deleteMany({ project: project.id }).exec()
+            Release.deleteMany({ project: project.id }).exec(),
+            Sprint.deleteMany({ project: project.id}).exec()
         ]
 
         User.updateMany(

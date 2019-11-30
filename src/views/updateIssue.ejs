@@ -33,34 +33,41 @@
                   <input name="difficulty" type="number" class="validate" value="<%=issue.difficulty%>" required>
                 </div>
                 <div class="input-field col s12 ">
-                  <select class="browser-default" name="state">
-                    <option value="" disabled selected>Etat</option>
-                    <option value="DONE"
-                      <%if(issue.state=='DONE'){%><%="selected"%><%}%> >Done</option>
-                      <option value="DOING" <%if(issue.state=='DOING'){%><%="selected"%><%}%>>Doing</option>
-                      <option value="TODO" <%if(issue.state=='TODO'){%><%="selected"%><%}%>>ToDo</option>
+                  <select class="browser-default" name="priority">
+                    <option value="" disabled selected>Priorité</option>
+                    <option value="HIGH" <%if(issue.priority==='HIGH'){%><%="selected"%><%}%>>High</option>
+                    <option value="LOW" <%if(issue.priority==='LOW'){%><%="selected"%><%}%>>Low</option>
                     </select>
                   </div>
                   <div class="input-field col s12 ">
-                    <select class="browser-default" name="priority">
-                      <option value="" disabled selected>Priorité</option>
-                      <option value="HIGH" <%if(issue.priority=='HIGH'){%><%="selected"%><%}%>>High</option>
-                      <option value="LOW" <%if(issue.priority=='LOW'){%><%="selected"%><%}%>>Low</option>
-                    </select>
-                  </div>
-                  <div class="input-field col s12 ">
-                      <select class='browser-default' name='sprint'>
-                          <option value='' disabled selected>Sprint</option>
-                          <% if(!issue.sprint) { %>
-                            <option value='' selected>Aucun</option>
-                          <% } else { %>
-                            <option value=''>Aucun</option>
-                            <% sprints.forEach(sprint => { %>
-                              <option value='<%= sprint._id %>' <%if(issue.sprint.equals(sprint._id)){%><%="selected"%><%}%>  ><%= sprint.num %></option>
-                            <% }); %>
-                          <% } %>
-                        </select>
-                    </div>
-                  <button class="btn waves-effect waves-light" type="submit">Mettre à jour</button>
-                  <a class="btn waves-effect waves-light red" href="/user/<%= user %>/projects/<%= project.id %>/backlog">Annuler </a>
-                      </div> </div> </div> </div> </div> </form> </div> </div> </body> </html>
+                    <select class='browser-default' name='sprint'>
+                      <option value='' disabled selected>Sprint</option>
+                      <% if(!issue.sprint) { %> 
+                        <option value='' selected>Aucun</option>
+                        <% sprints.forEach(sprint => { %>
+                          <option value='<%= sprint._id %>'><%= sprint.num %></option>
+                        <% }); %>
+                      <% } else { %>
+                        <option value=''>Aucun</option>
+                        <% sprints.forEach(sprint => { %>
+                          <option value='<%= sprint._id %>'
+                          <%if(issue.sprint.equals(sprint._id)){%><%="selected"%><%}%>  ><%= sprint.num %>
+                          </option>
+                        <% }); %> 
+                      <% } %> 
+                      </select> 
+                    </div> 
+                    <button class="btn waves-effect waves-light" type="submit">Mettre à jour</button>
+                    <a class="btn waves-effect waves-light red"
+                      href="/user/<%= user %>/projects/<%= project.id %>/backlog">Annuler </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</body>
+
+</html>
