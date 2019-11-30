@@ -3,7 +3,7 @@ var Schema = mongoose.Schema;
 
 var releaseSchema = new Schema({
     description: String,
-    features: String,
+    link: String,
     releaseDate: Date,
     version: String,
     issues: [{ type: Schema.Types.ObjectId, ref: 'issues' }],

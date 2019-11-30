@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="fr" dir="ltr">
+
+<head>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="/css/materialize.css">
+  <link rel="stylesheet" href="/css/style.css">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <title>Création release</title>
+</head>
+
+<body>
+  <nav class="navmargin">
+    <div class="nav-wrapper">
+      <ul id="nav-mobile" class="left hide-on-med-and-down">
+        <li>
+          <a href="/user/<%= user.login %>/projects/<%= project.id%>/releases">
+            <i class="material-icons left">keyboard_backspace</i>Retour aux releases</a></li>
+      </ul>
+      <a href="/" class="brand-logo center">Gestion projets</a>
+      <ul id="nav-mobile" class="right hide-on-med-and-down">
+        <li><a>Bienvenue <%= user.login %></a></li>
+        <li><a href="/logout">Déconnexion</a></li>
+      </ul>
+    </div>
+  </nav>
+  <div class="container">
+    <div class="row">
+      <form action="/user/<%= user.login %>/projects/<%= project.id %>/releases/new" method="POST">
+        <div class="row">
+          <div class="col s12 m10 l8 offset-m1 offset-l2">
+            <div class="card center-align mg">
+              <div class="card-content">
+                <span class="card-title">Créer une nouvelle release</span>
+                <% errors.forEach(function(error) { %>
+                <div class="card-pannel small red darken-2 white-text"><%= error.msg %></div>
+                <% }); %>
+                <div class="input-field">
+                  <label for="version" class="active">Version</label>
+                  <input id="version" name="version" type="text" required>
+                </div>
+                <div class="input-field">
+                  <label for="releaseDate" class="active">Date de release</label>
+                  <input name="releaseDate" type="text" id="datepicker" placeholder="yyyy/mm/dd" required>
+                </div>
+                <div class="input-field">
+                  <label for="link" class="active">Lien de téléchargement</label>
+                  <input id="link" name="link" type="text">
+                </div>
+                <div class="input-field">
+                  <label for="description" class="active">Description</label>
+                  <input id="description" name="description" type="text" class="validate materialize-textarea" required>
+                </div>
+                <div class="input-field">
+                <% issues.forEach( issue => { %>
+                  <p>
+                    <label>
+                      <input type="checkbox" name="issues" value="<%= issue._id %>"/>
+                      <span>Issue #<%= issue.num %>: <%=issue.description%></span>
+                    </label>
+                  </p>
+                <% }) %>
+                </div>
+                <button class="btn waves-effect waves-light" type="submit">Créer</button>
+                <a class="btn waves-effect waves-light red"
+                  href="/user/<%= user.login %>/projects/<%= project.id %>/releases/">Annuler</a>
+              </div>
+            </div>
+          </div>
+        </div>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+        <script>
+          CalenderObject = {
+            format: 'yyyy/mm/dd',
+            yearRange: 4,
+            firstDay: 1,
+            i18n: {
+              months: ["Janvier", "Février", "Mars", "Avril", "Mai", "Juin", "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"],
+              monthsShort: ["Jan", "Fév", "Mar", "Avr", "Mai", "Jun", "Jul", "Aoû", "Sep", "Oct", "Nov", "Déc"],
+              weekdays: ["Dimanche", "Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi"],
+              weekdaysShort: ["Dim", "Lun", "Mar", "Mer", "Jeu", "Ven", "Sam"],
+              weekdaysAbbrev: ["D", "L", "M", "M", "J", "V", "S"],
+              cancel: "Annuler"
+
+            }};
+          const Calender = document.querySelector('#datepicker');
+          M.Datepicker.init(Calender, CalenderObject);
+        </script>
+</body>
+
+</html>

@@ -41,5 +41,6 @@ require('./routes/backlog')(app);
 require('./routes/sprints')(app);
 require('./routes/tasks')(app);
 require('./routes/doc')(app);
+require('./routes/releases')(app);
 
 app.listen(8080);

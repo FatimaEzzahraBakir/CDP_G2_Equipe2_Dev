@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="fr" dir="ltr">
+
+<head>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="/css/materialize.css">
+  <link rel="stylesheet" href="/css/style.css">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <title>Releases</title>
+</head>
+
+<body>
+  <nav class="navmargin">
+    <div class="nav-wrapper">
+      <ul id="nav-mobile" class="left hide-on-med-and-down">
+        <li>
+          <a href="/user/<%= user.login %>/projects/<%= project.id %>">
+            <i class="material-icons left">keyboard_backspace</i>Retour au projet</a></li>
+
+      </ul>
+      <a href="/" class="brand-logo center">Gestion projets</a>
+      <ul id="nav-mobile" class="right hide-on-med-and-down">
+        <li><a>Bienvenue <%= user.login %></a></li>
+        <li><a href="/logout">Déconnexion</a></li>
+      </ul>
+    </div>
+  </nav>
+  <div class="container">
+    <div class="row">
+      <div class="col s8">
+        <% releases.forEach(release => { %>
+        <div class="row">
+          <div class="card z-depth-3">
+            <div class="card-content">
+              <h6 class="card-title"><%= release.version %></h6>
+              <% if(release.link && release.link.length > 0) { %>
+              <a href="https://<%=release.link %>">Lien de téléchargement</a>
+              <% } %>
+              <p><%= release.releaseDate.getDate() %>/<%= release.releaseDate.getMonth() +1 %>/<%= release.releaseDate.getFullYear(); %></p>
+              <p><%= release.description %></p>
+              <% issues.forEach(issue => { %>
+                <%if(release.issues && release.issues.some(releaseissue => {return releaseissue.equals(issue._id)})) {%>
+                  <p>Issue #<%= issue.num %> : <%= issue.description %></p>
+                <% } %>
+              <%}); %>
+            </div>
+            <div class="card-action">
+              <a href="/user/<%= user.login %>/projects/<%= project.id %>/releases/<%= release._id %>/delete"
+                class="materialize-red-text end">Supprimer</a>
+            </div>
+          </div>
+        </div>
+        <% }); %>
+      </div>
+      <div class="col s4">
+        <div class="cardmargin">
+          <a href="/user/<%= user.login %>/projects/<%= project.id %>/releases/new"
+            class="waves-effect waves-light btn btn-large"><i class="material-icons left">add</i>Nouvelle release</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</body>
+
+</html>

@@ -1,6 +1,8 @@
 const Issue = require('../models/issue.model');
 const Project = require('../models/project.model');
 const Sprint = require('../models/sprint.model');
+const Release = require('../models/release.model');
+const Task = require('../models/task.model');
 const TaskService = require('../services/task.service');
 const { check, validationResult } = require('express-validator');
 
@@ -68,11 +70,25 @@ module.exports.deleteIssue = function (issue_id) {
       { _id: issue_id },
       (err, issue) => {
         if (err) throw err;
+        //on l'enlève dans les releases
+        Release.updateMany({issues: issue_id},
+          { $pull: { issues: issue_id } },
+          (err) => {
+            if(err) throw err;
+          });
+          //on l'enlève dans les tasks
+        Task.updateMany({issues: issue_id},
+          { $pull: { issues: issue_id } },
+          (err) => {
+            if(err) throw err;
+          });
+          //on l'enlève dans les sprints
         Sprint.findByIdAndUpdate(
           issue.sprint,
           { $pull: { issues: issue_id } },
           (err) => {
             if (err) throw err;
+            //on l'enlève dans le projet
             Project.findByIdAndUpdate(
               issue.project,
               { $pull: { issues: issue_id } },
@@ -91,17 +107,13 @@ module.exports.updateIssueState = function (issue_id) {
     Issue.findById(issue_id,
       (err, issue) => {
         if (err) throw err;
-        console.log('updating issue state.. ' + issue.num);
         let number_of_tasks = issue.tasks.length;
         if (number_of_tasks === 0)
           resolve();
         TaskService.getTasksByIssue(issue).then(tasks => {
           let todo_tasks = tasks.filter(task => task.state === 'TODO');
-          console.log(todo_tasks.length);
           let done_tasks = tasks.filter(task => task.state === 'DONE');
-          console.log(done_tasks.length);
           let new_state = 'DOING';
-          //TODO attention quand l'issue n'a pas de tâches
           if(issue.tasks && issue.tasks.length > 0){
             if (todo_tasks.length === issue.tasks.length)
               new_state = 'TODO';
@@ -112,7 +124,6 @@ module.exports.updateIssueState = function (issue_id) {
             new_state = 'TODO';
           }
 
-          console.log(new_state);
           Issue.findByIdAndUpdate(
             issue_id,
             { state: new_state },

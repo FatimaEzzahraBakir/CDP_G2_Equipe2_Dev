@@ -149,7 +149,7 @@ module.exports.updateTask = function (task_id, newTask) {
       }
     );
 
-    if(!Array.isArray(newTask.issues))
+    if(newTask.issues && !Array.isArray(newTask.issues))
       newTask.issues = [newTask.issues];
 
     Task.findByIdAndUpdate(task_id, {
@@ -183,16 +183,18 @@ module.exports.updateTask = function (task_id, newTask) {
             old_issues.forEach(old_isssue => {
               IssueService.updateIssueState(old_isssue._id);
             });
-            Issue.updateMany(
-              { _id: newTask.issues },
-              { $addToSet: { tasks: task_id } },
-              err => { 
-                newTask.issues.forEach( new_issue => {
-                  IssueService.updateIssueState(new_issue);
-                });
-                if (err) throw err; 
-              }
-            )
+            if(newTask.issues) {
+              Issue.updateMany(
+                { _id: newTask.issues },
+                { $addToSet: { tasks: task_id } },
+                err => { 
+                  if (err) throw err; 
+                  newTask.issues.forEach( new_issue => {
+                    IssueService.updateIssueState(new_issue);
+                  });
+                }
+              );
+            }
           });
         resolve();
       });
