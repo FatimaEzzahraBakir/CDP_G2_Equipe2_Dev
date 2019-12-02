@@ -223,3 +223,17 @@ module.exports.moveIncompleteTasksAndIssues = function (from_sprint_id, to_sprin
   });
 }
 
+module.exports.getTodaySprints = function (sprints) {
+  return new Promise(function (resolve) {
+    let today = Date.now();
+    let promises = [];
+    sprints.forEach(sprint => {
+      if (sprint.startDate <= today && sprint.endDate >= today) {
+        promises.push(sprint);
+      }
+    });
+    Promise.all(promises).then(values => {
+      resolve(values);
+    });
+  });
+}

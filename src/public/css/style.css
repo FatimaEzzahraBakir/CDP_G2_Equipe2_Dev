@@ -60,3 +60,19 @@ nav {
 .num-input {
   width: 3em !important;
 }
+
+.todaySprint{
+  border-style: dotted;
+  border-width: 1px;
+  padding-left: 10px;
+}
+
+.btnDelete:hover{
+  background-color: #e53935;!important
+  color: #cddc39;!important
+}
+
+.btnModify:hover{
+  background-color: #cddc39;!important
+  color: #cddc39;!important
+}
