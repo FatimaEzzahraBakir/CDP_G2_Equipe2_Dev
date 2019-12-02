@@ -121,7 +121,7 @@ module.exports.deleteSprint = function (sprint_id) {
         if (err) throw err;
         Issue.update({ sprint: sprint_id },
           { sprint: undefined },
-          (err) => { 
+          (err) => {
             //delete toutes les tâches du sprint
             if (err) throw err;
             let promises = []
@@ -151,3 +151,18 @@ module.exports.updateSprint = function (sprint_id, startDate, endDate, descripti
           })
       });
     }
+
+module.exports.getTodaySprints = function (sprints) {
+    return new Promise(function (resolve) {
+      let today = Date.now();
+      let promises = [];
+      sprints.forEach(sprint =>{
+        if(sprint.startDate <= today && sprint.endDate >= today){
+          promises.push(sprint);
+        }
+      });
+      Promise.all(promises).then(values => {
+        resolve(values);
+      });
+    });
+  }

@@ -42,32 +42,35 @@
         <a href="/user/<%= user %>/projects/<%= project.id %>/releases" class="collection-item btn">Releases</a>
         <a href="/user/<%= user %>/projects/<%= project.id %>/newDoc" class="collection-item btn">Documentations</a>
       </div>
-
-      <div class="row">
-        <div class="col s6">
-          <a class="waves-effect waves-light btn orange lighten-2"
-            href="/user/<%= user %>/projects/<%= project.id %>/update">modifier</a>
-        </div>
-        <div class="col s6">
-          <a class="waves-effect waves-light btn red lighten-2"
-            href="/user/<%= user %>/projects/<%= project.id %>/delete">supprimer</a>
-          <% } %>
-        </div>
+      <div class="collection">
+        <a class ="btnModify collection-item btn" href="/user/<%= user %>/projects/<%= project.id %>/update">modifier</a>
+        <a class ="btnDelete collection-item btn"href="/user/<%= user %>/projects/<%= project.id %>/delete">supprimer</a>
       </div>
+
+      <% } %>
 
 
 
     </div>
 
     <div class="col s5">
+      <% if(typeof project != 'undefined') { %>
       <div class="card z-depth-1">
-        <div class="card-panel">
-
-          <% if(typeof project != 'undefined') { %>
+        <div class="card-content">
           <h6 class="card-title"><%= project.name %></h6>
           <p><%= project.description %></p>
         </div>
-        <% } %>
+      </div>
+      <% } %>
+      <div class="todaySprint">
+        <% if(typeof sprint != 'undefined') {  %>
+              <h6 class="card-title">Sprint actuel</h6>
+              <p></%=><%= sprint[0].description %></p>
+              <p><%= sprint[0].startDate.getDate() %>/<%= sprint[0].startDate.getMonth() +1 %>/<%= sprint[0].startDate.getFullYear(); %>
+              - <%= sprint[0].endDate.getDate() %>/<%= sprint[0].endDate.getMonth() +1 %>/<%= sprint[0].endDate.getFullYear(); %></p>
+              <p><a href="/user/<%= user %>/projects/<%= project.id %>/sprints/<%= sprint[0]._id %>"
+                >Accéder</a></p>
+        <%}%>
       </div>
     </div>
 
@@ -76,7 +79,7 @@
 
       <div class="card z-depth-1">
         <div class="card-content">
-          <h6 class="card-title">Membres</h6>
+          <h3 class="card-title">Membres</h3>
 
           <% if(typeof members != 'undefined') { %>
           <ul>
@@ -104,8 +107,9 @@
         <% } %>
       </div>
     </div>
-
   </div>
+
+
 
 
 </body>
