@@ -40,11 +40,11 @@ exports.SprintNewPost = async function (req, res, next) {
 exports.SprintsGet = async function (req, res, next) {
   let sprints = await SprintService.getSprintsFromProject(req.params.project_id);
   let tasks = await ProjectService.getTasks(res.locals.project);
-  return res.render('sprints', { 
-    user: req.user, 
-    project: res.locals.project, 
-    sprints: sprints, 
-    tasks : tasks
+  return res.render('sprints', {
+    user: req.user,
+    project: res.locals.project,
+    sprints: sprints,
+    tasks: tasks
   });
 }
 
@@ -69,8 +69,9 @@ exports.SprintUpdatePost = async function (req, res, next) {
 
 exports.SprintDetailsGet = async function (req, res, next) {
   let sprint = await SprintService.getSprint(req.params.sprint_id);
-  let tasks = await SprintService.getTasks(sprint);
+  //let tasks = await SprintService.getTasks(sprint);
   let issues = await SprintService.getIssues(sprint);
+  let tasks = await ProjectService.getTasks(res.locals.project);
   res.render('mySprint', {
     project: res.locals.project,
     user: req.user,
@@ -80,7 +81,7 @@ exports.SprintDetailsGet = async function (req, res, next) {
   });
 }
 
-exports.SprintTasksGet = async function (req, res, next) { 
+exports.SprintTasksGet = async function (req, res, next) {
   let sprint = await SprintService.getSprint(req.params.sprint_id);
   let tasks = await SprintService.getTasks(sprint);
   let members = await ProjectService.getMembers(res.locals.project.members);
@@ -97,4 +98,23 @@ exports.SprintIssuesGet = async function (req, res, next) {
   let sprint = await SprintService.getSprint(req.params.sprint_id);
   let issues = await SprintService.getIssues(sprint);
   return res.send(issues);
+}
+
+exports.SprintOverGet = async function (req, res, next) {
+  let sprints = await SprintService.getSprintsFromProject(req.params.project_id);
+  let sprint = await SprintService.getSprint(req.params.sprint_id);
+
+  return res.render('endSprint', {
+    user: req.user,
+    project: res.locals.project,
+    sprint: sprint,
+    sprints: sprints
+  });
+}
+
+exports.SprintOverPost = async function (req, res, next) {
+  await SprintService.moveIncompleteTasksAndIssues(req.params.sprint_id, req.body.sprint);
+  return res.send('ok ! ');
+
+  return res.redirect('/user/' + req.params.login + '/projects/' + req.params.project_id + "/sprints/" + req.body.newSprint);
 }

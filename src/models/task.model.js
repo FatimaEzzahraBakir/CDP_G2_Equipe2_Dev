@@ -11,6 +11,8 @@ var taskSchema = new mongoose.Schema({
   project: { type: Schema.Types.ObjectId, ref: 'projects' },
   dev: { type: Schema.Types.ObjectId, ref: 'users' },
   issues: [{ type: Schema.Types.ObjectId, ref: 'issues' }]
+}, {
+  usePushEach: true
 });
 
 const Task = mongoose.model('tasks', taskSchema);
