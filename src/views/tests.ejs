@@ -1,0 +1,60 @@
+<body onload="SortTable(0, 'N', 'tasksTable')">
+    <div class="container">
+      <div class="row">
+        <table id="tasksTable">
+          <thead>
+            <tr>
+              <th onclick="SortTable(0, 'N', 'tasksTable')">ID <i class="material-icons">unfold_more</i></th>
+              <th>Description</th>
+              <th>Definition Of Done</th>
+              <th onClick="SortTable(3, 'S', 'tasksTable')">État <i class="material-icons">unfold_more</i></th>
+              <th onClick="SortTable(4, 'T', 'tasksTable')">Développeur <i class="material-icons">unfold_more</i></th>
+              <th onClick="SortTable(5, 'N', 'tasksTable')">Coût <i class="material-icons">unfold_more</i></th>
+            </tr>
+          </thead>
+          <tbody>
+            <% if(typeof tasks != 'undefined') { %>
+            <% tasks.forEach(function(task) { if(task != null){%>
+            <div class="row">
+              <tr>
+                <td><%= task.num%></td>
+                <td>
+                  <p><%= task.description %></p>
+                </td>
+                <td><%= task.dod %></td>
+                <td><%= task.state %></td>
+                <%if(!task.dev) {%>
+                <td></td>
+                <%}else{%>
+                <td><%- members.find(member => { return (member._id.equals(task.dev));}).login %></td>
+                <%}%>
+          <td><%= task.length %></td>
+                <td>
+                  <a href="/user/<%= user %>/projects/<%= project.id %>/sprints/<%= sprint.id %>/tasks/<%= task._id %>/update"
+                    class="center-align"><i class="material-icons left">edit</i></a>
+                  <a href="/user/<%= user %>/projects/<%= project.id %>/sprints/<%= sprint.id %>/tasks/<%= task._id %>/addDev"
+                    class="center-align"><i class="material-icons green-text">person_add</i></a>
+                  <a href="/user/<%= user %>/projects/<%= project.id %>/sprints/<%= sprint.id %>/tasks/<%= task._id %>/delete"
+                    class="materialize-red-text"><i class="material-icons left">delete_forever</i></a>
+                </td>
+              </tr>
+              <% }}); %>
+  
+          </tbody>
+        </table>
+        <% } %>
+  
+      </div>
+      <div class="row">
+        <div class="cardmargin">
+          <a href="/user/<%= user %>/projects/<%= project.id %>/sprints/<%= sprint.id %>/addTask"
+            class="waves-effect waves-light btn btn-large"><i class="material-icons left">add</i>Nouvelle tâche</a>
+        </div>
+      </div>
+    </div>
+    </div>
+  
+    <script src="/scripts/sortTable.js">
+    </script>
+  
+  </body>

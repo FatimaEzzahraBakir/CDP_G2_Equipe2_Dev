@@ -42,5 +42,6 @@ require('./routes/sprints')(app);
 require('./routes/tasks')(app);
 require('./routes/doc')(app);
 require('./routes/releases')(app);
+require('./routes/tests')(app);
 
 app.listen(8080);

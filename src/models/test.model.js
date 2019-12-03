@@ -3,7 +3,7 @@ var Schema = mongoose.Schema;
 
 var TestSchema = new Schema({
   num: Number,
-  Name: String,
+  name: String,
   expectedResult: String,
   obtainedResult: String,
   level: Number,
