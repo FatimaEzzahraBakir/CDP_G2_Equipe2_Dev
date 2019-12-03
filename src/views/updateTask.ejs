@@ -44,13 +44,24 @@
                   <input name="dod" id="dod" type="text" class="validate" value="<%=task.dod%>" required>
                 </div>
                 <div class="input-field">
-                    <label for="state" class="active">État</label>
-                  <input name="state" id="state" type="text" class="validate" value="<%=task.state%>" required>
+                  <label for="state" class="active">État</label>
+                  <select class="browser-default" name="state" id="state">
+                  <option value='' disabled selected>État</option>
+                  <% let states = ['TODO', 'DOING', 'DONE']; %>
+                  <% states.forEach(state => { %>
+                  <% if(task.state === state) { %>
+                    <option value='<%= state %>' selected><%= state %></option>
+                  <% } else { %>
+                    <option value='<%= state %>'><%= state %></option>
+                  <% } %>
+                  <% }); %>
+                  </select>
                 </div>
                 <div class="input-field">
                   <label for="length" class="active">Difficulté</label>
                   <input name="length" id="length" type="number" class="validate" value="<%=task.length%>" required>
                 </div>
+                <!-- 
                 <% if(sprintIssues.length > 0 ) {%>
                 <div class="input-field">
                   <label for="issues" class="active">Issues</label>
@@ -67,7 +78,7 @@
                   </p>
                   <% }) %>
                 </div>
-                <% } %>
+                <% } %> -->
                 <div class="input-field">
                   <label for="sprint" class="active">Sprint</label>
                     <select class='browser-default' name='sprint' id="sprint">
@@ -81,7 +92,7 @@
                 </div>
                 <button class="btn waves-effect waves-light" type="submit">Mettre à jour</button>
                 <a class="btn waves-effect waves-light red"
-                  href="/user/<%= user.login %>/projects/<%= project.id %>/tasks">Annuler </a>
+                  href="/user/<%= user.login %>/projects/<%= project.id %>/sprints/<%= task.sprint %>#tasks">Annuler </a>
               </div>
             </div>
           </div>

@@ -138,6 +138,10 @@ module.exports.updateIssueState = function (issue_id) {
 
 module.exports.updateIssue = function (issue_id, description, difficulty, priority, sprint) {
   return new Promise(function (resolve) {
+    let old_sprint;
+    Sprint.findOne({issues: issue_id}, { $pull : { issues : issue_id }}, (err, foundsprint) => {
+      old_sprint = foundsprint;
+    });
     Issue.findByIdAndUpdate({
       _id: issue_id
     },
@@ -149,7 +153,19 @@ module.exports.updateIssue = function (issue_id, description, difficulty, priori
       },
       (err) => {
         if (err) throw err;
-        resolve();
+        if(old_sprint) {
+          Sprint.findByIdAndUpdate(old_sprint._id,
+            { $pull : { issues : issue_id }},
+            err => {
+              if (err) throw err;
+            });
+        }
+        Sprint.findByIdAndUpdate(sprint,
+          { $addToSet : { issues: issue_id }},
+          err => {
+            if(err) throw err;
+            resolve();
+          });
       });
   });
 }

@@ -51,40 +51,49 @@
               </thead>
               <tbody>
                   <% if(typeof issues != 'undefined') {%>
-                    <% issues.forEach(issue => { %>
-                      <tr>
-                        <td><%= issue.num %></td>
-                        <td><p><%= issue.description %></p></td>
-                        <td><%= issue.priority %></td>
-                        <td><%= issue.state %></td>
-                        <td><%= issue.difficulty %></td>
-                        <td>
-                          <% if(issue.tasks) {%>
-                          <% issue.tasks.forEach(issuetask => { %>
-                            <% let task = tasks.find(task => { return issuetask.equals(task._id);}); %>
-                            <% if(task.state === 'DONE') { %>
-                              <span class="green-text text-darken-3"><%= task.num %>/</span>
-                            <% } else if(task.state === 'DOING') { %> 
-                              <span class="blue-text text-darken-3"><%= task.num %>/</span>
-                            <% } else {%>
-                              <span class="red-text text-darken-3"><%= task.num %>/</span>
-                            <% } %>
-                          <% }); %>
-                          <% } %>
-                        </td>
-                      </tr>
-                    <% }); %>
-                  <% } %>
-              </tbody>
-            </table>
-          </div>
-          <div class="row">
-            <div class="col s6 offset-s3">
-              <a href="/user/<%= user.login %>/projects/<%= project.id %>/backlog" class="btn-large">Accéder aux issues du projet</a>
-            </div>
-          </div>
-        </div>
+    <% issues.forEach(issue => { %>
+    <tr>
+      <td><%= issue.num %></td>
+      <td>
+        <p><%= issue.description %></p>
+      </td>
+      <td><%= issue.priority %></td>
+      <td><%= issue.state %></td>
+      <td><%= issue.difficulty %></td>
+      <td>
+        <% if(issue.tasks) {%>
+        <% issue.tasks.forEach(issuetask => { %>
+        <% let task = tasks.find(task => { return issuetask.equals(task._id);}); %>
+        <a href="/user/<%= user.login %>/projects/<%= project.id %>/sprints/<%= task.sprint %>#tasks">
+        <% if(task.state === 'DONE') { %>
+        <span class="white-text green darken-3"><%= task.num %></span>&nbsp
+        <% } else if(task.state === 'DOING') { %>
+        <span class="white-text blue darken-3"><%= task.num %></span>&nbsp
+        <% } else {%>
+        <span class="white-text red darken-3"><%= task.num %></span>&nbsp
+        <% } %>
+        </a>
+        <% }); %>
+        <% } %>
+      </td>
+    </tr>
+    <% }); %>
+    <% } %>
+    </tbody>
+    </table>
+    </div>
+    <div class="row">
+      <div class="col s8 ">
+        <a href="/user/<%= user.login %>/projects/<%= project.id %>/backlog" class="btn-large">Accéder aux issues du
+          projet</a>
       </div>
+      <div class="col s4">
+        <a href="/user/<%= user.login %>/projects/<%= project.id %>/sprints/<%= sprint._id %>/sprintOver"
+          class="btn-large purple darken-4"> Sprint terminé</a>
+      </div>
+    </div>
+    </div>
+    </div>
 
     <div id="tasks" class="col s12">
       <div class="preloader-wrapper big active">
@@ -104,7 +113,7 @@
 
     </div>
     </div>
-    
+
     <script src="/jquery/jquery-3.4.1.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/js/materialize.min.js"></script>
     <script src="/ejs/ejs.js"></script>

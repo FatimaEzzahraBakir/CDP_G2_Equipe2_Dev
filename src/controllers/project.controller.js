@@ -1,4 +1,5 @@
 const ProjectService = require('../services/project.service');
+const SprintService = require('../services/sprint.service');
 const FlashError = require('../utils/flashError');
 const { check, validationResult } = require('express-validator');
 
@@ -26,10 +27,13 @@ exports.projectNewPost = async function (req, res, next) {
 exports.projectDetails = async function (req, res, next) {
   let members_ids = res.locals.project.members;
   members = await ProjectService.getMembers(members_ids);
+  let sprintsTmp = await SprintService.getSprintsFromProject(res.locals.project.id);
+  let sprint = await SprintService.getTodaySprints(sprintsTmp);
   return res.render('myProject', {
     user: req.user.login,
     project: res.locals.project,
-    members: members
+    members: members,
+    sprint: sprint
   });
 }
 

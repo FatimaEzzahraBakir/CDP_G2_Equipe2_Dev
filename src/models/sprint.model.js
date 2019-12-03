@@ -10,6 +10,8 @@ var sprintSchema = new Schema({
     issues: [{ type: Schema.Types.ObjectId, ref: 'issues' }],
     tasks: [{ type: Schema.Types.ObjectId, ref: 'tasks' }],
     project: { type: Schema.Types.ObjectId, ref: 'projects' }
+}, {
+  usePushEach: true
 });
 
 const Sprint = mongoose.model('sprints', sprintSchema);

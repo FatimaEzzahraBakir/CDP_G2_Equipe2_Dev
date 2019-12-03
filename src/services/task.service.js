@@ -141,24 +141,24 @@ module.exports.assignDev = function (task_id, dev_id) {
 
 module.exports.updateTask = function (task_id, newTask) {
   return new Promise(function (resolve) {
-
+    
     let old_issues;
     Issue.find({tasks: task_id},
       function(err, docs) {
         old_issues = docs;
       }
-    );
+    ); /*
 
     if(newTask.issues && !Array.isArray(newTask.issues))
-      newTask.issues = [newTask.issues];
+      newTask.issues = [newTask.issues]; */
 
     Task.findByIdAndUpdate(task_id, {
       description: newTask.description,
       dod: newTask.dod,
       state: newTask.state,
       length: newTask.length,
-      sprint: newTask.sprint,
-      issues: newTask.issues
+      sprint: newTask.sprint/*,
+      issues: newTask.issues*/
     },
       function (err) {
         if (err) throw err;
@@ -172,9 +172,13 @@ module.exports.updateTask = function (task_id, newTask) {
               { $addToSet: { tasks: task_id } },
               err => {
                 if(err) throw err;
+                old_issues.forEach(old_isssue => {
+                  IssueService.updateIssueState(old_isssue._id);
+                });// à supprimer si on décommente le reste
+                resolve();
               }
             );
-          });
+          });/*
         Issue.updateMany(
           { tasks: task_id },
           { $pull: { tasks: task_id } },
@@ -195,8 +199,8 @@ module.exports.updateTask = function (task_id, newTask) {
                 }
               );
             }
-          });
-        resolve();
+          });*/
+       // resolve();
       });
   });
 }

@@ -10,6 +10,8 @@ var issueSchema = new Schema({
   sprint: { type: Schema.Types.ObjectId, ref: 'sprints' },
   project: { type: Schema.Types.ObjectId, ref: 'projects' },
   tasks: [{ type: Schema.Types.ObjectId, ref: 'tasks' }]
+}, {
+  usePushEach: true
 });
 
 const Issue = mongoose.model('issues', issueSchema);

@@ -4,7 +4,9 @@ services:
     build: .
     ports:
       - "8080:8080"
-  database:
+    depends_on:
+      - mongo
+  mongo:
     image: mongo
     volumes:
       - "mongodb_data:/data/db"

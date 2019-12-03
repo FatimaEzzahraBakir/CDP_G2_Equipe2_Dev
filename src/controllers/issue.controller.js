@@ -87,5 +87,4 @@ module.exports.backlogAddIssuePost = async function (req, res, next) {
 
   await IssueService.createIssue(issueObject);
   return res.status(200).json({ status: "ok" })
-  //return res.redirect(200, '/user/' + req.user.login + '/projects/' + req.params.project_id + '/backlog');
 }

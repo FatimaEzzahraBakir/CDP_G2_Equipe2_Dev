@@ -52,16 +52,6 @@ module.exports.getSprint = function (sprint_id) {
   });
 }
 
-module.exports.getSprintFromDescription = function (description) {
-  return new Promise(function (resolve) {
-    Sprint.findOne({ description: description },
-      (err, sprint) => {
-        if (err) throw err;
-        resolve(sprint);
-      });
-  });
-}
-
 module.exports.getSprintsFromProject = function (project_id) {
   return new Promise(function (resolve) {
     Sprint.find({ project: project_id }, (err, sprints) => {
@@ -121,7 +111,7 @@ module.exports.deleteSprint = function (sprint_id) {
         if (err) throw err;
         Issue.update({ sprint: sprint_id },
           { sprint: undefined },
-          (err) => { 
+          (err) => {
             //delete toutes les tâches du sprint
             if (err) throw err;
             let promises = []
@@ -138,16 +128,112 @@ module.exports.deleteSprint = function (sprint_id) {
 }
 
 module.exports.updateSprint = function (sprint_id, startDate, endDate, description) {
-      return new Promise(function (resolve) {
-        Sprint.findByIdAndUpdate(sprint_id,
-          {
-            startDate: new Date(startDate),
-            endDate: new Date(endDate),
-            description: description
-          },
-          function (err) {
+  return new Promise(function (resolve) {
+    Sprint.findByIdAndUpdate(sprint_id,
+      {
+        startDate: new Date(startDate),
+        endDate: new Date(endDate),
+        description: description
+      },
+      function (err) {
+        if (err) throw err;
+        resolve();
+      })
+  });
+}
+
+module.exports.moveIncompleteTasksAndIssues = function (from_sprint_id, to_sprint_id) {
+  return new Promise(function (resolve) {
+    let issues_moved, tasks_moved;
+
+    Task.find(
+      {
+        sprint: from_sprint_id,
+        state: { $not: /DONE/ },
+      }, (err, tasks) => {
+        if (err) throw err;
+        tasks_moved = tasks.map(tasks => tasks._id);
+
+        Task.updateMany(
+          { _id: { $in: tasks_moved } },
+          { sprint: to_sprint_id },
+          err => {
             if (err) throw err;
-            resolve();
-          })
-      });
-    }
+
+            Issue.find(
+              {
+                sprint: from_sprint_id,
+                state: { $not: /DONE/ },
+              }, (err, issues) => {
+                if (err) throw err;
+                issues_moved = issues.map(issue => issue._id);
+
+                Issue.updateMany(
+                  { _id: { $in: issues_moved } },
+                  { sprint: to_sprint_id },
+                  err => {
+                    if (err) throw err;
+
+                    Sprint.findByIdAndUpdate(
+                      from_sprint_id,
+                      {
+                        $pullAll:
+                          { tasks: tasks_moved }
+                      }, (err) => {
+                        if (err) throw err;
+                        Sprint.findByIdAndUpdate(
+                          from_sprint_id,
+                          {
+                            $pullAll: { issues: issues_moved }
+                          },
+                          (err) => {
+                            if (err) throw err;
+                            Sprint.findByIdAndUpdate(
+                              to_sprint_id,
+                              {
+                                $push:
+                                  { tasks: { $each: tasks_moved } }
+                              },
+                              (err) => {
+                                if (err) throw err;
+                                Sprint.findByIdAndUpdate(
+                                  to_sprint_id,
+                                  {
+                                    $push: { issues: { $each: issues_moved } }
+                                  },
+                                  err => {
+                                    if (err) throw err;
+                                    resolve();
+                                  }
+                                );
+                              }
+                            );
+                          }
+                        );
+                      }
+                    );
+                  }
+                );
+              }
+            );
+          }
+        );
+      }
+    );
+  });
+}
+
+module.exports.getTodaySprints = function (sprints) {
+  return new Promise(function (resolve) {
+    let today = Date.now();
+    let promises = [];
+    sprints.forEach(sprint => {
+      if (sprint.startDate <= today && sprint.endDate >= today) {
+        promises.push(sprint);
+      }
+    });
+    Promise.all(promises).then(values => {
+      resolve(values);
+    });
+  });
+}

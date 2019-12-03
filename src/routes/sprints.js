@@ -22,5 +22,8 @@ module.exports = function (app) {
 
   app.get('/user/:login/projects/:project_id/sprints/:sprint_id/tasks', SprintController.SprintTasksGet);
 
+  app.get('/user/:login/projects/:project_id/sprints/:sprint_id/sprintOver', SprintController.SprintOverGet);
+
+  app.post('/user/:login/projects/:project_id/sprints/:sprint_id/sprintOver', SprintController.SprintOverPost);
 
 }
