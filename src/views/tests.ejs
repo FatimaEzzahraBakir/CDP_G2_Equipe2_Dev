@@ -1,60 +1,74 @@
-<body onload="SortTable(0, 'N', 'tasksTable')">
-    <div class="container">
-      <div class="row">
-        <table id="tasksTable">
-          <thead>
-            <tr>
-              <th onclick="SortTable(0, 'N', 'tasksTable')">ID <i class="material-icons">unfold_more</i></th>
-              <th>Description</th>
-              <th>Definition Of Done</th>
-              <th onClick="SortTable(3, 'S', 'tasksTable')">État <i class="material-icons">unfold_more</i></th>
-              <th onClick="SortTable(4, 'T', 'tasksTable')">Développeur <i class="material-icons">unfold_more</i></th>
-              <th onClick="SortTable(5, 'N', 'tasksTable')">Coût <i class="material-icons">unfold_more</i></th>
-            </tr>
-          </thead>
-          <tbody>
-            <% if(typeof tasks != 'undefined') { %>
-            <% tasks.forEach(function(task) { if(task != null){%>
-            <div class="row">
-              <tr>
-                <td><%= task.num%></td>
-                <td>
-                  <p><%= task.description %></p>
-                </td>
-                <td><%= task.dod %></td>
-                <td><%= task.state %></td>
-                <%if(!task.dev) {%>
-                <td></td>
-                <%}else{%>
-                <td><%- members.find(member => { return (member._id.equals(task.dev));}).login %></td>
-                <%}%>
-          <td><%= task.length %></td>
-                <td>
-                  <a href="/user/<%= user %>/projects/<%= project.id %>/sprints/<%= sprint.id %>/tasks/<%= task._id %>/update"
-                    class="center-align"><i class="material-icons left">edit</i></a>
-                  <a href="/user/<%= user %>/projects/<%= project.id %>/sprints/<%= sprint.id %>/tasks/<%= task._id %>/addDev"
-                    class="center-align"><i class="material-icons green-text">person_add</i></a>
-                  <a href="/user/<%= user %>/projects/<%= project.id %>/sprints/<%= sprint.id %>/tasks/<%= task._id %>/delete"
-                    class="materialize-red-text"><i class="material-icons left">delete_forever</i></a>
-                </td>
-              </tr>
-              <% }}); %>
-  
-          </tbody>
-        </table>
-        <% } %>
-  
-      </div>
-      <div class="row">
-        <div class="cardmargin">
-          <a href="/user/<%= user %>/projects/<%= project.id %>/sprints/<%= sprint.id %>/addTask"
-            class="waves-effect waves-light btn btn-large"><i class="material-icons left">add</i>Nouvelle tâche</a>
-        </div>
-      </div>
+<!DOCTYPE html>
+<html lang="fr" dir="ltr">
+
+<head>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="/css/materialize.css">
+  <link rel="stylesheet" href="/css/style.css">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+  <title>Tests</title>
+</head>
+
+<body>
+  <nav class="navmargin">
+    <div class="nav-wrapper">
+      <ul id="nav-mobile" class="left hide-on-med-and-down">
+        <li>
+          <% if(typeof project != 'undefined') { %>
+          <a href="/user/<%= user %>/projects/<%= project.id %>">
+            <i class="material-icons left">keyboard_backspace</i>Retour au projet</a></li>
+
+      </ul>
+      <a href="/" class="brand-logo center">Gestion projets</a>
+      <ul id="nav-mobile" class="right hide-on-med-and-down">
+        <li><a>Bienvenue <%= user %></a></li>
+        <li><a href="/logout">Déconnexion</a></li>
+      </ul>
     </div>
-    </div>
-  
-    <script src="/scripts/sortTable.js">
-    </script>
-  
-  </body>
+    <%}%>
+    </nav>
+        <div class="container">
+          <div class="col s8">
+            <table>
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Nom</th>
+                  <th>Resultat Attendu</th>
+                  <th>Resultat obtenu</th>
+                  <th>Niveau</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% if(typeof tests != 'undefined') { %>
+                  <% tests.forEach(function(test) { if(test != null){%>
+                    <div class="row">
+                      <tr>
+                        <td><p><%= test.num %></p></td>
+                        <td><%= test.name %></td>
+                        <td><%= test.expectedResult %></td>
+                        <td><%= test.obtainedResult %></td>
+                        <td><%= test.level %></td>
+
+                        <td> <p><a href="/user/<%= user %>/projects/<%= project.name %>/tests/<%= test._id %>/update" class="center-align"><i class="material-icons left">edit</i></a></p>
+                          <p><a href="/user/<%= user %>/projects/<%= project.name %>/tests/<%= test._id %>/delete" class="materialize-red-text"><i class="material-icons left">delete_forever</i></a></p></td>
+                        </tr>
+                        <% }}); %>
+
+                      </tbody>
+                    </table>
+                    <% } %>
+
+                  </div>
+                  <div class="col s4">
+                    <div class="cardmargin">
+                      <a href="/user/<%= user %>/projects/<%= project.name %>/addTest" class="waves-effect waves-light btn btn-large"><i
+                        class="material-icons left">add</i>Nouveau Test</a>
+                      </div>
+                    </div>
+                  </div>
+
+                </body>
+
+                </html>

@@ -36,3 +36,21 @@ module.exports.validateNewTest = function () {
       check('level', 'niveau requis').not().isEmpty()
     ];
   }
+
+  module.exports.createTest = function (testObject) {
+    return new Promise(function (resolve) {
+      let testInstance = new Test(testObject);
+      testInstance.save(function (err, test) {
+  
+        if (err) throw err;
+        Project.findOneAndUpdate(
+          { _id: test.project },
+          { $push: { tests: test.id } },
+          (err) => {
+            if (err) throw err;
+            resolve();
+          }
+        );
+      });
+    });
+  }
