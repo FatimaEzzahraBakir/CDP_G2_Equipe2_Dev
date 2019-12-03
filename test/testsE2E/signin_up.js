@@ -14,7 +14,7 @@ var assert = require('chai').assert;
   const browser = await puppeteer.launch();
   const page = await browser.newPage();
 
-  await page.goto('http://localhost:8080/');
+  await page.goto('http://192.168.99.100:8080/');
   await page.click('body > div > a:nth-child(1)');
   await page.waitFor(2000);
   //Prenom
@@ -46,7 +46,7 @@ var assert = require('chai').assert;
 
 
   const pageUrl = await page.url();
-  const expectedUrl = "http://localhost:8080/";
+  const expectedUrl = "http://192.168.99.100:8080/";
 
   await browser.close();
 
@@ -55,6 +55,7 @@ var assert = require('chai').assert;
   await User.deleteOne({login: '123456Test123456'});
 
   mongoose.connection.close();
+  console.log('Le test s\'est correctement déroulé');
 
 
 
