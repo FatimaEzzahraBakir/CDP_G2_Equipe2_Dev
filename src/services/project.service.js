@@ -1,6 +1,7 @@
 const Project = require('../models/project.model');
 const Issue = require('../models/issue.model');
 const Task = require('../models/task.model');
+const Test = require('../models/test.model');
 const Release = require('../models/release.model');
 const User = require('../models/user.model');
 const Sprint = require('../models/sprint.model');
@@ -38,6 +39,7 @@ exports.deleteProject = function (project) {
             Task.deleteMany({ project: project.id }).exec(),
             Issue.deleteMany({ project: project.id }).exec(),
             Release.deleteMany({ project: project.id }).exec(),
+            Test.deleteMany({ project: project.id}).exec(),
             Sprint.deleteMany({ project: project.id}).exec()
         ]
 

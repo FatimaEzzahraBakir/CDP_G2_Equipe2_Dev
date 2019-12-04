@@ -7,6 +7,7 @@ var projectSchema = new Schema({
   members: [{ type: Schema.Types.ObjectId, ref: 'users' }],
   issues: [{ type: Schema.Types.ObjectId, ref: 'issues' }],
   tasks: [{ type: Schema.Types.ObjectId, ref: 'tasks' }],
+  tests: [{ type: Schema.Types.ObjectId, ref: 'tests' }],
   userDoc : String,
   adminDoc : String
 });

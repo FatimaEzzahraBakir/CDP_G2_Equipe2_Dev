@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="fr" dir="ltr">
+
+<head>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="/css/materialize.css">
+  <link rel="stylesheet" href="/css/style.css">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <title>Ajouter Test</title>
+</head>
+
+<body>
+  <nav class="navmargin">
+    <div class="nav-wrapper">
+      <ul id="nav-mobile" class="left hide-on-med-and-down">
+        <li>
+            <a href="/user/<%= userLogin %>/projects/<%= project.id %>/tests"> 
+            <i class="material-icons left">keyboard_backspace</i>Retour à la liste</a></li>
+
+      </ul>
+      <a href="/" class="brand-logo center">Gestion projets</a>
+      <ul id="nav-mobile" class="right hide-on-med-and-down">
+        <li><a href="/logout">Déconnexion</a></li>
+      </ul>
+    </div>
+  </nav>
+  <div class="container">
+    <div class="row">
+      <form action="/user/<%= userLogin %>/projects/<%= project.id %>/tests/addTask" method="POST">
+        <div class="row">
+          <div class="col s8 offset-m2">
+            <div class="card center-align mg">
+              <div class="card-content">
+                <span class="card-title">Ajouter un test</span>
+                <% if (typeof  errors != 'undefined') { %>
+                <% errors.forEach(function(error) { %>
+                <div class="card-pannel small red darken-2 white-text"><%= error.msg %></div>
+                <% }); %>
+                <% } %>
+                <div class="input-field">
+                  <input name="num" type="number" class="validate" placeholder="ID" required>
+                </div>
+                <div class="input-field">
+                  <input name="name" type="text" class="validate" placeholder="nom" required>
+                </div>
+                <div class="input-field">
+                  <input name="expectedResult" type="text" class="validate" placeholder="Resultat attendu" required>
+                </div>
+                <div class="input-field">
+                    <input name="obtainedResult" type="text" class="validate" placeholder="Resultat obtenu" required>
+                </div>
+                <div class="input-field">
+                    <input name="level" type="number" class="validate" placeholder="Niveau" required>
+                </div>
+                <button class="btn waves-effect waves-light" type="submit">Ajouter</button>
+                <a class="btn waves-effect waves-light red"
+                  href="/user/<%= userLogin %>/projects/<%= project.id %>/tests">Retour</a>
+              </div>
+            </div>
+          </div>
+        </div>
+</body>

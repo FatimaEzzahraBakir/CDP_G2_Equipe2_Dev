@@ -29,11 +29,13 @@ exports.projectDetails = async function (req, res, next) {
   members = await ProjectService.getMembers(members_ids);
   let sprintsTmp = await SprintService.getSprintsFromProject(res.locals.project.id);
   let sprint = await SprintService.getTodaySprints(sprintsTmp);
+  let tasks = await ProjectService.getTasks(res.locals.project);
   return res.render('myProject', {
-    user: req.user.login,
+    user: req.user,
     project: res.locals.project,
     members: members,
-    sprint: sprint
+    sprint: sprint,
+    tasks: tasks
   });
 }
 
