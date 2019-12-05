@@ -78,20 +78,22 @@
 
         </div>
       <%}%>
-      <% if(typeof tasks != 'undefined') {  %>
+      <% if(typeof tasks != 'undefined' && typeof sprint[0] != 'undefined') {  %>
       <div class="myTasks col s6">
         <h6 class="card-title">Mes tâches en cours</h6>
         <ul class="collapsible">
           <% tasks.forEach(function(task) { %>
-          <%if(sprint[0].tasks.some(sprinttask => sprinttask.equals(task._id))
-                  && task.dev.equals(user._id) && task.state !== 'DONE') { %>
+          <%if(sprint[0].tasks.includes(task._id)
+                  && typeof task.dev != 'undefined' && task.dev.equals(user._id) && task.state !== 'DONE') { %>
             <li>
               <%
                 let badge_color = 'blue';
                 if(task.state === 'TODO')
                   badge_color = 'red';
               %>
-              <div class="collapsible-header">Tâche #<%= task.num %> : <%= task.description %> <span class="new badge <%= badge_color %>" data-badge-caption=""><%= task.state %></span></div>
+              <div class="collapsible-header">Tâche #<%= task.num %> : <%= task.description %>
+                <span class="new badge <%= badge_color %>" data-badge-caption=""><%= task.state %></span>
+              </div>
             </li>
           <% } %>
           <% }); %>
@@ -135,10 +137,6 @@
     </div>
   </div>
 </div>
-
-
-
-
 </body>
 
 </html>
