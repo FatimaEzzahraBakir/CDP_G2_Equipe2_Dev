@@ -35,23 +35,10 @@
 
   <div class="col s12 m4 l2">
 
-<<<<<<< HEAD
-      <div class="collection">
-        <a href="/user/<%= user %>/projects/<%= project.id %>/backlog" class="collection-item btn">Issues</a>
-        <a href="/user/<%= user %>/projects/<%= project.id %>/sprints" class="collection-item btn ">Sprints</a>
-        <a href="/user/<%= user %>/projects/<%= project.id %>/tests" class="collection-item btn ">Tests</a>
-        <a href="/user/<%= user %>/projects/<%= project.id %>/releases" class="collection-item btn">Releases</a>
-        <a href="/user/<%= user %>/projects/<%= project.id %>/newDoc" class="collection-item btn">Documentations</a>
-      </div>
-      <div class="collection">
-        <a class ="btnModify collection-item btn" href="/user/<%= user %>/projects/<%= project.id %>/update">modifier</a>
-        <a class ="btnDelete collection-item btn"href="/user/<%= user %>/projects/<%= project.id %>/delete">supprimer</a>
-      </div>
-=======
     <div class="collection">
       <a href="/user/<%= user.login %>/projects/<%= project.id %>/backlog" class="collection-item btn">Issues</a>
       <a href="/user/<%= user.login %>/projects/<%= project.id %>/sprints" class="collection-item btn ">Sprints</a>
-      <a href="/user/<%= user.login %>/projects/<%= project.id %>/tests" class="collection-item btn disabled">Tests</a>
+      <a href="/user/<%= user.login %>/projects/<%= project.id %>/tests" class="collection-item btn ">Tests</a>
       <a href="/user/<%= user.login %>/projects/<%= project.id %>/releases" class="collection-item btn">Releases</a>
       <a href="/user/<%= user.login %>/projects/<%= project.id %>/newDoc" class="collection-item btn">Documentations</a>
     </div>
@@ -59,7 +46,6 @@
       <a class ="collection-item btn btnModify" href="/user/<%= user.login %>/projects/<%= project.id %>/update">modifier</a>
       <a class ="collection-item btn btnDelete"href="/user/<%= user.login %>/projects/<%= project.id %>/delete">supprimer</a>
     </div>
->>>>>>> 21f0cff83379f613dd1c2f4777f23d164d9c9fe6
 
     <% } %>
 

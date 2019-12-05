@@ -9,5 +9,7 @@ module.exports = function (app) {
   app.post('/user/:login/projects/:project_id/addTest',
     TestController.validate(),
     TestController.TestAddPost);
+  
+  app.get('/user/:login/projects/:project_id/tests/:id/delete', TestController.testsDeleteTestGet);
 
 }

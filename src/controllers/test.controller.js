@@ -8,7 +8,7 @@ exports.validate = () => {
   }
   
   exports.TestGetList = async function (req, res, next) {
-    let tests = await ProjectService.getTasks(res.locals.project);
+    let tests = await ProjectService.getTests(res.locals.project);
     return res.render('tests', {
       user: req.user.login,
       project: res.locals.project,
@@ -46,4 +46,8 @@ exports.validate = () => {
     };
     await TestService.createTask(testObject);
     return res.redirect('/user/' + req.user.login + '/projects/' + req.params.project_id + '/tests/');
+  }
+  module.exports.testsDeleteTestGet = async function (req, res, next) {
+    await TestService.deleteTest(req.params.id);
+    return res.redirect('/user/' + req.params.login + '/projects/' + req.params.project_id + '/tests');
   }

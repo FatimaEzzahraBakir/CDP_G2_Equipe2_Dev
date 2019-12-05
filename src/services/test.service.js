@@ -54,3 +54,21 @@ module.exports.validateNewTest = function () {
       });
     });
   }
+  module.exports.deleteTest = function (test_id) {
+    return new Promise(function (resolve) {
+      Test.findOneAndDelete(
+        { _id: test_id },
+        (err, test) => {
+          if (err) throw err;
+              Project.findByIdAndUpdate(
+                test.project,
+                { $pull: { tests: test_id } },
+                (err) => {
+                  if (err) throw err;
+                  resolve();
+                });
+           
+  
+        });
+    });
+  }

@@ -51,8 +51,8 @@
                         <td><%= test.obtainedResult %></td>
                         <td><%= test.level %></td>
 
-                        <td> <p><a href="/user/<%= user %>/projects/<%= project.name %>/tests/<%= test._id %>/update" class="center-align"><i class="material-icons left">edit</i></a></p>
-                          <p><a href="/user/<%= user %>/projects/<%= project.name %>/tests/<%= test._id %>/delete" class="materialize-red-text"><i class="material-icons left">delete_forever</i></a></p></td>
+                        <td> <p><a href="/user/<%= user %>/projects/<%= project.id %>/tests/<%= test._id %>/update" class="center-align"><i class="material-icons left">edit</i></a></p>
+                          <p><a href="/user/<%= user %>/projects/<%= project.id %>/tests/<%= test._id %>/delete" class="materialize-red-text"><i class="material-icons left">delete_forever</i></a></p></td>
                         </tr>
                         <% }}); %>
 
@@ -63,7 +63,7 @@
                   </div>
                   <div class="col s4">
                     <div class="cardmargin">
-                      <a href="/user/<%= user %>/projects/<%= project.name %>/addTest" class="waves-effect waves-light btn btn-large"><i
+                      <a href="/user/<%= user %>/projects/<%= project.id %>/addTest" class="waves-effect waves-light btn btn-large"><i
                         class="material-icons left">add</i>Nouveau Test</a>
                       </div>
                     </div>

@@ -103,6 +103,21 @@ exports.getTasks = function (project) {
     });
 }
 
+exports.getTests = function (project) {
+    return new Promise(function (resolve) {
+        let res = [];
+        if (typeof project.tests == 'undefined' || project.tests.length === 0) {
+            resolve(res);
+        }
+        let promises = [];
+        project.tests.forEach(test_id => {
+            promises.push(Task.findById(test_id).exec());
+        });
+        Promise.all(promises).then(values => {
+            resolve(values);
+        });
+    });
+}
 exports.addMember = function (query, project_id) {
     return new Promise(function (resolve) {
         User.findOneAndUpdate(
