@@ -42,7 +42,7 @@ exports.validate = () => {
       obtainedResult: req.body.obtainedResult,
       level: req.body.level,
       project: project.id,
-      issue: req.params.issue_id,
+      //issue: req.params.issue_id,
     };
     await TestService.createTask(testObject);
     return res.redirect('/user/' + req.user.login + '/projects/' + req.params.project_id + '/tests/');
