@@ -128,6 +128,10 @@ module.exports.deleteSprint = function (sprint_id) {
 }
 
 module.exports.updateSprint = function (sprint_id, startDate, endDate, description) {
+  console.log(sprint_id);
+  console.log(startDate);
+  console.log(endDate);
+  console.log(description);
   return new Promise(function (resolve) {
     Sprint.findByIdAndUpdate(sprint_id,
       {

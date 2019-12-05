@@ -41,18 +41,17 @@
             <%= sprint.startDate.getDate() %>/<%= sprint.startDate.getMonth() +1 %>/<%= sprint.startDate.getFullYear(); %>
             - <%= sprint.endDate.getDate() %>/<%= sprint.endDate.getMonth() +1 %>/<%= sprint.endDate.getFullYear(); %>
           </p>
-          <h6 class="center-align">Vos tâches :</h6>
+          <h6 class="center-align">Vos tâches à faire :</h6>
           <ul class="collapsible">
             <% tasks.forEach(function(task) { %>
             <%if(sprint.tasks.some(sprinttask => sprinttask.equals(task._id))
             && task.dev
-            && task.dev.equals(user._id)) { %>
+            && task.dev.equals(user._id)
+            && task.state !== 'DONE') { %>
             <li>
               <%
               let badge_color = 'blue';
-              if(task.state === 'DONE')
-                  badge_color = 'green'
-              else if(task.state === 'TODO')
+              if(task.state === 'TODO')
                   badge_color = 'red'
               %>
               <div class="collapsible-header">Tâche #<%= task.num %> <span class="new badge <%= badge_color %>" data-badge-caption=""><%= task.state %></span></div>
