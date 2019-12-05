@@ -58,12 +58,12 @@ exports.SprintUpdateGet = async function (req, res, next) {
   return res.render('updateSprint', {
     user: req.user,
     project: res.locals.project,
-    sprint: req.params.sprint_id
+    sprint: sprint
   });
 }
 
 exports.SprintUpdatePost = async function (req, res, next) {
-  await SprintService.updateSprint(req.params.sprint_id, req.body.date, req.body.description);
+  await SprintService.updateSprint(req.params.sprint_id, req.body.startDate, req.body.endDate, req.body.description);
   res.redirect('/user/' + req.params.login + '/projects/' + req.params.project_id + "/sprints");
 }
 
@@ -114,7 +114,6 @@ exports.SprintOverGet = async function (req, res, next) {
 
 exports.SprintOverPost = async function (req, res, next) {
   await SprintService.moveIncompleteTasksAndIssues(req.params.sprint_id, req.body.sprint);
-  return res.send('ok ! ');
 
-  return res.redirect('/user/' + req.params.login + '/projects/' + req.params.project_id + "/sprints/" + req.body.newSprint);
+  return res.redirect('/user/' + req.params.login + '/projects/' + req.params.project_id + "/sprints/" + req.body.sprint);
 }
