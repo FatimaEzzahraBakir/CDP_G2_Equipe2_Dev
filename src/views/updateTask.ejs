@@ -10,58 +10,57 @@
 </head>
 
 <body>
-  <nav class="navmargin">
-    <div class="nav-wrapper">
-      <ul id="nav-mobile" class="left hide-on-med-and-down">
-        <li>
-          <a href="/user/<%= user.login %>/projects/<%= project.id %>/sprints/<%= task.sprint %>#issues">
-            <i class="material-icons left">keyboard_backspace</i>Retour au sprint</a>
-        </li>
-      </ul>
-      <a href="/" class="brand-logo center">Gestion projets</a>
-      <ul id="nav-mobile" class="right hide-on-med-and-down">
-        <li><a href="/logout">Déconnexion</a></li>
-      </ul>
-    </div>
-  </nav>
-  <div class="container">
+<nav class="navmargin">
+  <div class="nav-wrapper">
+    <ul id="nav-mobile" class="left hide-on-med-and-down">
+      <li>
+        <a href="/user/<%= user.login %>/projects/<%= project.id %>/sprints/<%= task.sprint %>#issues">
+          <i class="material-icons left">keyboard_backspace</i>Retour au sprint</a>
+      </li>
+    </ul>
+    <a href="/" class="brand-logo center">Gestion projets</a>
+    <ul id="nav-mobile" class="right hide-on-med-and-down">
+      <li><a href="/logout">Déconnexion</a></li>
+    </ul>
+  </div>
+</nav>
+<div class="container">
+  <form action="/user/<%= user.login %>/projects/<%= project.id %>/sprints/<%= task.sprint %>/tasks/<%= task._id %>/update" method="POST">
     <div class="row">
-      <form action="/user/<%= user.login %>/projects/<%= project.id %>/sprints/<%= task.sprint %>/tasks/<%= task._id %>/update" method="POST">
-        <div class="row">
-          <div class="col s12">
-            <div class="card center-align mg">
-              <div class="card-content">
-                <span class="card-title">Modifer la tâche</span>
-                <% if (typeof  error != 'undefined') { %>
-                <div class="card-pannel small red darken-2 white-text"><%= error %></div>
-                <% } %>
-                <div class="input-field">
-                  <label for="description" class="active">Description</label>
-                  <input name="description" id="description" type="text" class="validate" value="<%=task.description%>" required>
-                </div>
-                <div class="input-field">
-                    <label for="dod" class="active">Definition of done</label>
-                  <input name="dod" id="dod" type="text" class="validate" value="<%=task.dod%>" required>
-                </div>
-                <div class="input-field">
-                  <label for="state" class="active">État</label>
-                  <select class="browser-default" name="state" id="state">
-                  <option value='' disabled selected>État</option>
-                  <% let states = ['TODO', 'DOING', 'DONE']; %>
-                  <% states.forEach(state => { %>
+      <div class="col s12">
+        <div class="card center-align mg">
+          <div class="card-content">
+            <span class="card-title">Modifer la tâche</span>
+            <% if (typeof  error != 'undefined') { %>
+              <div class="card-pannel small red darken-2 white-text"><%= error %></div>
+            <% } %>
+            <div class="input-field">
+              <label for="description" class="active">Description</label>
+              <input name="description" id="description" type="text" class="validate" value="<%=task.description%>" required>
+            </div>
+            <div class="input-field">
+              <label for="dod" class="active">Definition of done</label>
+              <input name="dod" id="dod" type="text" class="validate" value="<%=task.dod%>" required>
+            </div>
+            <div class="input-field">
+              <label for="state" class="active">État</label>
+              <select class="browser-default" name="state" id="state">
+                <option value='' disabled selected>État</option>
+                <% let states = ['TODO', 'DOING', 'DONE']; %>
+                <% states.forEach(state => { %>
                   <% if(task.state === state) { %>
                     <option value='<%= state %>' selected><%= state %></option>
                   <% } else { %>
                     <option value='<%= state %>'><%= state %></option>
                   <% } %>
-                  <% }); %>
-                  </select>
-                </div>
-                <div class="input-field">
-                  <label for="length" class="active">Difficulté</label>
-                  <input name="length" id="length" type="number" class="validate" value="<%=task.length%>" required>
-                </div>
-                <!-- 
+                <% }); %>
+              </select>
+            </div>
+            <div class="input-field">
+              <label for="length" class="active">Difficulté</label>
+              <input name="length" id="length" type="number" class="validate" value="<%=task.length%>" required>
+            </div>
+            <!--
                 <% if(sprintIssues.length > 0 ) {%>
                 <div class="input-field">
                   <label for="issues" class="active">Issues</label>
@@ -79,28 +78,27 @@
                   <% }) %>
                 </div>
                 <% } %> -->
-                <div class="input-field">
-                  <label for="sprint" class="active">Sprint</label>
-                    <select class='browser-default' name='sprint' id="sprint">
-                      <option value='' disabled selected>Sprint</option>
-                      
-                      <% sprints.forEach(sprint => { %>
-                        <option value='<%= sprint._id %>' <%if(task.sprint.equals(sprint._id)){%><%="selected"%><%}%>  ><%= sprint.num %></option>
-                      <% }); %>
-                      
-                    </select>
-                </div>
-                <button class="btn waves-effect waves-light" type="submit">Mettre à jour</button>
-                <a class="btn waves-effect waves-light red"
-                  href="/user/<%= user.login %>/projects/<%= project.id %>/sprints/<%= task.sprint %>#tasks">Annuler </a>
-              </div>
+            <div class="input-field">
+              <label for="sprint" class="active">Sprint</label>
+              <select class='browser-default' name='sprint' id="sprint">
+                <option value='' disabled selected>Sprint</option>
+
+                <% sprints.forEach(sprint => { %>
+                  <option value='<%= sprint._id %>' <%if(task.sprint.equals(sprint._id)){%><%="selected"%><%}%>  ><%= sprint.num %></option>
+                <% }); %>
+
+              </select>
             </div>
+            <button class="btn waves-effect waves-light" type="submit">Mettre à jour</button>
+            <a class="btn waves-effect waves-light red"
+               href="/user/<%= user.login %>/projects/<%= project.id %>/sprints/<%= task.sprint %>#tasks">Annuler </a>
           </div>
         </div>
+      </div>
     </div>
-    </form>
-  </div>
-  </div>
+  </form>
+</div>
+</div>
 </body>
 
 </html>

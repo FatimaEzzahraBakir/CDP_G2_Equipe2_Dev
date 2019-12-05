@@ -51,3 +51,17 @@ exports.validate = () => {
     await TestService.deleteTest(req.params.id);
     return res.redirect('/user/' + req.params.login + '/projects/' + req.params.project_id + '/tests');
   }
+
+exports.TestUpdateGet = async function (req, res, next) {
+  let test = await ProjectService.getTest(res.locals.project, req.params.test_id);
+  return res.render('updateTest', {
+    user: req.user,
+    project: res.locals.project,
+    test: test[0]
+  });
+}
+
+exports.TestUpdatePost = async function (req, res, next) {
+  await TestService.updateTest(req.params.test_id, req.body.name, req.body.expectedResult, req.body.obtainedResult, req.body.level);
+  res.redirect('/user/' + req.params.login + '/projects/' + req.params.project_id + "/tests");
+}

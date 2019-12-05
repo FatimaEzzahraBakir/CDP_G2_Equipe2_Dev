@@ -111,13 +111,32 @@ exports.getTests = function (project) {
         }
         let promises = [];
         project.tests.forEach(test_id => {
-            promises.push(Task.findById(test_id).exec());
+            promises.push(Test.findById(test_id).exec());
         });
         Promise.all(promises).then(values => {
             resolve(values);
         });
     });
 }
+
+exports.getTest = function (project, test_id) {
+    return new Promise(function (resolve) {
+        let res = [];
+        if (typeof project.tests == 'undefined' || project.tests.length === 0
+            && typeof test_id == 'undefined') {
+            resolve(res);
+        }
+        let promises = [];
+        project.tests.forEach(tid => {
+            if (tid == test_id)
+                promises.push(Test.findById(tid).exec());
+        });
+        Promise.all(promises).then(values => {
+            resolve(values);
+        });
+    });
+}
+
 exports.addMember = function (query, project_id) {
     return new Promise(function (resolve) {
         User.findOneAndUpdate(
