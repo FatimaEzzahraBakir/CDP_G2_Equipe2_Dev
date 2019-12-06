@@ -35,9 +35,10 @@
                 <tr>
                   <th>ID</th>
                   <th>Nom</th>
-                  <th>Resultat Attendu</th>
-                  <th>Resultat obtenu</th>
+                  <th>Résultat Attendu</th>
+                  <th>Résultat obtenu</th>
                   <th>Niveau</th>
+                  <th>Etat</th>
                 </tr>
               </thead>
               <tbody>
@@ -50,6 +51,17 @@
                         <td><%= test.expectedResult %></td>
                         <td><%= test.obtainedResult %></td>
                         <td><%= test.level %></td>
+                        <% let state_color = "red-text accent-4";
+                        let state_icon = "sentiment_very_dissatisfied";
+                        if(test.obtainedResult == '') {
+                          state_color = "orange-text";
+                          state_icon = "sentiment_neutral";
+                        }
+                        else if(test.expectedResult == test.obtainedResult){
+                          state_color = "green-text";
+                          state_icon = "sentiment_very_satisfied";
+                        }%>
+                        <td><i class="material-icons left <%= state_color %>"><%= state_icon %></i></td>
 
                         <td> <p><a href="/user/<%= user %>/projects/<%= project.id %>/tests/<%= test._id %>/update" class="center-align"><i class="material-icons left">edit</i></a></p>
                           <p><a href="/user/<%= user %>/projects/<%= project.id %>/tests/<%= test._id %>/delete" class="materialize-red-text"><i class="material-icons left">delete_forever</i></a></p></td>
