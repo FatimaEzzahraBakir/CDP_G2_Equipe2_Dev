@@ -1,7 +1,5 @@
 const TestService = require('../services/test.service');
 const ProjectService = require('../services/project.service');
-const Test = require('../models/test.model');
-const { check, validationResult } = require('express-validator');
 
 exports.validate = () => {
     return TestService.validateNewTest();
@@ -42,9 +40,8 @@ exports.validate = () => {
       obtainedResult: req.body.obtainedResult,
       level: req.body.level,
       project: project.id,
-      //issue: req.params.issue_id,
     };
-    await TestService.createTask(testObject);
+    await TestService.createTest(testObject);
     return res.redirect('/user/' + req.user.login + '/projects/' + req.params.project_id + '/tests/');
   }
   module.exports.testsDeleteTestGet = async function (req, res, next) {

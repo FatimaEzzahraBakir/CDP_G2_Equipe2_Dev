@@ -40,21 +40,21 @@ module.exports.validateNewTest = function () {
 
 module.exports.createTest = function (testObject) {
     return new Promise(function (resolve) {
-        let testInstance = new Test(testObject);
-        testInstance.save(function (err, test) {
-
+      let testInstance = new Issue(testObject);
+      testInstance.save((err, test) => {
             if (err) throw err;
-            Project.findOneAndUpdate(
-                { _id: test.project },
-                { $push: { tests: test.id } },
-                (err) => {
-                    if (err) throw err;
-                    resolve();
-                }
-            );
-        });
+            Project.findByIdAndUpdate(
+              test.project,
+              { $push: { tests: test.id } },
+              (err) => {
+                if (err) throw err;
+                resolve();
+              });
+          
+      });
     });
-}
+  }
+
 module.exports.deleteTest = function (test_id) {
     return new Promise(function (resolve) {
         Test.findOneAndDelete(
