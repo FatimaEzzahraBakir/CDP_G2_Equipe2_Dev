@@ -1,5 +1,6 @@
 const Project = require('../models/project.model');
 const Test = require('../models/test.model');
+const Issue = require('../models/issue.model');
 const { check, validationResult } = require('express-validator');
 
 module.exports.getTest = function (test_id) {
@@ -34,27 +35,27 @@ module.exports.validateNewTest = function () {
         check('name', 'nom requis').not().isEmpty(),
         check('expectedResult', 'resultat attendu requis').not().isEmpty(),
         check('obtainedResult', 'resultat obtenu requis').not().isEmpty(),
-        check('level', 'niveau requis').not().isEmpty()
+        check('level', 'niveau requis').not().isEmpty().isInt()
     ];
 }
 
 module.exports.createTest = function (testObject) {
     return new Promise(function (resolve) {
-        let testInstance = new Test(testObject);
-        testInstance.save(function (err, test) {
-
+      let testInstance = new Test(testObject);
+      testInstance.save((err, test) => {
             if (err) throw err;
-            Project.findOneAndUpdate(
-                { _id: test.project },
-                { $push: { tests: test.id } },
-                (err) => {
-                    if (err) throw err;
-                    resolve();
-                }
-            );
-        });
+            Project.findByIdAndUpdate(
+              test.project,
+              { $push: { tests: test.id } },
+              (err) => {
+                if (err) throw err;
+                resolve();
+              });
+          
+      });
     });
-}
+  }
+
 module.exports.deleteTest = function (test_id) {
     return new Promise(function (resolve) {
         Test.findOneAndDelete(
