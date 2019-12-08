@@ -1,5 +1,6 @@
 # Documentation administateur
 
+Cette documenation est valable à partir de la release v0.3.0
 Voici la procédure à suivre pour installer notre application sur votre machine.
 
 
