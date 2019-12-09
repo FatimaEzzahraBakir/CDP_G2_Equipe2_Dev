@@ -12,5 +12,3 @@ services:
 before_install:
   - docker-compose  build
   - docker-compose up -d 
-script:
-  - node test/testsE2E/project
