@@ -109,11 +109,11 @@ exports.docNewPost = function (req, res) {
   const userDoc = req.body.userDoc;
   const adminDoc = req.body.adminDoc;
   let response = {};
-  if(userDoc) {
+  if (userDoc) {
     response.user = true;
     ProjectService.setUserDoc(req.params.project_id, userDoc);
   }
-  if(adminDoc) {
+  if (adminDoc) {
     response.admin = true;
     ProjectService.setAdminDoc(req.params.project_id, adminDoc);
   }
@@ -122,12 +122,25 @@ exports.docNewPost = function (req, res) {
 
 exports.docGet = function (req, res) {
   let fileName = req.params.docname;
-  if(fileName !== 'adminDoc.txt' && fileName !== 'userDoc.txt' )
+  if (fileName !== 'adminDoc.txt' && fileName !== 'userDoc.txt')
     return res.status(404).send();
 
-  let docs = { "adminDoc.txt" : res.locals.project.adminDoc,
-    "userDoc.txt" : res.locals.project.userDoc };
+  let docs = {
+    "adminDoc.txt": res.locals.project.adminDoc,
+    "userDoc.txt": res.locals.project.userDoc
+  };
 
-  res.set({"Content-Disposition":"attachment; filename=\"" + fileName + "\""});
+  res.set({ "Content-Disposition": "attachment; filename=\"" + fileName + "\"" });
   return res.send(docs[fileName]);
 }
+
+exports.docDelete = function (req, res) {
+  let project = res.locals.project;
+  let type = req.query.type;
+  if (type === 'user') {
+    ProjectService.setUserDoc(project._id, "");
+  } else if (type === 'admin') {
+    ProjectService.setAdminDoc(project._id, "");
+  }
+  return res.redirect('/user/' + req.params.login + '/projects/' + project._id + '/newDoc');
+};

@@ -31,6 +31,7 @@
   </div>
 </nav>
 
+
 <div class="row">
 
   <div class="col s12 m4 l2">
@@ -103,7 +104,7 @@
     </div>
   </div>
 
-  <div class="col s2 offset-s1">
+  <div class="col s12 m4 l3">
     <% if(typeof project != 'undefined') { %>
 
     <div class="card z-depth-1">
@@ -126,11 +127,11 @@
       <% } %>
     </div>
     <div class="collection">
-      <% if(project.adminDoc) { %>
+      <% if(project.adminDoc && project.adminDoc.length > 0) { %>
         <a class="collection-item" href="/user/<%= user.login %>/projects/<%= project.id %>/doc/adminDoc.txt">Doc
           Administrateur <i class="material-icons left">file_download</i></a>
       <% } %>
-      <% if(project.userDoc) { %>
+      <% if(project.userDoc && project.userDoc.length > 0) { %>
         <a class="collection-item" href="/user/<%= user.login %>/projects/<%= project.id %>/doc/userDoc.txt">Doc Utilisateur
           <i class="material-icons left">file_download</i></a>
       <% } %>

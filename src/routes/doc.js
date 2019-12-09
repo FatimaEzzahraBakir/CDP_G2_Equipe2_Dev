@@ -8,4 +8,6 @@ module.exports = function (app) {
 
   app.get('/user/:login/projects/:project_id/doc/:docname', ProjectController.docGet);
 
+  app.get('/user/:login/projects/:project_id/deleteDoc', ProjectController.docDelete); 
+
 }

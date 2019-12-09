@@ -44,6 +44,11 @@
             <div id="editor"></div>
           </div>
         </div>
+        <% if (project.adminDoc && project.adminDoc.length > 0) { %>
+        <a href="/user/<%= user %>/projects/<%= project.id%>/deleteDoc?type=admin" class="waves-effect waves-light btn-large red darken-4">Supprimer doc administrateur</a>
+        <% } else {%>
+        <a href="#" class="waves-effect waves-light btn-large disabled">Supprimer doc administrateur</a>
+        <% } %>
       </div>
       <div class="col s6">
         <div class="card teal lighten-2 " id="user_drop_zone" ondrop="dropHandler(event, this);"
@@ -59,6 +64,11 @@
             <div id="editor"></div>
           </div>
         </div>
+        <% if (project.userDoc && project.userDoc.length > 0) { %>
+          <a href="/user/<%= user %>/projects/<%= project.id%>/deleteDoc?type=user" class="waves-effect waves-light btn-large red darken-4">Supprimer doc utilisateur</a>
+          <% } else {%>
+          <a href="#" class="waves-effect waves-light btn-large disabled">Supprimer doc utilisateur</a>
+          <% } %>
       </div>
     </div>
     <div class="row">
