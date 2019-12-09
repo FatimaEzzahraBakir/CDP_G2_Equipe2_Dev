@@ -4,7 +4,7 @@
   "description": "Application pour la gestion des projets",
   "main": "index.js",
   "scripts": {
-    "test": "mocha"
+    "test": "mocha "
   },
   "repository": {
     "type": "git",
