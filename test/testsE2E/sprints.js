@@ -3,6 +3,7 @@ const mongoDB = 'mongodb+srv://dbAdmin:admindbCDP@cluster0-ryf5h.azure.mongodb.n
 
 const Projet = require('../../src/models/project.model');
 const User = require('../../src/models/user.model');
+const Sprint = require('../../src/models/sprint.model');
 
 
 const puppeteer = require('puppeteer');
@@ -36,32 +37,48 @@ var assert = require('chai').assert;
   // ----
   await page.$eval('body > div.identification > a:nth-child(3)', elem => elem.click());
   await page.$eval('body > div.container > div > div.col.s4 > div > a', elem => elem.click());
-  //let btnCreate = page.waitForSelector('body > div.container > div > div.col.s4 > div > a'); await btnCreate.click();
 
   await page.waitFor(2000);
-  //Creation d'un projet : nom du projet
-  await page.type('body > div > div > form > div > div > div > div > div:nth-child(2) > input', '123456TestNomProjet123456');
-  // description
-  await page.type('body > div > div > form > div > div > div > div > div:nth-child(3) > input', '123456TestDescriptionProjet123456');
-  //validation
-  await page.$eval('body > div.container > div > form > div > div > div > div > button', elem => elem.click());
-  //On accede a la page du projet
-  await page.$eval('body > div > div > div.col.s8 > div > div > div.card-action > a.left-align', elem => elem.click());
 
-  // On vérifie qu'on est sur la page du bon projet
-  const nameProject = '123456TestNomProjet123456';
+  //----- Etapes de creation d'un projet
+  await page.type('body > div > div > form > div > div > div > div > div:nth-child(2) > input', '123456TestNomProjet123456');
+  await page.type('body > div > div > form > div > div > div > div > div:nth-child(3) > input', '123456TestDescriptionProjet123456');
+  await page.$eval('body > div.container > div > form > div > div > div > div > button', elem => elem.click());
+  await page.$eval('body > div > div > div.col.s8 > div > div > div.card-action > a.left-align', elem => elem.click());
+  //-------
+
+  //On va sur la page des sprints
+  await page.$eval('body > div > div.col.s12.m4.l2 > div:nth-child(1) > a:nth-child(2)', elem => elem.click());
+  //On clique pour créer un sprint
+  await page.$eval('body > div.container > div > div.col.s4 > div > a', elem => elem.click());
+  //On remplit les champs
+  await page.type('body > div.container > div > form > div > div > div > div > div:nth-child(3) > input[type=number]', '123456');
+  await page.type('#datepicker1', '2019/05/05');
+  await page.type('#datepicker2', '2019/05/06');
+  await page.type('body > div.container > div > form > div > div > div > div > div:nth-child(6) > input', '123456TestSprint123456');
+  //On valide
+  await page.$eval('body > div.container > div > form > div > div > div > div > button', elem => elem.click());
+
+
+
+
+  // On vérifie qu'on a le bon sprint
+  const nameSprint = '123456 : 123456TestSprint123456';
   const expectedName = await page.evaluate(() => {
-    let name = document.querySelector('body > div > div.col.col.s12.m4.l6 > div.card.z-depth-1 > div > h6').innerText
+    let name = document.querySelector('body > div.container > div > div.col.s8 > div > div > div.card-content > h6.card-title').innerText
     return name
   })
 
 
   await browser.close();
 
-  assert.equal(nameProject, expectedName, 'Création projet OK');
-
   await User.deleteOne({login: '123456Test123456'});
   await Projet.deleteOne({name: '123456TestNomProjet123456'});
+  await Sprint.deleteOne({description: '123456TestSprint123456'});
+
+  assert.equal(nameSprint, expectedName, 'Création sprint OK');
+
+
 
   mongoose.connection.close();
   console.log('Le test s\'est correctement déroulé');
