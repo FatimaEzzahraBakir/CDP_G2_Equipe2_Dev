@@ -1,5 +1,6 @@
 # Documentation utilisateur
 
+Cette documenation est valable à partir de la release v0.3.0
 Voici le détails des actions réalisables grâce à notre application de gestion de projet. Pour effectuer une action, il faudra au préalable être connecté avec un compte.
 
 ## Inscription et connexion
