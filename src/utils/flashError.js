@@ -1,7 +1,4 @@
-class FlashError extends Error {
-  constructor(message){
-    this.message = message;
-  }
-}
+class FlashError extends Error { }
+
 
 module.exports = FlashError;
