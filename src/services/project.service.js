@@ -41,7 +41,7 @@ exports.deleteProject = function (project) {
             Release.deleteMany({ project: project.id }).exec(),
             Test.deleteMany({ project: project.id}).exec(),
             Sprint.deleteMany({ project: project.id}).exec()
-        ]
+        ];
 
         User.updateMany(
             { _id: project.members },
@@ -138,14 +138,15 @@ exports.getTest = function (project, test_id) {
 }
 
 exports.addMember = function (query, project_id) {
-    return new Promise(function (resolve) {
+    return new Promise(function (resolve, reject) {
         User.findOneAndUpdate(
             query,
             { $addToSet: { projects: project_id } }, //ajoute project au user
             function (err, userInvited) {
                 if (err) throw err;
                 if (!userInvited) {
-                    throw new FlashError('L\'utilisateur n\'a pas été trouvé');
+                    reject(new FlashError('L\'utilisateur n\'a pas été trouvé'));
+                    return;
                 }
                 //ajoute user au project        
                 Project.findOneAndUpdate(

@@ -84,12 +84,14 @@ exports.SprintDetailsGet = async function (req, res, next) {
 exports.SprintTasksGet = async function (req, res, next) {
   let sprint = await SprintService.getSprint(req.params.sprint_id);
   let tasks = await SprintService.getTasks(sprint);
+  let issues = await ProjectService.getIssues(res.locals.project);
   let members = await ProjectService.getMembers(res.locals.project.members);
   return res.render('tasks', {
     project: res.locals.project,
     user: req.user.login,
     tasks: tasks,
     sprint: sprint,
+    issues: issues,
     members: members
   });
 }

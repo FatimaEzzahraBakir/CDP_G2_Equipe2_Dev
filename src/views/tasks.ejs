@@ -10,6 +10,7 @@
             <th onClick="SortTable(3, 'S', 'tasksTable')">État <i class="material-icons">unfold_more</i></th>
             <th onClick="SortTable(4, 'T', 'tasksTable')">Développeur <i class="material-icons">unfold_more</i></th>
             <th onClick="SortTable(5, 'N', 'tasksTable')">Coût <i class="material-icons">unfold_more</i></th>
+            <th>Issues</th>
           </tr>
         </thead>
         <tbody>
@@ -28,7 +29,17 @@
               <%}else{%>
               <td><%- members.find(member => { return (member._id.equals(task.dev));}).login %></td>
               <%}%>
-        <td><%= task.length %></td>
+              <td><%= task.length %></td>
+              <td>
+                <% if(task.issues) {%>
+                <% task.issues.forEach(taskissue => { %>
+                <% let issue = issues.find(issue => { return taskissue.equals(issue._id);}); %>
+                <a href="/user/<%= user %>/projects/<%= project.id %>/sprints/<%= issue.sprint %>#issues">
+                  <%= task.num %>&nbsp
+                </a>
+                <% }); %>
+                <% } %>
+              </td>
               <td>
                 <a href="/user/<%= user %>/projects/<%= project.id %>/sprints/<%= sprint.id %>/tasks/<%= task._id %>/update"
                   class="center-align"><i class="material-icons left">edit</i></a>
