@@ -6,22 +6,22 @@ var userSchema = new mongoose.Schema({
                 type: String, 
                 required: true 
               },
-  lastName:  { 
+  lastName:   { 
                type: String, 
                required: true 
-             },
-  mail:  { 
-           type: String, 
-           required: true 
-         },
-  login:  { 
-            type: String, 
-            required: true 
-          },
-  password:  { 
-               type: String, 
-               required: true 
-             },
+              },
+  mail:       { 
+                type: String, 
+                required: true 
+              },
+  login:      { 
+                type: String, 
+                required: true 
+              },
+  password:   { 
+                type: String, 
+                required: true 
+              },
   projects: [{ type: mongoose.Schema.Types.ObjectId, ref: 'projects' }],
   tasks: [{ type: mongoose.Schema.Types.ObjectId, ref: 'tasks' }]
 });
